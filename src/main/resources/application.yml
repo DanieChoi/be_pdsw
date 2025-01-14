@@ -1,8 +1,16 @@
+server:
+  port: 4000
+
 spring:
   data:
     redis:
-      host: localhost
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+      host: 10.10.40.139
       port: 6379
-
-server:
-  port: 4000
+      password: nexus!234
+      database: 4
+      timeout: 2000
