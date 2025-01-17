@@ -47,7 +47,7 @@ public class GetCounselorListResponseDto extends ResponseDto  {
    *  상담사 리스트 가져오기(성공)
    *  
    *  @param List<Map<String, Object>> mapCounselorInfoList 반환할 상담사 리스트
-   *  @return ResponseEntity<? super GetCounselorListResponseDto>
+   *  @return ResponseEntity<GetCounselorListResponseDto>
    */
   public static ResponseEntity<GetCounselorListResponseDto> success(
     List<Map<String, Object>> mapCounselorInfoList
