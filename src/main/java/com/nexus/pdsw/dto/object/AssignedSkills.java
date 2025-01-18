@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PossessedSkills {
+public class AssignedSkills {
   private String SkillId;
 
   /*
@@ -24,11 +24,11 @@ public class PossessedSkills {
    *  @param String strPossessedSkills 반환할 상담사 소속 JSON 문자열열
 	 *  @return List<CounselorAffiliation>
 	*/
-  public static List<PossessedSkills> getPossessedSkillsList(
+  public static List<AssignedSkills> getPossessedSkillsList(
     String strPossessedSkills
   ) {
     
-    List<PossessedSkills> possessedSkillsList = new ArrayList<>();
+    List<AssignedSkills> possessedSkillsList = new ArrayList<>();
 
     try {
       Map<String, Object> mapPossessedSkills = new ObjectMapper().readValue(strPossessedSkills, Map.class);

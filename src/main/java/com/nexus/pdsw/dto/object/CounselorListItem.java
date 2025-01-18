@@ -14,10 +14,8 @@
 package com.nexus.pdsw.dto.object;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,7 +35,7 @@ public class CounselorListItem {
   private String counselorId;                                   //상담사 ID
   private String counselorname;                                 //상담사 이름
   private String blendKind;                                     //블랜딩 종류(1: 인바운드, 2: 아웃바운드, 3: 블랜드)
-  private List<PossessedSkills> possessedSkillsList;            //상담사 보유 스킬 리스트
+  private List<AssignedSkills> possessedSkillsList;             //상담사 보유 스킬 리스트
   private String onlyWork;                                      //상담사 업무유형
 
   /*
