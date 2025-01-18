@@ -35,8 +35,8 @@ public class CounselorListItem {
   private String counselorId;                                   //상담사 ID
   private String counselorname;                                 //상담사 이름
   private String blendKind;                                     //블랜딩 종류(1: 인바운드, 2: 아웃바운드, 3: 블랜드)
-  private List<AssignedSkills> possessedSkillsList;             //상담사 보유 스킬 리스트
-  private String onlyWork;                                      //상담사 업무유형
+  // private List<AssignedSkills> possessedSkillsList;             //상담사 보유 스킬 리스트
+  // private String onlyWork;                                      //상담사 업무유형
 
   /*
    *  상담사 리스트 반환 DTO 생성자
@@ -65,7 +65,7 @@ public class CounselorListItem {
     this.counselorname = (String) mapCounselorInfo.get("name");
     this.blendKind = (String) mapCounselorInfo.get("blend_kind");
     // this.possessedSkillsList = PossessedSkills.getPossessedSkillsList(mapCounselorInfo.get("skill"));
-    this.onlyWork = (String) mapCounselorInfo.get("onlyWork");
+    // this.onlyWork = (String) mapCounselorInfo.get("onlyWork");
   }
 
   /*
