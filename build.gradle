@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
   //JSONParser
   implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

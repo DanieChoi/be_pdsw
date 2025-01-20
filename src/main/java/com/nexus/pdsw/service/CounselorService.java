@@ -16,6 +16,7 @@ package com.nexus.pdsw.service;
 import org.springframework.http.ResponseEntity;
 
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
+import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
 
 public interface CounselorService {
  
@@ -27,4 +28,14 @@ public interface CounselorService {
    *  @return ResponseEntity<? super GetCounselorListResponseDto>
    */
   ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(String tenantId, String roleId);
+
+  /*
+   *  상담사 상태정보 가져오기
+   *  
+   *  @param String tenantId        테넌트ID
+   *  @param String counselorIds    상당원ID's
+   *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
+   */
+  ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(String tenantId, String counselorIds);
+
 }
