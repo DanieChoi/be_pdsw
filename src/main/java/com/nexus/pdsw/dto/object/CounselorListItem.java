@@ -30,8 +30,8 @@ public class CounselorListItem {
   private String centerId;                                      //센터 ID
   private String tenantId;                                      //테넌트 ID
   private List<CounselorAffiliation> counselorAffiliation;      //상담사 소속부서 정보리스트
-  private String AffiliationGroupId;                            //상담사 소속부서(그룹)
-  private String AffiliationTeamId;                             //상담사 소속부서(팀)
+  private String affiliationGroupId;                            //상담사 소속부서(그룹)
+  private String affiliationTeamId;                             //상담사 소속부서(팀)
   private String counselorId;                                   //상담사 ID
   private String counselorname;                                 //상담사 이름
   private String blendKind;                                     //블랜딩 종류(1: 인바운드, 2: 아웃바운드, 3: 블랜드)
@@ -55,9 +55,9 @@ public class CounselorListItem {
     Map<String, Object> mapCounselorAffiliation = objectMapper.convertValue(mapCounselorInfo.get("employee_group_id"), Map.class);
     mapCounselorAffiliation.forEach((key, value) -> {
       if (key.equals("1")) {
-        this.AffiliationGroupId = (String) value;
+        this.affiliationGroupId = (String) value;
       } else {
-        this.AffiliationTeamId = (String) value;
+        this.affiliationTeamId = (String) value;
       }
     });
     this.counselorAffiliation = CounselorAffiliation.getCounselorAffiliationList(mapCounselorAffiliation);
