@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
  * NAME : CounselorServiceImpl.java
- * DESC : 상담사 내역 불러오기 구현체
+ * DESC : 상담사 관련 구현체
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
  * Copyright 2024 Dootawiz All rights reserved
@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/15  최상원                       초기작성
+ * 2025/01/21  최상원                       상담사 내역 가져오기에 센터명, 테넌트명, 그룹명, 팀명 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -61,19 +61,79 @@ public class CounselorServiceImpl implements CounselorService {
 
     List<Map<String, Object>> mapCounselorInfoList = new ArrayList<Map<String, Object>>();
 
+    JSONArray arrJsonCenter = new JSONArray();
+    JSONArray arrJsonTenant = new JSONArray();
+    JSONArray arrJsonGroup = new JSONArray();
+    JSONArray arrJsonTeam = new JSONArray();
+
     try {
-      
+
       String redisKey = "";
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+      JSONParser jsonParser = new JSONParser();
+  
+      //센터정보
+      redisKey = "master.center";
+      Map<Object, Object> redisCenter = hashOperations.entries(redisKey);
+      arrJsonCenter = (JSONArray) jsonParser.parse(redisCenter.values().toString());
+
+      //테넌트정보
+      JSONObject jsonObjCenter = new JSONObject();
+      Map<Object, Object> redisTenant = new HashMap<>();
+
+      for (Object jsonCenter : arrJsonCenter) {
+
+        jsonObjCenter = (JSONObject) jsonCenter;
+        redisKey = "master.tenant-" + jsonObjCenter.get("CENTER").toString();
+
+        redisTenant = hashOperations.entries(redisKey);
+        arrJsonTenant.addAll((JSONArray) jsonParser.parse(redisTenant.values().toString()));
+      }
+
+      //부서(그룹)정보
+      JSONObject jsonObjTenant = new JSONObject();
+      Map<Object, Object> redisGroup = new HashMap<>();
+
+      for (Object jsonCenter : arrJsonCenter) {
+
+        jsonObjCenter = (JSONObject) jsonCenter;
+
+        for (Object jsonTenant : arrJsonTenant) {
+
+          jsonObjTenant = (JSONObject) jsonTenant;
+          redisKey = "master.group-emp-" + jsonObjCenter.get("CENTER").toString() + "-" + jsonObjTenant.get("TENANT").toString();
+
+          System.out.println(">>> 부서(그룹) Redis Key: " + redisKey);
+
+          redisGroup = hashOperations.entries(redisKey);
+          arrJsonGroup.addAll((JSONArray) jsonParser.parse(redisGroup.values().toString()));
+        }
+      }
+
+      //부서(팀)정보
+      Map<Object, Object> redisTeam = new HashMap<>();
+
+      for (Object jsonCenter : arrJsonCenter) {
+
+        jsonObjCenter = (JSONObject) jsonCenter;
+
+        for (Object jsonTenant : arrJsonTenant) {
+
+          jsonObjTenant = (JSONObject) jsonTenant;
+          redisKey = "master.team-emp-" + jsonObjCenter.get("CENTER").toString() + "-" + jsonObjTenant.get("TENANT").toString();
+
+          System.out.println(">>> 부서(팀) Redis Key: " + redisKey);
+
+          redisTeam = hashOperations.entries(redisKey);
+          arrJsonTeam.addAll((JSONArray) jsonParser.parse(redisTeam.values().toString()));
+        }
+      }
 
       Map<Object, Object> redisCounselorList = new HashMap<>();
-
       Map<String, Object> mapCounselorInfo = null;
+      JSONArray arrJsonCounselor = new JSONArray();
 
-      JSONArray arrJsonCounselor = new JSONArray();      
-      JSONParser jsonParser = new JSONParser();
-
-      // 로그인 사용자의 역할ID에 따라 다른 상담사 리스트를 반환한다.
+      //로그인 사용자의 역할ID에 따라 다른 상담사 리스트를 반환한다.
       switch (roleId) {
         //테넌트 매니저저
         case "4":
@@ -81,7 +141,6 @@ public class CounselorServiceImpl implements CounselorService {
           redisCounselorList = hashOperations.entries(redisKey);
 
           arrJsonCounselor = (JSONArray) jsonParser.parse(redisCounselorList.values().toString());
-          // arrJsonCounselor.add(redisCounselorList.values().toString());
 
           for (int i = 0; i < arrJsonCounselor.size(); ++i) {
             JSONObject counselor = (JSONObject) arrJsonCounselor.get(i);
@@ -111,7 +170,6 @@ public class CounselorServiceImpl implements CounselorService {
             redisCounselorList = hashOperations.entries(redisKey);
 
             arrJsonCounselor = (JSONArray) jsonParser.parse(redisCounselorList.values().toString());
-            arrJsonCounselor.add(redisCounselorList.values().toString());
 
             for (int i = 0; i < arrJsonCounselor.size() - 1; ++i) {
               JSONObject counselor = (JSONObject) arrJsonCounselor.get(i);
@@ -139,7 +197,7 @@ public class CounselorServiceImpl implements CounselorService {
             e.printStackTrace();
             ResponseDto.databaseError();
     }
-    return GetCounselorListResponseDto.success(mapCounselorInfoList);
+    return GetCounselorListResponseDto.success(arrJsonCenter, arrJsonTenant, arrJsonGroup, arrJsonTeam, mapCounselorInfoList);
   }
 
   /*
