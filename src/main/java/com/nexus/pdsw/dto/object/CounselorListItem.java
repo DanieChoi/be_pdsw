@@ -20,12 +20,8 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nexus.pdsw.dto.response.ResponseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

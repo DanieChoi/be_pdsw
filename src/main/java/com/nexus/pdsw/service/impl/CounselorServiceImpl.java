@@ -23,10 +23,11 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
+import com.nexus.pdsw.dto.response.counselor.PutSubscribeResponseDto;
 import com.nexus.pdsw.service.CounselorService;
+import com.nexus.pdsw.service.RedisSubscriberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,8 +46,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CounselorServiceImpl implements CounselorService {
 
-  @Autowired
-  private RedisTemplate<String, String> redisTemplate;
+  private final RedisTemplate<String, Object> redisTemplate;
+  private final RedisSubscriberService redisSubscriberService;
+  private final RedisMessageListenerContainer redisMessageListenerContainer;
+
+
+  /*
+   *  상담사 로그인 시 채널 구독하기
+   *  
+   *  @param String tenantId  상담사 소속 테넌트ID
+   *  @param String roleId    상담사 역할 ID(1: 상담사, 2: 파트매니저, 3: 그룹매니저, 4: 테넌트메니저, 5: 시스템 메니저, 6: 전체)
+   *  @return ResponseEntity<? super PutSubscribeResponseDto>
+   */
+  @Override
+  public ResponseEntity<? super PutSubscribeResponseDto> subscribe(
+    String tenantId,
+    String roleId
+  ) {
+
+    try {
+        ChannelTopic channel = new ChannelTopic("pds:tenant:0");
+        redisMessageListenerContainer.addMessageListener(redisSubscriberService, channel);      
+    } catch (Exception e) {
+      e.printStackTrace();
+      ResponseDto.databaseError();
+    }
+    return PutSubscribeResponseDto.success();
+  }
 
   /*  
    *  상담사 리스트 가져오기
@@ -103,8 +131,6 @@ public class CounselorServiceImpl implements CounselorService {
           jsonObjTenant = (JSONObject) jsonTenant;
           redisKey = "master.group-emp-" + jsonObjCenter.get("CENTER").toString() + "-" + jsonObjTenant.get("TENANT").toString();
 
-          System.out.println(">>> 부서(그룹) Redis Key: " + redisKey);
-
           redisGroup = hashOperations.entries(redisKey);
           arrJsonGroup.addAll((JSONArray) jsonParser.parse(redisGroup.values().toString()));
         }
@@ -121,8 +147,6 @@ public class CounselorServiceImpl implements CounselorService {
 
           jsonObjTenant = (JSONObject) jsonTenant;
           redisKey = "master.team-emp-" + jsonObjCenter.get("CENTER").toString() + "-" + jsonObjTenant.get("TENANT").toString();
-
-          System.out.println(">>> 부서(팀) Redis Key: " + redisKey);
 
           redisTeam = hashOperations.entries(redisKey);
           arrJsonTeam.addAll((JSONArray) jsonParser.parse(redisTeam.values().toString()));

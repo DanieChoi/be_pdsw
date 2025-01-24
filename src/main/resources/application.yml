@@ -12,10 +12,4 @@ spring:
       host: 10.10.40.139
       port: 6379
       password: nexus!234
-      database: 4
       timeout: 2000
-  rabbitmq:
-    port: 5672
-    host: localhost
-    username: guest
-    password: guest
