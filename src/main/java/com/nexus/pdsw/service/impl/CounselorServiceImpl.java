@@ -23,6 +23,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -40,16 +41,23 @@ import com.nexus.pdsw.dto.response.counselor.PutSubscribeResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 import com.nexus.pdsw.service.RedisSubscriberService;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class CounselorServiceImpl implements CounselorService {
 
-  private final RedisTemplate<String, Object> redisTemplate;
   private final RedisSubscriberService redisSubscriberService;
   private final RedisMessageListenerContainer redisMessageListenerContainer;
+  @Qualifier("1")
+  private final RedisTemplate<String, Object> redisTemplate1;
 
+  public CounselorServiceImpl(
+    RedisSubscriberService redisSubscriberService,
+    RedisMessageListenerContainer redisMessageListenerContainer,
+    @Qualifier("1") RedisTemplate<String, Object> redisTemplate1
+  ) {
+    this.redisMessageListenerContainer = redisMessageListenerContainer;
+    this.redisSubscriberService = redisSubscriberService;
+    this.redisTemplate1 = redisTemplate1;
+  }
 
   /*
    *  상담사 로그인 시 채널 구독하기
@@ -65,8 +73,17 @@ public class CounselorServiceImpl implements CounselorService {
   ) {
 
     try {
-        ChannelTopic channel = new ChannelTopic("pds:tenant:0");
-        redisMessageListenerContainer.addMessageListener(redisSubscriberService, channel);      
+      
+      String channelKey = "";
+
+      //상담사 레벨이 시스템매니저이거나 전체매니저인 경우
+      if (roleId.equals("5") || roleId.equals("6")) {
+        channelKey = "pds:tenant:0";
+      } else {
+        channelKey = "pds:tenant:" + tenantId;
+      }
+      ChannelTopic channel = new ChannelTopic(channelKey);
+      redisMessageListenerContainer.addMessageListener(redisSubscriberService, channel);      
     } catch (Exception e) {
       e.printStackTrace();
       ResponseDto.databaseError();
@@ -97,7 +114,8 @@ public class CounselorServiceImpl implements CounselorService {
     try {
 
       String redisKey = "";
-      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+      // System.out.println(redisTemplate1.keys("*"));
+      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
       JSONParser jsonParser = new JSONParser();
   
       //센터정보
@@ -218,8 +236,8 @@ public class CounselorServiceImpl implements CounselorService {
       }
 
     } catch (Exception e) {
-            e.printStackTrace();
-            ResponseDto.databaseError();
+      e.printStackTrace();
+      ResponseDto.databaseError();
     }
     return GetCounselorListResponseDto.success(arrJsonCenter, arrJsonTenant, arrJsonGroup, arrJsonTeam, mapCounselorInfoList);
   }
@@ -245,7 +263,7 @@ public class CounselorServiceImpl implements CounselorService {
 
       String redisKey = "";
       String redisCounselorIdx = "";
-      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
       Map<Object, Object> redisCounselorStatusList = new HashMap<>();
 
       JSONArray arrJsonCounselorState = new JSONArray();      

@@ -42,8 +42,8 @@ public class SseEmitterController {
   
   private final SseEmitterService sseEmitterService;
   private final RedisPublisherService redisPublisherService;
-  @Qualifier("1")
-  private final RedisTemplate<String, Object> redisTemplate1;
+  // @Qualifier("1")
+  // private final RedisTemplate<String, Object> redisTemplate1;
   
   /*
    *  연결
@@ -62,25 +62,30 @@ public class SseEmitterController {
 
     try {
       // 최초 연결 시 메시지를 안 보내면 503 Service unavailable 에러 발생
-      emitter.send(SseEmitter.event().name("connect").data("connected!"));
-      emitter.complete();
-    } catch (Exception e) {
-      e.printStackTrace();
+      emitter.send(SseEmitter
+        .event()
+        .id(counselorId)
+        .name("connect")
+        .data("connected!")
+      );
+      // emitter.send(SseEmitter.event().name("connect").data("connected!"));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
     // 2. 캐싱 처리된 못 받은 알람 connection 완료 시 밀어주기.
-    if (Boolean.TRUE.equals(redisTemplate1.hasKey(counselorId))) {
-      ListOperations<String, Object> valuOperations = redisTemplate1.opsForList();
-      Long size = valuOperations.size(counselorId);
-      List<Notification> notificationList = valuOperations.range(counselorId, 0, size-1)
-        .stream()
-        .map(a->(Notification)a)
-        .collect(Collectors.toList());
-      for(Notification notification : notificationList) {
-        sendLastInfoToCounselor(counselorId, notification);
-      }
-      redisTemplate1.delete(counselorId);
-    }
+    // if (Boolean.TRUE.equals(redisTemplate1.hasKey(counselorId))) {
+    //   ListOperations<String, Object> valuOperations = redisTemplate1.opsForList();
+    //   Long size = valuOperations.size(counselorId);
+    //   List<Notification> notificationList = valuOperations.range(counselorId, 0, size-1)
+    //     .stream()
+    //     .map(a->(Notification)a)
+    //     .collect(Collectors.toList());
+    //   for(Notification notification : notificationList) {
+    //     sendLastInfoToCounselor(counselorId, notification);
+    //   }
+    //   redisTemplate1.delete(counselorId);
+    // }
 
     return ResponseEntity.ok(emitter);
   }

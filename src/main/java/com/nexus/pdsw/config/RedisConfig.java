@@ -45,10 +45,34 @@ public class RedisConfig {
 
   @Bean
   @Primary
-  LettuceConnectionFactory connectionFactory() { return createConnectionFactoryWith(4); }
+  LettuceConnectionFactory connectionFactory() { return createConnectionFactoryWith(9); }
   @Bean
   @Primary
   RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+
+    // redis template에 connection factory 연결
+    redisTemplate.setConnectionFactory(connectionFactory);
+
+    // 일반적인 key:value의 경우 시리얼라이저
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new StringRedisSerializer());
+
+    // Hash를 사용할 경우 시리얼라이저
+    redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+    redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+
+    return redisTemplate;
+  }
+
+  // ----------------------------------------------------------------------------
+  // 상담원 관련 데이타 가져 올 레디스 4번 구역
+  @Bean
+  @Qualifier("1")
+  LettuceConnectionFactory connectionFactory1() { return createConnectionFactoryWith(4); }
+  @Bean
+  @Qualifier("1")
+  RedisTemplate<String, Object> redisTemplate1(@Qualifier("1") RedisConnectionFactory connectionFactory) {
     RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(connectionFactory);
 
@@ -60,24 +84,6 @@ public class RedisConfig {
     redisTemplate.setHashKeySerializer(new StringRedisSerializer());
     redisTemplate.setHashValueSerializer(new StringRedisSerializer());
 
-    // 모든 경우
-    redisTemplate.setDefaultSerializer(new StringRedisSerializer());
-
-    return redisTemplate;
-  }
-
-  // ----------------------------------------------------------------------------
-  // 못받은 메시지를 저장할 레디스 1번 구역
-  @Bean
-  @Qualifier("1")
-  LettuceConnectionFactory connectionFactory1() { return createConnectionFactoryWith(1); }
-  @Bean
-  @Qualifier("1")
-  RedisTemplate<String, Object> redisTemplate1(@Qualifier("1") RedisConnectionFactory connectionFactory) {
-    RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-    redisTemplate.setKeySerializer(new StringRedisSerializer());
-    redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-    redisTemplate.setConnectionFactory(connectionFactory);
     return redisTemplate;
   }
    
@@ -97,7 +103,7 @@ public class RedisConfig {
   RedisTemplate<String, String> redisTemplate2(@Qualifier("2") RedisConnectionFactory connectionFactory) {
     RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
     redisTemplate.setKeySerializer(new StringRedisSerializer());
-    redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+    redisTemplate.setValueSerializer(new StringRedisSerializer());
     redisTemplate.setConnectionFactory(connectionFactory);
     return redisTemplate;
   }

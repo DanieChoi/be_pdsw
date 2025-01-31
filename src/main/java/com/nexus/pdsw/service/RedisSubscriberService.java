@@ -27,6 +27,7 @@ public class RedisSubscriberService implements MessageListener {
   public void onMessage(Message message, @Nullable byte[] pattern) {
     try {
 
+      System.out.println(">>>Public Message: " + message);
       String[] strings = message.toString().split("_");
 
       String type = strings[0];
