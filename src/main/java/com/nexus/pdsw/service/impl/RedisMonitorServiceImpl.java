@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.response.ResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
@@ -52,7 +53,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
     try {
       
-      // System.out.println(redisTemplate.keys("*"));
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJsonMonitorProcess = new JSONArray();
@@ -77,6 +77,48 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       ResponseDto.databaseError();
     }
     return GetProcessStatusInfoResponseDto.success(mapMonitorProcessList);
+  }
+
+  /*
+   *  Dialer 채널 상태 정보 가져오기
+   *  
+   *  @param String deviceId         Dialer 장비ID
+   *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
+   */
+  @Override
+  public ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
+    String deviceId
+  ) {
+
+    List<Map<String, Object>> mapDialerChannelStatusList = new ArrayList<Map<String, Object>>();
+
+    try {
+      
+      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+      JSONParser jsonParser = new JSONParser();
+      JSONArray arrJson = new JSONArray();
+
+      String redisKey = "monitor:dialer:" + deviceId + ":channel";
+
+      Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
+      arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
+      Map<String, Object> mapItem = null;
+
+      for(Object jsonItem : arrJson) {
+        try {
+          mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+        } catch (JsonMappingException e) {
+          throw new RuntimeException(e);
+        }
+        mapDialerChannelStatusList.add(mapItem);
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      ResponseDto.databaseError();
+    }
+
+    return GetDialerChannelStatusInfoResponseDto.success(mapDialerChannelStatusList);
   }
   
 }

@@ -16,6 +16,7 @@ package com.nexus.pdsw.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -43,5 +45,17 @@ public class RedisMonitorController {
     return response;
   }
   
-
+  /*
+   *  Dialer 채널 상태 정보 가져오기
+   *  
+   *  @param deviceId         Dialer 장비ID
+   *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
+   */
+  @GetMapping("/dialer/{deviceId}/channel")
+  public ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
+    @PathVariable("deviceId") String deviceId
+  ) {
+    ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> response = redisMonitorService.getDialerChannelStatusInfo(deviceId);
+    return response;
+  }
 }

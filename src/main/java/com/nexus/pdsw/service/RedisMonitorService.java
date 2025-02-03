@@ -15,6 +15,7 @@ package com.nexus.pdsw.service;
 
 import org.springframework.http.ResponseEntity;
 
+import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 
 public interface RedisMonitorService {
@@ -25,5 +26,13 @@ public interface RedisMonitorService {
    *  @return ResponseEntity<? super GetProcessStatusInfoResponseDto>
    */
   ResponseEntity<? super GetProcessStatusInfoResponseDto> getProcessStatusInfo();
+
+  /*
+   *  Dialer 채널 상태 정보 가져오기
+   *  
+   *  @param String deviceId         Dialer 장비ID
+   *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
+   */
+  ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(String deviceId);
   
 }
