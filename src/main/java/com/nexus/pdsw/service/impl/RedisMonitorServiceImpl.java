@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
 import lombok.RequiredArgsConstructor;
@@ -119,6 +120,50 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
     }
 
     return GetDialerChannelStatusInfoResponseDto.success(mapDialerChannelStatusList);
+  }
+
+  /*
+   *  캠페인 별 발신 진행상태정보 가져오기
+   *  
+   *  @param tenantId           테넌트ID
+   *  @param campaignId         캠페인ID
+   *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
+   */
+  @Override
+  public ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(
+    String tenantId,
+    String campaignId
+  ) {
+
+    List<Map<String, Object>> mapSendingProgressStatusList = new ArrayList<Map<String, Object>>();
+
+    try {
+      
+      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+      JSONParser jsonParser = new JSONParser();
+      JSONArray arrJson = new JSONArray();
+
+      String redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
+
+      Map<Object, Object> redisSendingProgressStatus = hashOperations.entries(redisKey);
+      arrJson = (JSONArray) jsonParser.parse(redisSendingProgressStatus.values().toString());
+      Map<String, Object> mapItem = null;
+
+      for(Object jsonItem : arrJson) {
+        try {
+          mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+        } catch (JsonMappingException e) {
+          throw new RuntimeException(e);
+        }
+        mapSendingProgressStatusList.add(mapItem);
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      ResponseDto.databaseError();
+    }
+
+    return GetSendingProgressStatusResponseDto.success(mapSendingProgressStatusList);
   }
   
 }
