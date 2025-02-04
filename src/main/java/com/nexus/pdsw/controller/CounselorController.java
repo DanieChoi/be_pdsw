@@ -16,10 +16,15 @@ package com.nexus.pdsw.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
+import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PutSubscribeResponseDto;
@@ -27,6 +32,7 @@ import com.nexus.pdsw.service.CounselorService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -73,16 +79,32 @@ public class CounselorController {
   /*
    *  상담사 상태정보 가져오기
    *  
-   *  @param String tenantId        테넌트ID
-   *  @param String counselorIds    상당원ID's
+   *  @param String tenantId                            테넌트ID("0"이면 전체)
+   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
    *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
    */
-  @GetMapping("/state")
+  @PostMapping("/{tenantId}/state")
   public ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(
-    @RequestParam(required = true) String tenantId,
-    @RequestParam(required = true) String counselorIds
+    @PathVariable("tenantId") String tenantId,
+    @RequestBody PostCounselorListRequestDto requestBody
   ) {
-    ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, counselorIds);
+    ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, requestBody);
+    return response;
+  }
+
+  /*
+   *  캠페인 할당 상담사정보 가져오기
+   *  
+   *  @param String tenantId                            테넌트ID("0"이면 전체)
+   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
+   *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
+   */
+  @PostMapping("/{tenantId}/counselorInfo")
+  public ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(
+    @PathVariable("tenantId") String tenantId,
+    @RequestBody PostCounselorListRequestDto requestBody
+  ) {
+    ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(tenantId, requestBody);
     return response;
   }
 }

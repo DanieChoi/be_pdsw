@@ -34,7 +34,9 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
+import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PutSubscribeResponseDto;
@@ -245,21 +247,21 @@ public class CounselorServiceImpl implements CounselorService {
   /*
    *  상담사 상태정보 가져오기
    *  
-   *  @param String tenantId        테넌트ID
-   *  @param String counselorIds    상당원ID's
+   *  @param String tenantId                            테넌트ID("0"이면 전체)
+   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
    *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
    */
   @Override
   public ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(
     String tenantId,
-    String counselorIds
+    PostCounselorListRequestDto requestBody
   ) {
 
     List<Map<String, Object>> mapCounselorStatusList = new ArrayList<Map<String, Object>>();
 
     try {
 
-      String[] arrCounselorId = counselorIds.split(",");
+      String[] arrCounselorId = requestBody.getCounselors().split(",");
 
       String redisKey = "";
       String redisCounselorIdx = "";
@@ -325,5 +327,76 @@ public class CounselorServiceImpl implements CounselorService {
       ResponseDto.databaseError();
     }
     return GetCounselorStatusListResponseDto.success(mapCounselorStatusList);
+  }
+
+  /*
+   *  캠페인 할당 상담사정보 가져오기
+   *  
+   *  @param String tenantId                            테넌트ID("0"이면 전체)
+   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
+   *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
+   */
+  @Override
+  public ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(
+    String tenantId,
+    PostCounselorListRequestDto requestBody
+  ) {
+
+    List<Map<String, Object>> mapCounselorInfoList = new ArrayList<Map<String, Object>>();
+
+    try {
+
+      String[] arrCounselorId = requestBody.getCounselors().split(",");
+
+      String redisKey = "";
+      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
+      Map<Object, Object> redisCounselorList = new HashMap<>();
+      JSONArray arrJson = new JSONArray();      
+      JSONParser jsonParser = new JSONParser();
+
+      //센터 내 모든 상담원 대상으로 정보요구 시
+      if (tenantId.equals("0")) {
+          Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
+          for (Object tenantKey : redisTenantList.keySet()) {
+            redisKey = "master.employee-1-" + tenantKey;
+            redisCounselorList = hashOperations.entries(redisKey);
+            
+            arrJson = (JSONArray) jsonParser.parse(redisCounselorList.values().toString());
+
+          }
+        
+      } else {
+        redisKey = "master.employee-1-" + tenantId;
+        redisCounselorList = hashOperations.entries(redisKey);
+
+        arrJson = (JSONArray) jsonParser.parse(redisCounselorList.values().toString());
+        Map<String, Object> mapItem = null;
+
+        for (String counselorId : arrCounselorId){
+          for (Object jsonItem : arrJson) {
+            JSONObject jsonObj = (JSONObject) jsonItem;
+
+            //해당 테넌트에 소속된 상담사 중 대상 상담사의 ID와 동일하면
+            if (counselorId.equals(jsonObj.get("EMPLOYEE").toString())) {
+              JSONObject jsonObjData = (JSONObject) jsonObj.get("Data");
+
+              try {
+                mapItem = new ObjectMapper().readValue(jsonObjData.toString(), Map.class);
+              } catch (JsonMappingException e) {
+                throw new RuntimeException(e);
+              }
+              mapCounselorInfoList.add(mapItem);
+              break;
+            }
+          }
+        }
+      }
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+      ResponseDto.databaseError();
+    }
+
+    return GetCounselorInfoListResponseDto.success(mapCounselorInfoList);
   }
 }
