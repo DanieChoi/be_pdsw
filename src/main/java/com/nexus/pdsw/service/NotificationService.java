@@ -1,0 +1,37 @@
+/*------------------------------------------------------------------------------
+ * NAME : NotificationService.java
+ * DESC : 알림 이벤트 기능
+ * VER  : V1.0
+ * PROJ : 웹 기반 PDS 구축 프로젝트
+ * Copyright 2024 Dootawiz All rights reserved
+ *------------------------------------------------------------------------------
+ *                               MODIFICATION LOG
+ *------------------------------------------------------------------------------
+ *    DATE     AUTHOR                       DESCRIPTION
+ * ----------  ------  -----------------------------------------------------------
+ * 2025/02/04  최상원                       초기작성
+ *------------------------------------------------------------------------------*/
+package com.nexus.pdsw.service;
+
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.nexus.pdsw.dto.request.GetSubscribeRequestDto;
+
+public interface NotificationService {
+  
+  /*
+   *  알림 이벤트 구독
+   *  
+   *  @param GetSubscribeRequestDto requestBody   로그인 상담사 정보
+   *  @return SseEmitter
+   */
+  public SseEmitter subscribe(GetSubscribeRequestDto requestBody);
+
+  /*
+   *  알림 이벤트 전송
+   *  
+   *  @param NotificationEvent event   상담사ID
+   *  @return SseEmitter
+   */
+  // public void sendNotification(NotificationDto event);
+}

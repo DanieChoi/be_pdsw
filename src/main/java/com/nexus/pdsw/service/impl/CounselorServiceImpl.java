@@ -27,8 +27,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -39,58 +37,18 @@ import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
-import com.nexus.pdsw.dto.response.counselor.PutSubscribeResponseDto;
 import com.nexus.pdsw.service.CounselorService;
-import com.nexus.pdsw.service.RedisSubscriberService;
 
 @Service
 public class CounselorServiceImpl implements CounselorService {
 
-  private final RedisSubscriberService redisSubscriberService;
-  private final RedisMessageListenerContainer redisMessageListenerContainer;
   @Qualifier("1")
   private final RedisTemplate<String, Object> redisTemplate1;
 
   public CounselorServiceImpl(
-    RedisSubscriberService redisSubscriberService,
-    RedisMessageListenerContainer redisMessageListenerContainer,
     @Qualifier("1") RedisTemplate<String, Object> redisTemplate1
   ) {
-    this.redisMessageListenerContainer = redisMessageListenerContainer;
-    this.redisSubscriberService = redisSubscriberService;
     this.redisTemplate1 = redisTemplate1;
-  }
-
-  /*
-   *  상담사 로그인 시 채널 구독하기
-   *  
-   *  @param String tenantId  상담사 소속 테넌트ID
-   *  @param String roleId    상담사 역할 ID(1: 상담사, 2: 파트매니저, 3: 그룹매니저, 4: 테넌트메니저, 5: 시스템 메니저, 6: 전체)
-   *  @return ResponseEntity<? super PutSubscribeResponseDto>
-   */
-  @Override
-  public ResponseEntity<? super PutSubscribeResponseDto> subscribe(
-    String tenantId,
-    String roleId
-  ) {
-
-    try {
-      
-      String channelKey = "";
-
-      //상담사 레벨이 시스템매니저이거나 전체매니저인 경우
-      if (roleId.equals("5") || roleId.equals("6")) {
-        channelKey = "pds:tenant:0";
-      } else {
-        channelKey = "pds:tenant:" + tenantId;
-      }
-      ChannelTopic channel = new ChannelTopic(channelKey);
-      redisMessageListenerContainer.addMessageListener(redisSubscriberService, channel);      
-    } catch (Exception e) {
-      e.printStackTrace();
-      ResponseDto.databaseError();
-    }
-    return PutSubscribeResponseDto.success();
   }
 
   /*  
