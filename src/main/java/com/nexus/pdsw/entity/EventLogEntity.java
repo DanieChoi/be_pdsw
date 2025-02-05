@@ -17,8 +17,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.nexus.pdsw.common.AesEncDecConverter;
 import com.nexus.pdsw.dto.request.PostEventLogRequestDto;
 
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,6 +45,7 @@ public class EventLogEntity {
   private String queryId;           //web query id
   private String queryType;         //이벤트타입 I:insert, U:update, D:delete, R:select, A:자원변경
   private String activation;        //행위 로그
+  @Convert(converter = AesEncDecConverter.class)
   private String description;       //부가정보
   private int successFlag;          //성공여부 1 : 성공 0 : 실패 또는 DB 에러코드
   private LocalDateTime eventTime;  //이벤트일시
