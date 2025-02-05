@@ -40,8 +40,7 @@ public class RedisSubscriber implements MessageListener {
     try {
 
       String channel = new String(message.getChannel());
-        // .substring(CHANNEL_PREFIX);
-      
+
       NotificationDto notificationDto = objectMapper.readValue(message.getBody(), NotificationDto.class);
 
       sseEmitterService.sendNotificationToClient(channel, notificationDto);

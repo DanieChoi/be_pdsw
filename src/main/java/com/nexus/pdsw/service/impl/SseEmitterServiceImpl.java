@@ -69,8 +69,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    */
   @Override
   public void sendNotificationToClient(String emitterKey, NotificationDto notificationDto) {
-    sseEmitterRepository.findById(emitterKey)
-      .ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
+    sseEmitterRepository.findById(emitterKey).ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
   }
 
   /*
@@ -87,6 +86,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     try {
       log.info("send to client {}:[{}]", emitterKey, data);
       sseEmitter.send(SseEmitter.event()
+        .name("message")
         .id(emitterKey)
         .data(data, MediaType.APPLICATION_JSON)
       );

@@ -16,6 +16,7 @@ package com.nexus.pdsw.controller;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,15 +37,15 @@ public class NotificationController {
   /*
    *  실시간 이벤트 구독
    *  
-   *  @param String counselorId  상담사 ID
+   *  @param String tenantId  테넌트ID
    *  @return ResponseEntity<SseEmitter>
    */
-  @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  @GetMapping(value = "/{tenantId}/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public ResponseEntity<SseEmitter> subscribe(
-    @RequestBody GetSubscribeRequestDto requestBody
+    @PathVariable("tenantId") String tenantId
   ) {
     
-    return ResponseEntity.ok(notificationService.subscribe(requestBody));
+    return ResponseEntity.ok(notificationService.subscribe(tenantId));
 
   }
 

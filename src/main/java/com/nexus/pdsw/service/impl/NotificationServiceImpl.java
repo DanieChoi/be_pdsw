@@ -35,21 +35,25 @@ public class NotificationServiceImpl implements NotificationService {
   /*
    *  알림 이벤트 구독
    *  
-   *  @param GetSubscribeRequestDto requestBody   로그인 상담사 정보
+   *  @param String tenantId  테넌트ID
    *  @return SseEmitter
    */
   @Override
-  public SseEmitter subscribe(GetSubscribeRequestDto requestBody) {
-    SseEmitter sseEmitter = sseEmitterService.createEmitter(requestBody.getCounselorId());
-    sseEmitterService.send("MsgF", requestBody.getCounselorId(), sseEmitter);
+  public SseEmitter subscribe(String tenantId) {
+    String emitterKey = "pds:tenant:" + tenantId;
 
-    redisMessageService.subscribe(requestBody.getTenantId());
+    SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);
+    sseEmitterService.send("Connected!!", emitterKey, sseEmitter);
+    // SseEmitter sseEmitter = sseEmitterService.createEmitter(requestBody.getCounselorId());
+    // sseEmitterService.send("Connected!!", requestBody.getCounselorId(), sseEmitter);
+
+    redisMessageService.subscribe(tenantId);
 
     sseEmitter.onTimeout(sseEmitter::complete);
     sseEmitter.onError((e) -> sseEmitter.complete());
     sseEmitter.onCompletion(() -> {
-      sseEmitterService.deleteEmitter(requestBody.getCounselorId());
-      redisMessageService.removeSubscribe(requestBody.getTenantId());
+      sseEmitterService.deleteEmitter(emitterKey);
+      redisMessageService.removeSubscribe(tenantId);
     });
     return sseEmitter;
   }
