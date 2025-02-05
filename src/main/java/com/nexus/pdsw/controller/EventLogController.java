@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
- * NAME : NotificationController.java
- * DESC : SSE 방식의 실시간 알림
+ * NAME : EventLogController.java
+ * DESC : 이벤트 로그 기록
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
  * Copyright 2024 Dootawiz All rights reserved
@@ -13,38 +13,38 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.controller;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.nexus.pdsw.service.NotificationService;
+import com.nexus.pdsw.dto.request.PostEventLogRequestDto;
+import com.nexus.pdsw.dto.response.eventLog.PostEventLogResponseDto;
+import com.nexus.pdsw.service.EventLogService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/api/v1/notification")
+@Slf4j
+@RequestMapping("/api/v1/log")
 @RequiredArgsConstructor
 @RestController
-public class NotificationController {
+public class EventLogController {
 
-  private final NotificationService notificationService;
+  private final EventLogService eventLogService;
   
-  /*
-   *  실시간 이벤트 구독
+  /*  
+   *  이벤트 로그 저장하기
    *  
-   *  @param String tenantId  테넌트ID
-   *  @return ResponseEntity<SseEmitter>
+   *  @param PostEventLogRequestDto requestBody  이벤트 로그 전달 DTO
+   *  @return ResponseEntity<? super PostEventLogResponseDto>
    */
-  @GetMapping(value = "/{tenantId}/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public ResponseEntity<SseEmitter> subscribe(
-    @PathVariable("tenantId") String tenantId
+  @PostMapping("/save")
+  public ResponseEntity<? super PostEventLogResponseDto> saveEventLog(
+    @RequestBody PostEventLogRequestDto requestBody
   ) {
-    
-    return ResponseEntity.ok(notificationService.subscribe(tenantId));
-
+    ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody);
+    return response;
   }
-
 }

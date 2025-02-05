@@ -16,7 +16,6 @@ package com.nexus.pdsw.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.nexus.pdsw.dto.request.GetSubscribeRequestDto;
 import com.nexus.pdsw.service.NotificationService;
 import com.nexus.pdsw.service.RedisMessageService;
 import com.nexus.pdsw.service.SseEmitterService;

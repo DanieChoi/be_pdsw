@@ -2,6 +2,11 @@ server:
   port: 4000
 
 spring:
+  datasource:
+    url: jdbc:mariadb://10.10.40.136:3306/JEDAI_CUBE
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: pdsw_app
+    password: pdswDev136!
   data:
     redis:
       lettuce:

@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
- * NAME : GetSubscribeRequestDto.java
- * DESC : SSE 실시간 이벤트 구독 요청 시 전달 DTO
+ * NAME : EventLogRepository.java
+ * DESC : 이벤트 로그 저장장
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
  * Copyright 2024 Dootawiz All rights reserved
@@ -11,18 +11,14 @@
  * ----------  ------  -----------------------------------------------------------
  * 2025/02/05  최상원                       초기작성
  *------------------------------------------------------------------------------*/
-package com.nexus.pdsw.dto.request;
+package com.nexus.pdsw.repository;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class GetSubscribeRequestDto {
+import com.nexus.pdsw.entity.EventLogEntity;
+
+@Repository
+public interface EventLogRepository extends JpaRepository<EventLogEntity, Long> {
   
-  private String tenantId;    //상담원 소속 테넌트ID
-  private String counselorId; //상담원 ID
-  private String roleCd;      //상담원 역할코드
 }
