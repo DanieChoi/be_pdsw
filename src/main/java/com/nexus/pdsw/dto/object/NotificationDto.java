@@ -13,6 +13,8 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.dto.object;
 
+import java.util.List;
+
 import lombok.Getter;
 
 @Getter
@@ -21,5 +23,5 @@ public class NotificationDto {
   private String kind;
   private String command;
   private String announce;
-  private Object data;
+  private List<Object> data;
 }
