@@ -117,9 +117,9 @@ jobs:
         # 7. 뒷정리
         #    rm -rf /home/nexus/fe_pdsw/upload
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          host: ${{ secrets.PDSW_HOST }}
+          username: ${{ secrets.PDSW_USER }}
+          key: ${{ secrets.PDSW_KEY }}
           script_stop: true
           script: |
             rm -rf /home/nexus/fe_pdsw/api
