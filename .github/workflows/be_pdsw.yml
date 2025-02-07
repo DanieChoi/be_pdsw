@@ -114,7 +114,7 @@ jobs:
         # 6. 서버구동
         #    엑세스, 에러로그등 전체 로그를 output.log으로 출력
         #    nohup java -jar fe_pdsw.jar > ./output.log 2>&1 &
-        # 7. 뒷정리
+        # 7. 뒷정리 
         #    rm -rf /home/nexus/fe_pdsw/upload
         with:
           host: ${{ secrets.PDSW_HOST }}
