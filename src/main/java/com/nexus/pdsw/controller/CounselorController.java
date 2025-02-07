@@ -36,54 +36,65 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/counselor")
 @RequiredArgsConstructor
 public class CounselorController {
-  
-  private final CounselorService counselorService;
 
-  /*
-   *  상담사 리스트 가져오기
-   *  
-   *  @param String tenantId  상담사 소속 테넌트ID
-   *  @param String roleId    상담사 역할 ID(1: 상담사, 2: 파트매니저, 3: 그룹매니저, 4: 테넌트메니저, 5: 시스템 메니저, 6: 전체)
-   *  @return ResponseEntity<? super GetCounselorListResponseDto>
-   */
-  @GetMapping("/list")
-  public ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(
-    @RequestParam(required = true) String tenantId,
-    @RequestParam(required = true) String roleId
-  ) {
-    ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(tenantId, roleId);
-    return response;
-  }
+    private final CounselorService counselorService;
 
-  /*
-   *  상담사 상태정보 가져오기
-   *  
-   *  @param String tenantId                            테넌트ID("0"이면 전체)
-   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
-   *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
-   */
-  @PostMapping("/{tenantId}/state")
-  public ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(
-    @PathVariable("tenantId") String tenantId,
-    @RequestBody PostCounselorListRequestDto requestBody
-  ) {
-    ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, requestBody);
-    return response;
-  }
+    /*
+     *  상담사 리스트 가져오기
+     *
+     *  @param String tenantId  상담사 소속 테넌트ID
+     *  @param String roleId    상담사 역할 ID(1: 상담사, 2: 파트매니저, 3: 그룹매니저, 4: 테넌트메니저, 5: 시스템 메니저, 6: 전체)
+     *  @return ResponseEntity<? super GetCounselorListResponseDto>
+     */
+    @GetMapping("/list")
+    public ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(
+            @RequestParam(required = true) String tenantId,
+            @RequestParam(required = true) String roleId
+    ) {
+        ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(tenantId, roleId);
+        return response;
+    }
 
-  /*
-   *  캠페인 할당 상담사정보 가져오기
-   *  
-   *  @param String tenantId                            테넌트ID("0"이면 전체)
-   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
-   *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
-   */
-  @PostMapping("/{tenantId}/counselorInfo")
-  public ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(
-    @PathVariable("tenantId") String tenantId,
-    @RequestBody PostCounselorListRequestDto requestBody
-  ) {
-    ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(tenantId, requestBody);
-    return response;
-  }
+    /*
+     *  상담사 상태정보 가져오기
+     *
+     *  @param String tenantId                            테넌트ID("0"이면 전체)
+     *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
+     *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
+     */
+    @PostMapping("/{tenantId}/state")
+    public ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(
+            @PathVariable("tenantId") String tenantId,
+            @RequestBody PostCounselorListRequestDto requestBody
+    ) {
+        ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, requestBody);
+        return response;
+    }
+
+    /*
+     *  캠페인 할당 상담사정보 가져오기
+     *
+     *  @param String tenantId                            테넌트ID("0"이면 전체)
+     *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
+     *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
+     */
+    @PostMapping("/{tenantId}/counselorInfo")
+    public ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(
+            @PathVariable("tenantId") String tenantId,
+            @RequestBody PostCounselorListRequestDto requestBody
+    ) {
+        ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(tenantId, requestBody);
+        return response;
+    }
+
+    //  pub test controller 추가 필요
+    // hello-pub 로 요청 하면 hello pub ! this is pub test 출력
+    //  @GetMapping("/hello-pub")
+    //  public ResponseEntity<String> testPublish() {
+    //    String message = "hello pub ! this is pub test";
+    //    redisTemplate.convertAndSend("campaign-updated", message);
+    //    return ResponseEntity.ok("Published: " + message);
+    //  }
+
+
 }

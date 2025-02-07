@@ -11,8 +11,9 @@
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/31  최상원                       초기작성
  *------------------------------------------------------------------------------*/
+// src\main\java\com\nexus\pdsw\controller\RedisMonitorController.java
 package com.nexus.pdsw.controller;
-
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class RedisMonitorController {
 
   private final RedisMonitorService redisMonitorService;
-  
+  private final StringRedisTemplate redisTemplate;
+
   /*
    *  타 시스템 프로세스 상태정보 가져오기
    *  
@@ -75,4 +77,12 @@ public class RedisMonitorController {
     ResponseEntity<? super GetSendingProgressStatusResponseDto> response = redisMonitorService.getSendingProgressStatus(tenantId, campaignId);
     return response;
   }
+
+  @GetMapping("/hello-pub")
+  public ResponseEntity<String> testPublish() {
+    String message = "hello pub ! this is pub test";
+    redisTemplate.convertAndSend("campaign-updated", message);
+    return ResponseEntity.ok("Published: " + message);
+  }
+
 }
