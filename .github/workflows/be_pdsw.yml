@@ -88,7 +88,7 @@ jobs:
         with:
           host: ${{ secrets.PDSW_HOST }}
           username: ${{ secrets.PDSW_USER }}
-          key: ${{ secrets.PDSW_KEY }}
+          password: ${{ secrets.PDSW_PASSWORD }}
           source: fe_pdsw.jar
           target: /home/nexus/fe_pdsw/upload
 
@@ -119,7 +119,7 @@ jobs:
         with:
           host: ${{ secrets.PDSW_HOST }}
           username: ${{ secrets.PDSW_USER }}
-          key: ${{ secrets.PDSW_KEY }}
+          password: ${{ secrets.PDSW_PASSWORD }}
           script_stop: true
           script: |
             rm -rf /home/nexus/fe_pdsw/api
