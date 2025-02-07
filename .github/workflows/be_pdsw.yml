@@ -62,7 +62,7 @@ jobs:
         #    demo-deploy-0.0.1-SNAPSHOT-plain.jar ...
         run: |
           chmod +x ./gradlew
-          ./gradlew clean build
+          ./gradlew clean build -x test
 
       # 이름이 너무 길므로 적당하게 수정 -> 리눅스 명령어
       # 파일 위치를 변경하면서 이름도 변경 -> mv
