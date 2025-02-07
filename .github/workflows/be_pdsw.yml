@@ -68,7 +68,7 @@ jobs:
       # 파일 위치를 변경하면서 이름도 변경 -> mv
       - name: 관리상 빌드된 결과물의 이름을 변경 처리
         run: |
-          mv ./build/libs/*SNAPSHOT.jar ./fe_pdsw.jar
+          mv ./build/libs/*SNAPSHOT.jar ./be_pdsw.jar
           ls
 
       # 서버(PDSW)로 업로드
@@ -76,8 +76,8 @@ jobs:
       # SSH를 통해서 파일등을 복사(업로드)
       # 호스트정보(10.10.30.229), 접속자명(root), 패스워드(pdsWeb01!) -> 시크릿!!
       # PDSW_HOST
-      # 업로드 대상(fe_pdsw.jar)
-      # 타겟(PDSW)의 특정 경로(복사될 위치), /home/nexus/fe_pdsw/upload
+      # 업로드 대상(be_pdsw.jar)
+      # 타겟(PDSW)의 특정 경로(복사될 위치), /home/nexus/be_pdsw/upload
       - name: 서버(PDSW)에 jar파일 업로드
         uses: appleboy/scp-action@v0.1.7
         # 위의 액션을 위한 파라미터
@@ -90,8 +90,8 @@ jobs:
           username: ${{ secrets.PDSW_USER }}
           password: ${{ secrets.PDSW_PASSWORD }}
           timeout: 40s
-          source: fe_pdsw.jar
-          target: /home/nexus/fe_pdsw/upload
+          source: be_pdsw.jar
+          target: /home/nexus/be_pdsw/upload
 
 
       # 서버(PDSW) 접속, 서버가동!!
@@ -101,31 +101,31 @@ jobs:
         # script_stop : true -> 오류나면 중단
         # 처리할 반복적 작업
         # 1. 기존 jar 파일 삭제 처리 (업로드 위치, 구동 위치 구분)
-        #    구동 위치 : /home/nexus/fe_pdsw
+        #    구동 위치 : /home/nexus/be_pdsw
         #    rm -rf 대상 => 대상의 폴더 및 하위 파일까지 모두다 삭제
-        # 2. 새롭게 폴더 생성 /home/nexus/fe_pdsw/api
-        #    mkdir /home/nexus/fe_pdsw/api
+        # 2. 새롭게 폴더 생성 /home/nexus/be_pdsw/api
+        #    mkdir /home/nexus/be_pdsw/api
         # 3. jar 파일 이동 (~/upload/*.jar => ~/api/*.jar)
         #    mv
         # 4. jar 파일이 존재하는 위치로 이동
-        #    cd /home/nexus/fe_pdsw/api
+        #    cd /home/nexus/be_pdsw/api
         # 5. 서버 중단 -> 4000포트를 사용하는 프로세스 중단
         #    sudo fuser -k -n tcp 4000 || true
         #    무조건 다음 단계로 넘어가게 처리 (|| true)
         # 6. 서버구동
         #    엑세스, 에러로그등 전체 로그를 output.log으로 출력
-        #    nohup java -jar fe_pdsw.jar > ./output.log 2>&1 &
+        #    nohup java -jar be_pdsw.jar > ./output.log 2>&1 &
         # 7. 뒷정리 
-        #    rm -rf /home/nexus/fe_pdsw/upload
+        #    rm -rf /home/nexus/be_pdsw/upload
         with:
           host: ${{ secrets.PDSW_HOST }}
           username: ${{ secrets.PDSW_USER }}
           password: ${{ secrets.PDSW_PASSWORD }}
           script_stop: true
           script: |
-            rm -rf /home/nexus/fe_pdsw/api
-            mkdir /home/nexus/fe_pdsw/api
-            mv /home/nexus/fe_pdsw/upload/fe_pdsw.jar /home/nexus/fe_pdsw/api/fe_pdsw.jar
-            cd /home/nexus/fe_pdsw/api
+            rm -rf /home/nexus/be_pdsw/api
+            mkdir /home/nexus/be_pdsw/api
+            mv /home/nexus/be_pdsw/upload/be_pdsw.jar /home/nexus/be_pdsw/api/be_pdsw.jar
+            cd /home/nexus/be_pdsw/api
             sudo fuser -k -n tcp 4000 || true
-            nohup java -jar fe_pdsw.jar > ./output.log 2>&1 &
+            nohup java -jar be_pdsw.jar > ./output.log 2>&1 &
