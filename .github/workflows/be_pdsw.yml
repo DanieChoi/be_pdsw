@@ -74,21 +74,24 @@ jobs:
       # 서버(PDSW)로 업로드
       # https://github.com/appleboy/scp-action
       # SSH를 통해서 파일등을 복사(업로드)
-      # 호스트정보(10.10.30.229), 접속자명(root), 패스워드(pdsWeb01!) -> 시크릿!!
+      # 호스트정보(IP), 접속자명(username), 패스워드(password)
       # PDSW_HOST
       # 업로드 대상(be_pdsw.jar)
       # 타겟(PDSW)의 특정 경로(복사될 위치), /home/nexus/be_pdsw/upload
       - name: 서버(PDSW)에 jar파일 업로드
         uses: appleboy/scp-action@v0.1.7
         # 위의 액션을 위한 파라미터
-        # SSH의 포트를 보안상 이유로 22->다른번호변경 했다면
-        # PORT 설정 필요
+        # SSH의 포트를 보안상 이유로 22->다른번호변경 했다면 PORT 설정 필요
         # 파일이 여러개면 "파일, 파일, ... "
         # 원격 서버에 폴더도 자동 생성되는지 검토
         with:
-          host: ${{ secrets.PDSW_HOST }}
-          username: ${{ secrets.PDSW_USER }}
-          password: ${{ secrets.PDSW_PASSWORD }}
+          # host: ${{ secrets.PDSW_HOST }}
+          # username: ${{ secrets.PDSW_USER }}
+          # password: ${{ secrets.PDSW_PASSWORD }}
+          host: 10.10.30.228
+          username: root
+          password: pdsWeb01!
+          port: 22
           timeout: 40s
           source: be_pdsw.jar
           target: /home/nexus/be_pdsw/upload
@@ -96,7 +99,7 @@ jobs:
 
       # 서버(PDSW) 접속, 서버가동!!
       # https://github.com/appleboy/ssh-action
-      - name: SSH로 서버(PDSW)에 정리후, 접속후 서버가동
+      - name: SSH로 서버(PDSW)에 접속후 서버가동
         uses: appleboy/ssh-action@v1.2.0
         # script_stop : true -> 오류나면 중단
         # 처리할 반복적 작업
