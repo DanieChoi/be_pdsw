@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
@@ -27,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -49,16 +52,16 @@ public class RedisMonitorController {
   }
   
   /*
-   *  Dialer 채널 상태 정보 가져오기
+   *  Dialer 채널 상태 정보 가져오기 
    *  
-   *  @param deviceId         Dialer 장비ID
+   *  @param PostDialerChannelStatusInfoRequestDto requestDto     Dialer 장비ID's
    *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
    */
-  @GetMapping("/dialer/{deviceId}/channel")
+  @PostMapping("/dialer/channel")
   public ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
-    @PathVariable("deviceId") String deviceId
+    @RequestBody PostDialerChannelStatusInfoRequestDto requestDto
   ) {
-    ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> response = redisMonitorService.getDialerChannelStatusInfo(deviceId);
+    ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> response = redisMonitorService.getDialerChannelStatusInfo(requestDto);
     return response;
   }
 

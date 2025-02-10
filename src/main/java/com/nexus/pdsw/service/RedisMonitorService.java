@@ -15,6 +15,7 @@ package com.nexus.pdsw.service;
 
 import org.springframework.http.ResponseEntity;
 
+import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
@@ -31,10 +32,10 @@ public interface RedisMonitorService {
   /*
    *  Dialer 채널 상태 정보 가져오기
    *  
-   *  @param String deviceId         Dialer 장비ID
+   *  @param PostDialerChannelStatusInfoRequestDto requestDto     Dialer 장비ID's
    *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
    */
-  ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(String deviceId);
+  ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(PostDialerChannelStatusInfoRequestDto requestDto);
 
   /*
    *  캠페인 별 발신 진행상태정보 가져오기

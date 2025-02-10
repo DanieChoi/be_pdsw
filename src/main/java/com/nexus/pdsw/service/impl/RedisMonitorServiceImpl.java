@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
@@ -81,36 +82,46 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
   /*
    *  Dialer 채널 상태 정보 가져오기
    *  
-   *  @param String deviceId         Dialer 장비ID
+   *  @param PostDialerChannelStatusInfoRequestDto requestDto     Dialer 장비ID's
    *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
    */
   @Override
   public ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
-    String deviceId
+    PostDialerChannelStatusInfoRequestDto requestDto
   ) {
 
     List<Map<String, Object>> mapDialerChannelStatusList = new ArrayList<Map<String, Object>>();
 
     try {
       
+      System.out.println("장비 ID's: " + requestDto);
+      String[] arrDeviceId = requestDto.getDeviceIds().split(",");
+
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
 
-      String redisKey = "monitor:dialer:" + deviceId + ":channel";
+      String redisKey = "";
 
-      Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
-      arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
-      Map<String, Object> mapItem = null;
+      for(String deviceId : arrDeviceId) {
 
-      for(Object jsonItem : arrJson) {
-        try {
-          mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
-        } catch (JsonMappingException e) {
-          throw new RuntimeException(e);
+        redisKey = "monitor:dialer:" + deviceId + ":channel";
+
+        Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
+        arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
+        Map<String, Object> mapItem = null;
+
+        for(Object jsonItem : arrJson) {
+          try {
+            mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+          } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+          }
+          mapDialerChannelStatusList.add(mapItem);
         }
-        mapDialerChannelStatusList.add(mapItem);
       }
+
+
 
     } catch (Exception e) {
       e.printStackTrace();

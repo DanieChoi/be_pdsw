@@ -46,7 +46,6 @@ jobs:
 
       - name: 서버(PDSW)에 jar파일 업로드
         uses: appleboy/scp-action@v0.1.7
-        #uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.PDSW_HOST }}
           username: ${{ secrets.PDSW_USER }}
