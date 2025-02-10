@@ -31,12 +31,12 @@ jobs:
       - name: application.yml 동적 생성
         run: |
           mkdir -p ./src/main/resources
-          echo "${{ secrets.APPLICATION_PRO }}" > ./src/main/resources/application.yml
+          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
           
       - name: 빌드
         run: |
           chmod +x ./gradlew
-          ./gradlew clean build -x test
+          ./gradlew clean build
 
       - name: 관리상 빌드된 결과물의 이름을 변경 처리
         run: |
@@ -50,9 +50,9 @@ jobs:
           host: ${{ secrets.PDSW_HOST }}
           username: ${{ secrets.PDSW_USER }}
           password: ${{ secrets.PDSW_PASSWORD }}
-          port: 22
-          timeout: 40s
-          source: ./be_pdsw.jar
+          port: ${{ secrets.PDSW_PORT }}
+          timeout: 60s
+          source: be_pdsw.jar
           target: /home/nexus/be_pdsw/upload
 
 
