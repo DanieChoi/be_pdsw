@@ -47,4 +47,11 @@ public class NotificationController {
 
   }
 
+  /*
+   *  실시간 이벤트 발행
+   *  
+   *  @param String tenantId  테넌트ID
+   *  @return ResponseEntity<SseEmitter>
+   */
+
 }
