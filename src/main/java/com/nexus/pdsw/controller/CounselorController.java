@@ -29,9 +29,12 @@ import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/counselor")
 @RequiredArgsConstructor
@@ -48,11 +51,12 @@ public class CounselorController {
      */
     @GetMapping("/list")
     public ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(
-            @RequestParam(required = true) String tenantId,
-            @RequestParam(required = true) String roleId
+      @RequestParam(required = true, value = "tenantId") String tenantId,
+      @RequestParam(required = true, value =  "roleId") String roleId
     ) {
-        ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(tenantId, roleId);
-        return response;
+      log.info("TenantId: {}", tenantId);
+      ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(tenantId, roleId);
+      return response;
     }
 
     /*
@@ -64,11 +68,11 @@ public class CounselorController {
      */
     @PostMapping("/{tenantId}/state")
     public ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(
-            @PathVariable("tenantId") String tenantId,
-            @RequestBody PostCounselorListRequestDto requestBody
+      @PathVariable("tenantId") String tenantId,
+      @RequestBody PostCounselorListRequestDto requestBody
     ) {
-        ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, requestBody);
-        return response;
+      ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, requestBody);
+      return response;
     }
 
     /*
@@ -80,21 +84,10 @@ public class CounselorController {
      */
     @PostMapping("/{tenantId}/counselorInfo")
     public ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(
-            @PathVariable("tenantId") String tenantId,
-            @RequestBody PostCounselorListRequestDto requestBody
+      @PathVariable("tenantId") String tenantId,
+      @RequestBody PostCounselorListRequestDto requestBody
     ) {
-        ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(tenantId, requestBody);
-        return response;
+      ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(tenantId, requestBody);
+      return response;
     }
-
-    //  pub test controller 추가 필요
-    // hello-pub 로 요청 하면 hello pub ! this is pub test 출력
-    //  @GetMapping("/hello-pub")
-    //  public ResponseEntity<String> testPublish() {
-    //    String message = "hello pub ! this is pub test";
-    //    redisTemplate.convertAndSend("campaign-updated", message);
-    //    return ResponseEntity.ok("Published: " + message);
-    //  }
-
-
 }
