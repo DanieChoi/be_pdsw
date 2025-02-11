@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.PDSW_USER }}
           password: ${{ secrets.PDSW_PASSWORD }}
           port: ${{ secrets.PDSW_PORT }}
-          timeout: 60s
+          timeout: 40s
           source: be_pdsw.jar
           target: /home/nexus/be_pdsw/upload
 
