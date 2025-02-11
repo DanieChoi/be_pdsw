@@ -54,7 +54,7 @@ public class CounselorController {
       @RequestParam(required = true, value = "tenantId") String tenantId,
       @RequestParam(required = true, value =  "roleId") String roleId
     ) {
-      log.info("TenantId: {}", tenantId);
+      // log.info("TenantId: {}", tenantId);
       ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(tenantId, roleId);
       return response;
     }

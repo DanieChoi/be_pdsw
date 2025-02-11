@@ -83,7 +83,7 @@ public class CounselorServiceImpl implements CounselorService {
       Map<Object, Object> redisCenter = hashOperations.entries(redisKey);
       arrJsonCenter = (JSONArray) jsonParser.parse(redisCenter.values().toString());
 
-      System.out.println(">>>센터정보: " + arrJsonCenter.toJSONString());
+      // System.out.println(">>>센터정보: " + arrJsonCenter.toJSONString());
 
       //테넌트정보
       JSONObject jsonObjCenter = new JSONObject();
