@@ -62,6 +62,7 @@ jobs:
           host: ${{ secrets.PDSW_HOST }}
           username: ${{ secrets.PDSW_USER }}
           password: ${{ secrets.PDSW_PASSWORD }}
+          port: ${{ secrets.PDSW_PORT }}
           script_stop: true
           script: |
             rm -rf /home/nexus/be_pdsw/api
