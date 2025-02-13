@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
- * NAME : GetSendingProgressStatusResponseDto.java
- * DESC : 캠페인별 발신상태정보 가져오기 항목 DTO
+ * NAME : GetProgressInfoResponseDto.java
+ * DESC : 캠페인별 진행정보 가져오기 항목 DTO
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
  * Copyright 2024 Dootawiz All rights reserved
@@ -21,39 +21,39 @@ import org.springframework.http.ResponseEntity;
 
 import com.nexus.pdsw.common.ResponseCode;
 import com.nexus.pdsw.common.ResponseMessage;
-import com.nexus.pdsw.dto.object.SendingProcessStatusItem;
+import com.nexus.pdsw.dto.object.ProgressInfoItem;
 import com.nexus.pdsw.dto.response.ResponseDto;
 
 import lombok.Getter;
 
 @Getter
-public class GetSendingProgressStatusResponseDto extends ResponseDto {
+public class GetProgressInfoResponseDto extends ResponseDto {
   
-  private List<SendingProcessStatusItem> sendingProcessStatusList;
+  private List<ProgressInfoItem> progressInfoList;
 
   /*  
-   *  캠페인별 발신상태정보 가져오기(생성자)
+   *  캠페인별 진행정보 가져오기(생성자)
    *  
-   *  @param List<Map<String, Object>> mapSendingProgressStatusList  캠페인 별 발신 상태정보 리스트
+   *  @param List<Map<String, Object>> mapProgressInfoList  캠페인별 진행정보 리스트
    */
-  private GetSendingProgressStatusResponseDto(
-    List<Map<String, Object>> mapSendingProgressStatusList
+  private GetProgressInfoResponseDto(
+    List<Map<String, Object>> mapProgressInfoList
   ) {
 
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.sendingProcessStatusList = SendingProcessStatusItem.getSendingProgressStatus(mapSendingProgressStatusList);
+    this.progressInfoList = ProgressInfoItem.getProgressInfo(mapProgressInfoList);
   }
 
   /*  
-   *  캠페인별 발신상태정보 가져오기(성공)
+   *  캠페인별 진행정보 가져오기(성공)
    *  
-   *  @param List<Map<String, Object>> mapSendingProgressStatusList  캠페인 별 발신 상태정보 리스트
-   *  @return ResponseEntity<GetSendingProgressStatusResponseDto>
+   *  @param List<Map<String, Object>> mapProgressInfoList  캠페인 별 발신 상태정보 리스트
+   *  @return ResponseEntity<GetProgressInfoResponseDto>
    */
-  public static ResponseEntity<GetSendingProgressStatusResponseDto> success(
-    List<Map<String, Object>> mapSendingProgressStatusList
+  public static ResponseEntity<GetProgressInfoResponseDto> success(
+    List<Map<String, Object>> mapProgressInfoList
   ) {
-    GetSendingProgressStatusResponseDto result = new GetSendingProgressStatusResponseDto(mapSendingProgressStatusList);
+    GetProgressInfoResponseDto result = new GetProgressInfoResponseDto(mapProgressInfoList);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 }

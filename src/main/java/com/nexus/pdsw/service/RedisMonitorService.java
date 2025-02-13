@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
-import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
 
 public interface RedisMonitorService {
   
@@ -38,12 +38,12 @@ public interface RedisMonitorService {
   ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(PostDialerChannelStatusInfoRequestDto requestDto);
 
   /*
-   *  캠페인 별 발신 진행상태정보 가져오기
+   *  캠페인별 진행정보 가져오기
    *  
    *  @param tenantId           테넌트ID
    *  @param campaignId         캠페인ID
-   *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
+   *  @return ResponseEntity<? super GetProgressInfoResponseDto>
    */
-  ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(String tenantId, String campaignId);
+  ResponseEntity<? super GetProgressInfoResponseDto> getProgressInfo(String tenantId, String campaignId);
   
 }

@@ -30,7 +30,7 @@ import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
-import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
 import lombok.RequiredArgsConstructor;
@@ -135,15 +135,15 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
    *  
    *  @param tenantId           테넌트ID
    *  @param campaignId         캠페인ID
-   *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
+   *  @return ResponseEntity<? super GetProgressInfoResponseDto>
    */
   @Override
-  public ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(
+  public ResponseEntity<? super GetProgressInfoResponseDto> getProgressInfo(
     String tenantId,
     String campaignId
   ) {
 
-    List<Map<String, Object>> mapSendingProgressStatusList = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> mapProgressInfoList = new ArrayList<Map<String, Object>>();
 
     try {
       
@@ -153,8 +153,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
       String redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
-      Map<Object, Object> redisSendingProgressStatus = hashOperations.entries(redisKey);
-      arrJson = (JSONArray) jsonParser.parse(redisSendingProgressStatus.values().toString());
+      Map<Object, Object> redisProgressInfo = hashOperations.entries(redisKey);
+      arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
       Map<String, Object> mapItem = null;
 
       for(Object jsonItem : arrJson) {
@@ -163,7 +163,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
         } catch (JsonMappingException e) {
           throw new RuntimeException(e);
         }
-        mapSendingProgressStatusList.add(mapItem);
+        mapProgressInfoList.add(mapItem);
       }
 
     } catch (Exception e) {
@@ -171,7 +171,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       ResponseDto.databaseError();
     }
 
-    return GetSendingProgressStatusResponseDto.success(mapSendingProgressStatusList);
+    return GetProgressInfoResponseDto.success(mapProgressInfoList);
   }
   
 }

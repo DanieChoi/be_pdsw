@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
-import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
 import lombok.RequiredArgsConstructor;
@@ -66,18 +66,18 @@ public class RedisMonitorController {
   }
 
   /*
-   *  캠페인 별 발신 진행상태정보 가져오기
+   *  캠페인별 진행정보 가져오기
    *  
    *  @param tenantId           테넌트ID
    *  @param campaignId         캠페인ID
-   *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
+   *  @return ResponseEntity<? super GetProgressInfoResponseDto>
    */
   @GetMapping("/tenant/{tenantId}/campaign/{campaignId}/statistics")
-  public ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(
+  public ResponseEntity<? super GetProgressInfoResponseDto> getProgressInfo(
     @PathVariable("tenantId") String tenantId,
     @PathVariable("campaignId") String campaignId
   ) {
-    ResponseEntity<? super GetSendingProgressStatusResponseDto> response = redisMonitorService.getSendingProgressStatus(tenantId, campaignId);
+    ResponseEntity<? super GetProgressInfoResponseDto> response = redisMonitorService.getProgressInfo(tenantId, campaignId);
     return response;
   }
 
