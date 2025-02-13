@@ -179,32 +179,16 @@ public class CounselorServiceImpl implements CounselorService {
               JSONObject counselor = (JSONObject) jsonCounselor;
               JSONObject counselorInfo = (JSONObject) counselor.get("Data");
 
-              stateRedisKey = "st.employee.state-1-" + tenantKey;
-              Map<Object, Object> redisCounselorStatusList = redisCounselorStatusList = hashOperations.entries(stateRedisKey);
-              JSONArray arrJsonCounselorStatus = (JSONArray) jsonParser.parse(redisCounselorStatusList.values().toString());
-
-              for (Object jsonCounselorStatus : arrJsonCounselorStatus) {
-
-                JSONObject counselorStatus = (JSONObject) jsonCounselorStatus;
-                JSONObject csi = (JSONObject) counselorStatus.get("Data");
-
-                if (counselorStatus.get("EMPLOYEE").equals(counselor.get("EMPLOYEE"))) {
-                  if (!csi.get("state").equals("202")) {
-                    
-                    try {
-                      mapCounselorInfo = new ObjectMapper().readValue(counselorInfo.toString(), Map.class);
-                    } catch (JsonParseException e) {
-                      e.printStackTrace();
-                    } catch (JsonMappingException e) {
-                      e.printStackTrace();
-                    } catch (IOException e) {
-                      e.printStackTrace();
-                    }
-                    mapCounselorInfoList.add(mapCounselorInfo);
-                    break;
-                  }
-                }
+              try {
+                mapCounselorInfo = new ObjectMapper().readValue(counselorInfo.toString(), Map.class);
+              } catch (JsonParseException e) {
+                e.printStackTrace();
+              } catch (JsonMappingException e) {
+                e.printStackTrace();
+              } catch (IOException e) {
+                e.printStackTrace();
               }
+              mapCounselorInfoList.add(mapCounselorInfo);
             }
           }
           
