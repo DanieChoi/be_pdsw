@@ -146,8 +146,8 @@ public class CounselorServiceImpl implements CounselorService {
 
           arrJsonCounselor = (JSONArray) jsonParser.parse(redisCounselorList.values().toString());
 
-          for (int i = 0; i < arrJsonCounselor.size(); ++i) {
-            JSONObject counselor = (JSONObject) arrJsonCounselor.get(i);
+          for (Object jsonCounselor : arrJsonCounselor) {
+            JSONObject counselor = (JSONObject) jsonCounselor;
             JSONObject counselorInfo = (JSONObject) counselor.get("Data");
             try {
               mapCounselorInfo = new ObjectMapper().readValue(counselorInfo.toString(), Map.class);
@@ -239,10 +239,47 @@ public class CounselorServiceImpl implements CounselorService {
 
       //사이드 바(상담원)에서 선택한 항목이 센터인 경우
       if (tenantId.equals("0")) {
-          Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
+        Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
+
+        for (String counselorId : arrCounselorId){
+
           for (Object tenantKey : redisTenantList.keySet()) {
+
+            redisKey = "st.employee.state-1-" + tenantKey;
             redisCounselorStatusList = hashOperations.entries(redisKey);
+
+            arrJsonCounselorState = (JSONArray) jsonParser.parse(redisCounselorStatusList.values().toString());
+
+            for (Object jsonCounselorState : arrJsonCounselorState) {
+
+              JSONObject jsonObjCounselorState = (JSONObject) jsonCounselorState;
+
+              strCounselorId = jsonObjCounselorState.get("EMPLOYEE").toString();
+
+              if (counselorId.equals(strCounselorId)) {
+
+                JSONObject jsonObjCounselorStateData = (JSONObject) jsonObjCounselorState.get("Data");
+                strStateCode = jsonObjCounselorStateData.get("state").toString();
+
+                if (strStateCode.equals("203") || strStateCode.equals("204") || strStateCode.equals("205") || strStateCode.equals("206")) {
+
+                  try {
+                    mapCounselorState = new ObjectMapper().readValue(jsonObjCounselorStateData.toString(), Map.class);
+                  } catch (JsonParseException e) {
+                    e.printStackTrace();
+                  } catch (JsonMappingException e) {
+                    e.printStackTrace();
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                  }
+                  mapCounselorStatusList.add(mapCounselorState);
+                  break;
+                }
+              }
+            }
+
           }
+        }
         
       } else {
         redisKey = "st.employee.state-1-" + tenantId;
