@@ -85,7 +85,7 @@ public class ProgressInfoItem {
   /*
    *  Redis 9번방의 캠페인별 진행정보 DTO(생성자)
 	 * 
-   *  @param Map<String, Object> mapProgressInfo  캠페인 별 발신 상태정보
+   *  @param Map<String, Object> mapProgressInfo  캠페인별 진행정보
 	*/
   private ProgressInfoItem(
     Map<String, Object> mapProgressInfo

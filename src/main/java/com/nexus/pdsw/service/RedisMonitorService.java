@@ -19,6 +19,7 @@ import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 
 public interface RedisMonitorService {
   
@@ -46,4 +47,12 @@ public interface RedisMonitorService {
    */
   ResponseEntity<? super GetProgressInfoResponseDto> getProgressInfo(String tenantId, String campaignId);
   
+  /*
+   *  발신진행상태 가져오기
+   *  
+   *  @param tenantId           테넌트ID
+   *  @param campaignId         캠페인ID
+   *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
+   */
+  ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(String tenantId, String campaignId);
 }

@@ -10,17 +10,20 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/31  최상원                       초기작성
+ * 2025/02/13  최상원                       발신진행상태 추가
  *------------------------------------------------------------------------------*/
 // src\main\java\com\nexus\pdsw\controller\RedisMonitorController.java
 package com.nexus.pdsw.controller;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
 import lombok.RequiredArgsConstructor;
@@ -81,11 +84,20 @@ public class RedisMonitorController {
     return response;
   }
 
-  @GetMapping("/hello-pub")
-  public ResponseEntity<String> testPublish() {
-    String message = "hello pub ! this is pub test";
-    redisTemplate.convertAndSend("campaign-updated", message);
-    return ResponseEntity.ok("Published: " + message);
+  /*
+   *  발신진행상태 가져오기
+   *  
+   *  @param tenantId           테넌트ID
+   *  @param campaignId         캠페인ID
+   *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
+   */
+  @GetMapping("/tenant/{tenantId}/campaign/dial")
+  public ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(
+    @PathVariable("tenantId") String tenantId,
+    @RequestParam(required = true, value = "campaignId") String campaignId
+  ) {
+    ResponseEntity<? super GetSendingProgressStatusResponseDto> response = redisMonitorService.getSendingProgressStatus(tenantId, campaignId);
+    return response;
   }
 
 }
