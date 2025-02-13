@@ -39,6 +39,8 @@ import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
+import jakarta.websocket.OnClose;
+
 @Service
 public class CounselorServiceImpl implements CounselorService {
 
@@ -74,7 +76,7 @@ public class CounselorServiceImpl implements CounselorService {
     try {
 
       String redisKey = "";
-      // System.out.println(redisTemplate1.keys("*"));
+      String stateRedisKey = "";
       HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
       JSONParser jsonParser = new JSONParser();
   
@@ -82,8 +84,6 @@ public class CounselorServiceImpl implements CounselorService {
       redisKey = "master.center";
       Map<Object, Object> redisCenter = hashOperations.entries(redisKey);
       arrJsonCenter = (JSONArray) jsonParser.parse(redisCenter.values().toString());
-
-      // System.out.println(">>>센터정보: " + arrJsonCenter.toJSONString());
 
       //테넌트정보
       JSONObject jsonObjCenter = new JSONObject();
@@ -175,19 +175,36 @@ public class CounselorServiceImpl implements CounselorService {
 
             arrJsonCounselor = (JSONArray) jsonParser.parse(redisCounselorList.values().toString());
 
-            for (int i = 0; i < arrJsonCounselor.size() - 1; ++i) {
-              JSONObject counselor = (JSONObject) arrJsonCounselor.get(i);
+            for (Object jsonCounselor : arrJsonCounselor) {
+              JSONObject counselor = (JSONObject) jsonCounselor;
               JSONObject counselorInfo = (JSONObject) counselor.get("Data");
-              try {
-                mapCounselorInfo = new ObjectMapper().readValue(counselorInfo.toString(), Map.class);
-              } catch (JsonParseException e) {
-                e.printStackTrace();
-              } catch (JsonMappingException e) {
-                e.printStackTrace();
-              } catch (IOException e) {
-                e.printStackTrace();
+
+              stateRedisKey = "st.employee.state-1-" + tenantKey;
+              Map<Object, Object> redisCounselorStatusList = redisCounselorStatusList = hashOperations.entries(stateRedisKey);
+              JSONArray arrJsonCounselorStatus = (JSONArray) jsonParser.parse(redisCounselorStatusList.values().toString());
+
+              for (Object jsonCounselorStatus : arrJsonCounselorStatus) {
+
+                JSONObject counselorStatus = (JSONObject) jsonCounselorStatus;
+                JSONObject csi = (JSONObject) counselorStatus.get("Data");
+
+                if (counselorStatus.get("EMPLOYEE").equals(counselor.get("EMPLOYEE"))) {
+                  if (csi.get("state").equals("203") || csi.get("state").equals("204") || csi.get("state").equals("205") || csi.get("state").equals("206")) {
+                    
+                    try {
+                      mapCounselorInfo = new ObjectMapper().readValue(counselorInfo.toString(), Map.class);
+                    } catch (JsonParseException e) {
+                      e.printStackTrace();
+                    } catch (JsonMappingException e) {
+                      e.printStackTrace();
+                    } catch (IOException e) {
+                      e.printStackTrace();
+                    }
+                    mapCounselorInfoList.add(mapCounselorInfo);
+                    break;
+                  }
+                }
               }
-              mapCounselorInfoList.add(mapCounselorInfo);
             }
           }
           
@@ -241,7 +258,6 @@ public class CounselorServiceImpl implements CounselorService {
           Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
           for (Object tenantKey : redisTenantList.keySet()) {
             redisCounselorStatusList = hashOperations.entries(redisKey);
-
           }
         
       } else {

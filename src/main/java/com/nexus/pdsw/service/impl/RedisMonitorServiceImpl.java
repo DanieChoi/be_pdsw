@@ -94,7 +94,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
     try {
       
-      System.out.println("장비 ID's: " + requestDto);
       String[] arrDeviceId = requestDto.getDeviceIds().split(",");
 
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
