@@ -189,7 +189,7 @@ public class CounselorServiceImpl implements CounselorService {
                 JSONObject csi = (JSONObject) counselorStatus.get("Data");
 
                 if (counselorStatus.get("EMPLOYEE").equals(counselor.get("EMPLOYEE"))) {
-                  if (csi.get("state").equals("203") || csi.get("state").equals("204") || csi.get("state").equals("205") || csi.get("state").equals("206")) {
+                  if (!csi.get("state").equals("202")) {
                     
                     try {
                       mapCounselorInfo = new ObjectMapper().readValue(counselorInfo.toString(), Map.class);
