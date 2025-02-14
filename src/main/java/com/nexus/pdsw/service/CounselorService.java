@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
-import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
+import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
 
 public interface CounselorService {
  
@@ -34,11 +34,10 @@ public interface CounselorService {
   /*
    *  상담사 상태정보 가져오기
    *  
-   *  @param String tenantId                            테넌트ID("0"이면 전체)
-   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
-   *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
+   *  @param PostCounselorListRequestDto requestBody    전달 DTO
+   *  @return ResponseEntity<? super PostCounselorStatusListResponseDto>
    */
-  ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(String tenantId, PostCounselorListRequestDto requestBody);
+  ResponseEntity<? super PostCounselorStatusListResponseDto> getCounselorStatusList(PostCounselorListRequestDto requestBody);
 
   /*
    *  캠페인 할당 상담사정보 가져오기

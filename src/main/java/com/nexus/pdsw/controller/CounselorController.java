@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
-import com.nexus.pdsw.dto.response.counselor.GetCounselorStatusListResponseDto;
+import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
 import lombok.RequiredArgsConstructor;
@@ -62,16 +62,14 @@ public class CounselorController {
     /*
      *  상담사 상태정보 가져오기
      *
-     *  @param String tenantId                            테넌트ID("0"이면 전체)
-     *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
-     *  @return ResponseEntity<? super GetCounselorStatusListResponseDto>
+     *  @param PostCounselorListRequestDto requestBody    전달 DTO
+     *  @return ResponseEntity<? super PostCounselorStatusListResponseDto>
      */
-    @PostMapping("/{tenantId}/state")
-    public ResponseEntity<? super GetCounselorStatusListResponseDto> getCounselorStatusList(
-      @PathVariable("tenantId") String tenantId,
+    @PostMapping("/state")
+    public ResponseEntity<? super PostCounselorStatusListResponseDto> getCounselorStatusList(
       @RequestBody PostCounselorListRequestDto requestBody
     ) {
-      ResponseEntity<? super GetCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(tenantId, requestBody);
+      ResponseEntity<? super PostCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(requestBody);
       return response;
     }
 

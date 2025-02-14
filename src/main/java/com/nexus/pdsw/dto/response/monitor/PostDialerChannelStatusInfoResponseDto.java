@@ -66,5 +66,4 @@ public class PostDialerChannelStatusInfoResponseDto extends ResponseDto {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_DIALER, ResponseMessage.NOT_EXISTED_DIALER);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
   }
-
 }

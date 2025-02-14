@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- * NAME : GetCounselorStatusListResponseDto.java
+ * NAME : PostCounselorStatusListResponseDto.java
  * DESC : 상담사 상태정보 리스트 항목 DTO
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
@@ -27,7 +27,7 @@ import com.nexus.pdsw.dto.response.ResponseDto;
 import lombok.Getter;
 
 @Getter
-public class GetCounselorStatusListResponseDto extends ResponseDto {
+public class PostCounselorStatusListResponseDto extends ResponseDto {
   
   List<CounselorStatusListItem> counselorStatusList;
   
@@ -36,7 +36,7 @@ public class GetCounselorStatusListResponseDto extends ResponseDto {
    *  
    *  @param List<Map<String, String>> mapCounselorInfoList 반환할 상담사 리스트
    */
-  private GetCounselorStatusListResponseDto(
+  private PostCounselorStatusListResponseDto(
     List<Map<String, Object>> mapCounselorStatusList
   ){
 
@@ -48,12 +48,13 @@ public class GetCounselorStatusListResponseDto extends ResponseDto {
    *  상담사 상태정보 리스트 가져오기(성공)
    *  
    *  @param List<Map<String, String>> mapCounselorStatusList 반환할 상담사 상태 리스트
-   *  @return ResponseEntity<GetCounselorStatusListResponseDto>
+   *  @return ResponseEntity<PostCounselorStatusListResponseDto>
    */
-  public static ResponseEntity<GetCounselorStatusListResponseDto> success(
+  public static ResponseEntity<PostCounselorStatusListResponseDto> success(
     List<Map<String, Object>> mapCounselorStatusList
   ) {
-    GetCounselorStatusListResponseDto result = new GetCounselorStatusListResponseDto(mapCounselorStatusList);
+    PostCounselorStatusListResponseDto result = new PostCounselorStatusListResponseDto(mapCounselorStatusList);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
+
 }
