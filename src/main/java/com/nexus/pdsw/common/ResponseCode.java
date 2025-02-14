@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/15  최상원                       초기작성
+ * 2025/02/14  최상원                       NOT_EXISTED_DIALER 다이얼 장비가 존재하지 않습니다.
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.common;
 
@@ -20,6 +21,7 @@ public interface ResponseCode {
 
   // HTTP Status 400(Bad Request)
   String VALIDATION_FAILED = "VF";
+  String NOT_EXISTED_DIALER = "NED";                  //다이얼 장비가 존재하지 않습니다.
 
   // HTTP Status 401(Unauthorized)
 

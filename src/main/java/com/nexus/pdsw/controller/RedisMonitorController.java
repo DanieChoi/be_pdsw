@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
-import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
+import com.nexus.pdsw.dto.response.monitor.PostDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
@@ -58,13 +58,13 @@ public class RedisMonitorController {
    *  Dialer 채널 상태 정보 가져오기 
    *  
    *  @param PostDialerChannelStatusInfoRequestDto requestDto     Dialer 장비ID's
-   *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<? super PostDialerChannelStatusInfoResponseDto>
    */
   @PostMapping("/dialer/channel")
-  public ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
+  public ResponseEntity<? super PostDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
     @RequestBody PostDialerChannelStatusInfoRequestDto requestDto
   ) {
-    ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> response = redisMonitorService.getDialerChannelStatusInfo(requestDto);
+    ResponseEntity<? super PostDialerChannelStatusInfoResponseDto> response = redisMonitorService.getDialerChannelStatusInfo(requestDto);
     return response;
   }
 

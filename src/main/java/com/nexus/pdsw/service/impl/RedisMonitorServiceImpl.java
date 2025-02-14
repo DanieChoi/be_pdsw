@@ -13,7 +13,9 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
+import java.net.http.HttpHeaders;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,21 +23,25 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
-import com.nexus.pdsw.dto.response.monitor.GetDialerChannelStatusInfoResponseDto;
+import com.nexus.pdsw.dto.response.monitor.PostDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RedisMonitorServiceImpl implements RedisMonitorService {
@@ -84,28 +90,76 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
    *  Dialer 채널 상태 정보 가져오기
    *  
    *  @param PostDialerChannelStatusInfoRequestDto requestDto     Dialer 장비ID's
-   *  @return ResponseEntity<? super GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<? super PostDialerChannelStatusInfoResponseDto>
    */
   @Override
-  public ResponseEntity<? super GetDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
+  public ResponseEntity<? super PostDialerChannelStatusInfoResponseDto> getDialerChannelStatusInfo(
     PostDialerChannelStatusInfoRequestDto requestDto
   ) {
 
     List<Map<String, Object>> mapDialerChannelStatusList = new ArrayList<Map<String, Object>>();
 
     try {
-      
-      String[] arrDeviceId = requestDto.getDeviceIds().split(",");
 
+      String redisKey = "";
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
 
-      String redisKey = "";
+      //전체 Device에 대한 채널상태
+      if (requestDto.getDeviceId().equals("0")) {        
+        // Map<String, Object> bodyMap = new HashMap<>();
+        WebClient webClient =
+          WebClient
+            .builder()
+            .baseUrl("http://10.10.40.145:8010")
+            .defaultHeaders(httpHeaders -> {
+              httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+              httpHeaders.add("Session-Key", requestDto.getSessionKey());
+            })
+            .build();
+      
+        //API 요청
+        Map<String, Object> apiDialer =
+          webClient
+            .post()
+            .uri(uriBuilder ->
+              uriBuilder
+                .path("/pds/collections/dialing-device")
+                .build()
+            )
+            .retrieve()
+            .bodyToMono(Map.class)
+            .block();
 
-      for(String deviceId : arrDeviceId) {
+        //장비 내역 가져오기 API 요청이 실패했을 때
+        if (!apiDialer.get("result_code").equals(0)) {
+          return PostDialerChannelStatusInfoResponseDto.notExistDialerDevice();
+        }
 
-        redisKey = "monitor:dialer:" + deviceId + ":channel";
+        List<Map<String, Object>> mapDialerList = (List<Map<String, Object>>) apiDialer.get("result_data");
+
+        for(Map<String, Object> mapDialer : mapDialerList) {
+
+          redisKey = "monitor:dialer:" + mapDialer.get("device_id") + ":channel";
+
+          Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
+          arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
+          Map<String, Object> mapItem = null;
+
+          for(Object jsonItem : arrJson) {
+            try {
+              mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+            } catch (JsonMappingException e) {
+              throw new RuntimeException(e);
+            }
+            mapDialerChannelStatusList.add(mapItem);
+          }
+        }
+      //특정 Device에 대한 채널상태
+      } else {
+
+        redisKey = "monitor:dialer:" + requestDto.getDeviceId() + ":channel";
 
         Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
         arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
@@ -121,14 +175,12 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
         }
       }
 
-
-
     } catch (Exception e) {
       e.printStackTrace();
       ResponseDto.databaseError();
     }
 
-    return GetDialerChannelStatusInfoResponseDto.success(mapDialerChannelStatusList);
+    return PostDialerChannelStatusInfoResponseDto.success(mapDialerChannelStatusList);
   }
 
   /*

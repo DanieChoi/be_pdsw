@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/02/10  최상원                       초기작성
+ * 2025/02/14  최상원                       sessionKey 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.dto.request;
 
@@ -22,5 +23,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PostDialerChannelStatusInfoRequestDto {
   
-  private String deviceIds;  //,로 구분된 Dialer 장비 ID's
+  private String deviceId;      //Dialer 장비ID(전체일 경우 '0')
+  private String sessionKey;
 }
