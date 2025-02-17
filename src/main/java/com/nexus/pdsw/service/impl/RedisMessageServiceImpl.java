@@ -80,8 +80,7 @@ public class RedisMessageServiceImpl implements RedisMessageService {
    */
   @Override
   public void publicNotification(PostRedisMessagePublishRequestDto requestBody) {
-    NotificationDto notificationDto = new NotificationDto(requestBody.getNotification().getKind(), requestBody.getNotification().getCommand(), requestBody.getNotification().getAnnounce(), requestBody.getNotification().getData());
-    redisTemplate2.convertAndSend(getChannelName(requestBody.getTenantId()), notificationDto);
+    redisTemplate2.convertAndSend(getChannelName(requestBody.getTenantId()), requestBody.getNotification());
   }
 
   /*

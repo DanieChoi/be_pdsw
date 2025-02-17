@@ -22,12 +22,14 @@ public class NotificationDto {
   
   private String kind;
   private String command;
+  private String api;
   private String announce;
   private Object data;
 
-  public NotificationDto(String kind, String command, String announce, Object data) {
+  public NotificationDto(String kind, String command, String api, String announce, Object data) {
     this.kind = kind;
     this.command = command;
+    this.api = api;
     this.announce = announce;
     this.data = data;
   }
