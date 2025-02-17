@@ -11,17 +11,16 @@
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/15  최상원                       초기작성
  * 2025/01/21  최상원                       상담사 내역 가져오기에 센터명, 테넌트명, 그룹명, 팀명 추가
+ * 2025/02/14  최상원                       상담사 상태 모니터, 캠페인별 할당 상담사 정보 가져오기 API 수정
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -43,7 +42,6 @@ import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
-import com.nexus.pdsw.dto.response.monitor.PostDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
 import lombok.extern.slf4j.Slf4j;
