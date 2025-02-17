@@ -13,7 +13,10 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service;
 
+import org.springframework.data.redis.core.RedisTemplate;
+
 import com.nexus.pdsw.dto.object.NotificationDto;
+import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 
 public interface RedisMessageService {
   
@@ -28,11 +31,19 @@ public interface RedisMessageService {
   /*
    *  Redis 채널 배포
    *  
-   *  @param String channel                   채널정보
+   *  @param String tenantId                  채널정보
    *  @param NotificationDto notificationDto  배포 메시지
    *  @return void
    */
-  public void publish(String channel, NotificationDto notificationDto);
+  public void publish(String tenantId, NotificationDto notificationDto);
+
+  /*
+   *  Redis 채널 배포
+   *  
+   *  @param PostRedisMessagePublishRequestDto requestBody  배포 메시지 전달 개체 DTO
+   *  @return void
+   */
+  public void publicNotification(PostRedisMessagePublishRequestDto requestBody);
 
   /*
    *  Redis 구독 채널 삭제

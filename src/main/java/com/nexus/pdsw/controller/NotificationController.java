@@ -21,9 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 import com.nexus.pdsw.service.NotificationService;
+import com.nexus.pdsw.service.RedisMessageService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RequestMapping("/api/v1/notification")
 @RequiredArgsConstructor
@@ -31,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class NotificationController {
 
   private final NotificationService notificationService;
+  private final RedisMessageService redisMessageService;
   
   /*
    *  실시간 이벤트 구독
@@ -50,8 +56,13 @@ public class NotificationController {
   /*
    *  실시간 이벤트 발행
    *  
-   *  @param String tenantId  테넌트ID
-   *  @return ResponseEntity<SseEmitter>
+   *  @param PostRedisMessagePublishRequestDto requestBody  발행 메시지 전달 개체 DTO
+   *  @return void
    */
-
+  @PostMapping("/publish")
+  public void publish(
+    @RequestBody PostRedisMessagePublishRequestDto requestBody
+  ) {
+    redisMessageService.publicNotification(requestBody);
+  }
 }

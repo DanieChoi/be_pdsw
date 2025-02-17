@@ -251,7 +251,7 @@ public class CounselorServiceImpl implements CounselorService {
           .build();
 
       //API 호출 시 Request 개체 자료구조
-      Map<String, Object> bodyMap = new HashMap<>();        
+      Map<String, Object> bodyMap = new HashMap<>();
       Map<String, Object> filterMap = new HashMap<>();
       Map<String, Object> sortMap = new HashMap<>();
       Map<String, Object> pageMap = new HashMap<>();

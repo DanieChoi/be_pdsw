@@ -13,6 +13,7 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -20,17 +21,30 @@ import org.springframework.stereotype.Service;
 
 import com.nexus.pdsw.common.component.RedisSubscriber;
 import com.nexus.pdsw.dto.object.NotificationDto;
+import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 import com.nexus.pdsw.service.RedisMessageService;
 
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 public class RedisMessageServiceImpl implements RedisMessageService {
-
+  
   private final RedisMessageListenerContainer container;
   private final RedisSubscriber subscriber;
-  private final RedisTemplate<String, Object> redisTemplate;
+  @Qualifier("2")
+  private final RedisTemplate<String, String> redisTemplate2;
+
+  public RedisMessageServiceImpl(
+    RedisMessageListenerContainer container,
+    RedisSubscriber subscriber,
+    @Qualifier("2") RedisTemplate<String, String> redisTemplate2
+  ) {
+    this.redisTemplate2 = redisTemplate2;
+    this.container = container;
+    this.subscriber = subscriber;
+  }
+
 
   /*
    *  Redis 채널 구독
@@ -46,13 +60,28 @@ public class RedisMessageServiceImpl implements RedisMessageService {
   /*
    *  Redis 채널 배포
    *  
-   *  @param String channel                   채널정보
+   *  @param String tenantId                   채널정보
    *  @param NotificationDto notificationDto  배포 메시지
    *  @return void
    */
   @Override
-  public void publish(String channel, NotificationDto notificationDto) {
-    redisTemplate.convertAndSend(channel, notificationDto);
+  public void publish(
+    String tenantId,
+    NotificationDto notificationDto
+  ) {
+    redisTemplate2.convertAndSend(getChannelName(tenantId), notificationDto);
+  }
+
+  /*
+   *  Redis 채널 배포
+   *  
+   *  @param PostRedisMessagePublishRequestDto requestBody  배포 메시지 전달 개체 DTO
+   *  @return void
+   */
+  @Override
+  public void publicNotification(PostRedisMessagePublishRequestDto requestBody) {
+    NotificationDto notificationDto = new NotificationDto(requestBody.getNotification().getKind(), requestBody.getNotification().getCommand(), requestBody.getNotification().getAnnounce(), requestBody.getNotification().getData());
+    redisTemplate2.convertAndSend(getChannelName(requestBody.getTenantId()), notificationDto);
   }
 
   /*

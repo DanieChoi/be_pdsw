@@ -16,6 +16,7 @@ package com.nexus.pdsw.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 import com.nexus.pdsw.service.NotificationService;
 import com.nexus.pdsw.service.RedisMessageService;
 import com.nexus.pdsw.service.SseEmitterService;
@@ -24,8 +25,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
   private final SseEmitterService sseEmitterService;
@@ -43,8 +44,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);
     sseEmitterService.send("Connected!!", emitterKey, sseEmitter);
-    // SseEmitter sseEmitter = sseEmitterService.createEmitter(requestBody.getCounselorId());
-    // sseEmitterService.send("Connected!!", requestBody.getCounselorId(), sseEmitter);
 
     redisMessageService.subscribe(tenantId);
 
@@ -57,11 +56,15 @@ public class NotificationServiceImpl implements NotificationService {
     return sseEmitter;
   }
 
+  /*
+   *  알림 이벤트 전송
+   *  
+   *  @param PostRedisMessagePublishRequestDto requestBody   실시간 이벤트 발행 개체 DTO
+   *  @return void
+   */
   // @Override
-  // @Transactional
-  // public void sendNotification(NotificationEvent event) {
-  //   String key = "";
-  //   redisMessageService.publish(key, NotificationDto);
+  // public void publicNotification(PostRedisMessagePublishRequestDto requestBody) {
+  //   redisMessageService.publish(requestBody.getTenantId(), requestBody.getNotification());
   // }
   
 }

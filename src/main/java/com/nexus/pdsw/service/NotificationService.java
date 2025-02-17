@@ -28,8 +28,8 @@ public interface NotificationService {
   /*
    *  알림 이벤트 전송
    *  
-   *  @param NotificationEvent event   상담사ID
-   *  @return SseEmitter
+   *  @param PostRedisMessagePublishRequestDto requestBody   실시간 이벤트 발행 개체 DTO
+   *  @return void
    */
-  // public void sendNotification(NotificationDto event);
+  // public void publicNotification(PostRedisMessagePublishRequestDto requestBody);
 }
