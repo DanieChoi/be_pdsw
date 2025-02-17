@@ -42,9 +42,8 @@ public interface CounselorService {
   /*
    *  캠페인 할당 상담사정보 가져오기
    *  
-   *  @param String tenantId                            테넌트ID("0"이면 전체)
-   *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
+   *  @param PostCounselorListRequestDto requestBody    전달 매개변수 개체 DTO
    *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
    */
-  ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(String tenantId, PostCounselorListRequestDto requestBody);
+  ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(PostCounselorListRequestDto requestBody);
 }

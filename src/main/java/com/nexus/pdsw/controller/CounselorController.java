@@ -73,19 +73,17 @@ public class CounselorController {
       return response;
     }
 
-    /*
-     *  캠페인 할당 상담사정보 가져오기
-     *
-     *  @param String tenantId                            테넌트ID("0"이면 전체)
-     *  @param PostCounselorListRequestDto requestBody    대상 상당원ID's
-     *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
-     */
-    @PostMapping("/{tenantId}/counselorInfo")
+  /*
+   *  캠페인 할당 상담사정보 가져오기
+   *  
+   *  @param PostCounselorListRequestDto requestBody    전달 매개변수 개체 DTO
+   *  @return ResponseEntity<? super GetCounselorInfoListResponseDto>
+   */
+  @PostMapping("/counselorInfo")
     public ResponseEntity<? super GetCounselorInfoListResponseDto> getCounselorInfoList(
-      @PathVariable("tenantId") String tenantId,
       @RequestBody PostCounselorListRequestDto requestBody
     ) {
-      ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(tenantId, requestBody);
+      ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(requestBody);
       return response;
     }
 }
