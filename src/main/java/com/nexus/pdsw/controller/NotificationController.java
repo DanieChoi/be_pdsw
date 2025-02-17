@@ -26,10 +26,12 @@ import com.nexus.pdsw.service.NotificationService;
 import com.nexus.pdsw.service.RedisMessageService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+@Slf4j
 @RequestMapping("/api/v1/notification")
 @RequiredArgsConstructor
 @RestController
@@ -49,6 +51,7 @@ public class NotificationController {
     @PathVariable("tenantId") String tenantId
   ) {
     
+    log.info(">>>테넌트 ID: {}", tenantId);
     return ResponseEntity.ok(notificationService.subscribe(tenantId));
 
   }

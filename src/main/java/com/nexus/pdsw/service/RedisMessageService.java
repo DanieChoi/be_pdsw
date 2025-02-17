@@ -13,8 +13,6 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service;
 
-import org.springframework.data.redis.core.RedisTemplate;
-
 import com.nexus.pdsw.dto.object.NotificationDto;
 import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 
