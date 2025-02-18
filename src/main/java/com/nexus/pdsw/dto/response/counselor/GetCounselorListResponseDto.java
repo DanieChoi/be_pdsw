@@ -15,15 +15,15 @@
 package com.nexus.pdsw.dto.response.counselor;
 
 import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONArray;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.nexus.pdsw.common.ResponseCode;
 import com.nexus.pdsw.common.ResponseMessage;
-import com.nexus.pdsw.dto.object.CounselorListItem;
+import com.nexus.pdsw.dto.object.OrganizationItem;
 import com.nexus.pdsw.dto.response.ResponseDto;
 
 import lombok.Getter;
@@ -31,46 +31,42 @@ import lombok.Getter;
 @Getter
 public class GetCounselorListResponseDto extends ResponseDto  {
 
-  private List<CounselorListItem> counselorList;
+  private List<OrganizationItem> organizationList;
 
   /*  
    *  상담사 리스트 가져오기(생성자)
    *  
+   *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String roleId                                  로그인 상담사 레벨ID
+   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param JSONArray arrJsonCenter                        센터 정보
-   *  @param JSONArray arrJsonTenant                        테넌트 정보
-   *  @param JSONArray arrJsonGroup                         부서(그룹) 정보
-   *  @param JSONArray arrJsonTeam                          부서(팀) 정보
-   *  @param List<Map<String, Object>> mapCounselorInfoList 반환할 상담사 리스트
    */
   private GetCounselorListResponseDto(
-    JSONArray arrJsonCenter,
-    JSONArray arrJsonTenant,
-    JSONArray arrJsonGroup,
-    JSONArray arrJsonTeam,
-    List<Map<String, Object>> mapCounselorInfoList
+    RedisTemplate<String, Object> redisTemplate1,
+    String roleId,
+    String tenantId,
+    JSONArray arrJsonCenter
   ) {
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.counselorList = CounselorListItem.getCounselorList(arrJsonCenter, arrJsonTenant, arrJsonGroup, arrJsonTeam, mapCounselorInfoList);
+    this.organizationList = OrganizationItem.getOrganizationList(redisTemplate1, roleId, tenantId, arrJsonCenter);
   }
 
   /*  
    *  상담사 리스트 가져오기(성공)
    *  
+   *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String roleId                                  로그인 상담사 레벨ID
+   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param JSONArray arrJsonCenter                        센터 정보
-   *  @param JSONArray arrJsonTenant                        테넌트 정보
-   *  @param JSONArray arrJsonGroup                         부서(그룹) 정보
-   *  @param JSONArray arrJsonTeam                          부서(팀) 정보
-   *  @param List<Map<String, Object>> mapCounselorInfoList 반환할 상담사 리스트
    *  @return ResponseEntity<GetCounselorListResponseDto>
    */
   public static ResponseEntity<GetCounselorListResponseDto> success(
-    JSONArray arrJsonCenter,
-    JSONArray arrJsonTenant,
-    JSONArray arrJsonGroup,
-    JSONArray arrJsonTeam,
-    List<Map<String, Object>> mapCounselorInfoList
+    RedisTemplate<String, Object> redisTemplate1,
+    String roleId,
+    String tenantId,
+    JSONArray arrJsonCenter
   ) {
-    GetCounselorListResponseDto result = new GetCounselorListResponseDto(arrJsonCenter, arrJsonTenant, arrJsonGroup, arrJsonTeam, mapCounselorInfoList);
+    GetCounselorListResponseDto result = new GetCounselorListResponseDto(redisTemplate1, roleId, tenantId, arrJsonCenter);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 }

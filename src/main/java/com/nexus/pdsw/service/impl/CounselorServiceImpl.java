@@ -82,13 +82,13 @@ public class CounselorServiceImpl implements CounselorService {
     try {
 
       String redisKey = "";
-      String stateRedisKey = "";
       HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
       JSONParser jsonParser = new JSONParser();
   
       //센터정보
       redisKey = "master.center";
       Map<Object, Object> redisCenter = hashOperations.entries(redisKey);
+
       arrJsonCenter = (JSONArray) jsonParser.parse(redisCenter.values().toString());
 
       //테넌트정보
@@ -208,7 +208,7 @@ public class CounselorServiceImpl implements CounselorService {
       e.printStackTrace();
       ResponseDto.databaseError();
     }
-    return GetCounselorListResponseDto.success(arrJsonCenter, arrJsonTenant, arrJsonGroup, arrJsonTeam, mapCounselorInfoList);
+    return GetCounselorListResponseDto.success(redisTemplate1, roleId, tenantId, arrJsonCenter);
   }
 
   /*
