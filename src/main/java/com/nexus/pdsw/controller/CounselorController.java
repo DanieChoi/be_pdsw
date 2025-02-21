@@ -11,21 +11,23 @@
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/15  최상원                       초기작성
  * 2025/01/18  최상원                       상담사 상태정보 가져오기 추가
+ * 2025/02/20  최상원                       스킬 할당된 상담사 리스트 가져오기 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
+import com.nexus.pdsw.dto.request.PostSkillAssignedCounselorListRequestDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
+import com.nexus.pdsw.dto.response.counselor.PostSkillAssignedCounselorListResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
 import lombok.RequiredArgsConstructor;
@@ -83,6 +85,20 @@ public class CounselorController {
       @RequestBody PostCounselorListRequestDto requestBody
     ) {
       ResponseEntity<? super GetCounselorInfoListResponseDto> response = counselorService.getCounselorInfoList(requestBody);
+      return response;
+    }
+
+  /*
+   *  스킬 할당 상담사 목록 가져오기
+   *  
+   *  @param PostSkillAssignedCounselorListRequestDto requestBody    전달 매개변수 개체 DTO
+   *  @return ResponseEntity<? super PostSkillAssignedCounselorListResponseDto>
+   */
+  @PostMapping("/sillAssigned/list")
+    public ResponseEntity<? super PostSkillAssignedCounselorListResponseDto> getCounselorInfoList(
+      @RequestBody PostSkillAssignedCounselorListRequestDto requestBody
+    ) {
+      ResponseEntity<? super PostSkillAssignedCounselorListResponseDto> response = counselorService.getSillAssignedCounselorList(requestBody);
       return response;
     }
 }

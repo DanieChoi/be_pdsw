@@ -38,21 +38,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class CounselorItem {
   private String counselorId;                                   //상담사 ID
+  private String counselorLoginId;                              //상담사 로그인 ID
   private String counselorname;                                 //상담사 이름
   private String blendKind;                                     //블랜딩 종류(1: 인바운드, 2: 아웃바운드, 3: 블랜드)
 
   /*
    *  상담사 리스트 반환 DTO 생성자
    * 
-   *  @param Map<String, Object> mapCounselor 상담사 정보
+   *  @param JSONObject objCounselorData 상담사 정보
   */
   private CounselorItem(
-    Map<String, Object> mapCounselor
+    JSONObject objCounselorData
   ) {
     
-    JSONObject objCounselorData = (JSONObject) mapCounselor.get("Data");
+    // JSONObject objCounselorData = (JSONObject) mapCounselor.get("Data");
 
     this.counselorId = (String) objCounselorData.get("id");
+    this.counselorLoginId = (String) objCounselorData.get("media_login_id");
     this.counselorname = (String) objCounselorData.get("name");
     this.blendKind = (String) objCounselorData.get("blend_kind");
   }
@@ -97,9 +99,14 @@ public class CounselorItem {
       } catch (ParseException e) {
         e.printStackTrace();
       }
+      
+      JSONObject objCounselorData = (JSONObject) mapCounselor.get("Data");
 
-      CounselorItem counselorInfo = new CounselorItem(mapCounselor); 
-      counselorList.add(counselorInfo);
+      if (!objCounselorData.get("media_login_id").equals("NULL")) {
+        CounselorItem counselorInfo = new CounselorItem(objCounselorData); 
+        counselorList.add(counselorInfo);          
+      }
+
     }
 
     return counselorList;
