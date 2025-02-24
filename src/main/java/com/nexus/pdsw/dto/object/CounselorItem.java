@@ -101,8 +101,9 @@ public class CounselorItem {
       }
       
       JSONObject objCounselorData = (JSONObject) mapCounselor.get("Data");
-
-      if (!objCounselorData.get("media_login_id").equals("NULL")) {
+      
+      //only_work가 call인 상담원만 가져오는 부분은 차후 환경설정 변수로 처리할 예정(2025-02-25 최상원)
+      if (!objCounselorData.get("media_login_id").equals("NULL") && objCounselorData.get("only_work").equals("call")) {
         CounselorItem counselorInfo = new CounselorItem(objCounselorData); 
         counselorList.add(counselorInfo);          
       }
