@@ -76,7 +76,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    *  알림 메시지 전송
    *  
    *  @param Object data            Emitter 키
-   *  @param String emitterKey      Emitter 키
+   *  @param String emitterKey      Emitter 키 이유
    *  @param SseEmitter sseEmitter  SSE Emitter 개체
    *  @return void
    */
