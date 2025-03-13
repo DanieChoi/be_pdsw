@@ -96,7 +96,6 @@ public class RedisMonitorController {
     @PathVariable("tenantId") String tenantId,
     @RequestParam(required = true, value = "campaignId") String campaignId
   ) {
-    System.out.println(">>>테넌트: " + tenantId);
     ResponseEntity<? super GetSendingProgressStatusResponseDto> response = redisMonitorService.getSendingProgressStatus(tenantId, campaignId);
     return response;
   }
