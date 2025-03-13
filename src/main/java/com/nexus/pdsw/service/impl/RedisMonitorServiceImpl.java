@@ -13,9 +13,7 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
-import java.net.http.HttpHeaders;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -253,7 +251,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       Map<Object, Object> redisSendingProgressStatus = hashOperations.entries(redisKey);
       arrJson = (JSONArray) jsonParser.parse(redisSendingProgressStatus.values().toString());
 
-      System.out.println(">>>" + arrJson.toString());
+      log.info(">>>레디스 값: {}", arrJson.toString());
       Map<String, Object> mapItem = null;
 
       for(Object jsonItem : arrJson) {
