@@ -13,7 +13,6 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +22,7 @@ import java.util.stream.Collectors;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.json.JsonParseException;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -52,12 +48,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class RedisMonitorServiceImpl implements RedisMonitorService {
 
+  private final RedisTemplate<String, Object> redisTemplate;
+
   @Qualifier("1")
   private final RedisTemplate<String, Object> redisTemplate1;
 
   public RedisMonitorServiceImpl(
+    RedisTemplate<String, Object> redisTemplate,
     @Qualifier("1") RedisTemplate<String, Object> redisTemplate1
   ) {
+    this.redisTemplate = redisTemplate;
     this.redisTemplate1 = redisTemplate1;
   }
 
@@ -116,7 +116,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
     try {
 
       String redisKey = "";
-      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
+      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
 
@@ -214,15 +214,19 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
     try {
       
-      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
+      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
 
       String redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
+      log.info(">>>레디스키: {}", redisKey);
+
       Map<Object, Object> redisProgressInfo = hashOperations.entries(redisKey);
       arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
       Map<String, Object> mapItem = null;
+
+      log.info(">>>진행정보: {}", arrJson.toString());
 
       for(Object jsonItem : arrJson) {
         try {
@@ -278,7 +282,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
       int[] arrCampaignId = new int[1];
 
-      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
+      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
+      HashOperations<String, Object, Object> hashOperations1 = redisTemplate1.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
       JSONArray arrJsonCounselorState = new JSONArray();
@@ -286,7 +291,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       String strCounselorId = "";
       String strStateCode = "";
 
-      Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
+      Map<Object, Object> redisTenantList = hashOperations1.entries("master.tenant-1");
 
       Map<Object, Object> redisSendingProgressStatus = new HashMap<>();
       Map<Object, Object> redisCounselorStatusList = new HashMap<>();
