@@ -23,18 +23,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SendingProgressStatusItem {
-  private int campaignId;         //캠페인ID
-  private String campaignName;    //캠페인 이름
-  private int event;              //채널에 발생한 마지막 이벤트(0(NONE), 1(ON_HOOK), 2(OFF_HOOK), 3(PRESS_DIGIT), 4(NETWORK_DELAY), 5(INTERRUPT_CALL), 6(RINGBACK), 7(CONNECT), 8(DETECT_BEGIN), 9(DETECT_END), 10(ROUTE))
-  private int dialSequence;       //발신 일련 번호
-  private int dialResult;         //발신 결과 코드(0(NONE), 1(MAN), 2(BUSY), 3(NO_ANSWER), 4(FAX_MODEM), 5(ANSWERING_MACHINE), 6(ETC_FAIL), 7(INVALID_NUMBER), 8(DIALING), 9(LINE_STOP), 10(CUSTOMER_ONHOOK), 11(SILENCE), 12(DIALTONE_SILENCE), 13(BLACK_LIST), 14(ROUTE_FAIL), 15(BEFORE_BLACKLIST), 2501(MACHINE_BUSY), 2502(MACHINE_NOANSWER), 2503(MACHINE_POWEROFF), 2504(MACHINE_ROAMING), 2505(MACHINE_MISSING_NUMBER), 2506(MACHINE_ETC))
-  private String customerName;    //고객 이름
-  private String customerKey;     //고객 키
-  private String[] phoneNumber;   //발신 번호
-  private int[] phoneDialCount;   //발신 번호 별 시도 회수
-  private int dialedPhone;        //발신 번호 인덱스
-  private int reuseCount;         //캠페인 재사용 회수 : 1(최초발신), 2~(재발신)
-  private int retryCall;          //재시도 여부 : 0(재시도 없음), 1(재시도 있음)
+  private int campaignId;           //캠페인ID
+  private String campaignName;      //캠페인 이름
+  private int waitingLstCnt;        //대기리스트 건수
+  private int event;                //채널에 발생한 마지막 이벤트(0(NONE), 1(ON_HOOK), 2(OFF_HOOK), 3(PRESS_DIGIT), 4(NETWORK_DELAY), 5(INTERRUPT_CALL), 6(RINGBACK), 7(CONNECT), 8(DETECT_BEGIN), 9(DETECT_END), 10(ROUTE))
+  private int dialSequence;         //발신 일련 번호
+  private int dialResult;           //발신 결과 코드(0(NONE), 1(MAN), 2(BUSY), 3(NO_ANSWER), 4(FAX_MODEM), 5(ANSWERING_MACHINE), 6(ETC_FAIL), 7(INVALID_NUMBER), 8(DIALING), 9(LINE_STOP), 10(CUSTOMER_ONHOOK), 11(SILENCE), 12(DIALTONE_SILENCE), 13(BLACK_LIST), 14(ROUTE_FAIL), 15(BEFORE_BLACKLIST), 2501(MACHINE_BUSY), 2502(MACHINE_NOANSWER), 2503(MACHINE_POWEROFF), 2504(MACHINE_ROAMING), 2505(MACHINE_MISSING_NUMBER), 2506(MACHINE_ETC))
+  private String customerName;      //고객 이름
+  private String customerKey;       //고객 키
+  private String[] phoneNumber;     //발신 번호
+  private int[] phoneDialCount;     //발신 번호 별 시도 회수
+  private int dialedPhone;          //발신 번호 인덱스
+  private int reuseCount;           //캠페인 재사용 회수 : 1(최초발신), 2~(재발신)
+  private int retryCall;            //재시도 여부 : 0(재시도 없음), 1(재시도 있음)
 
   /*
    *  Redis 9번방의 발신진행상태 DTO(생성자)

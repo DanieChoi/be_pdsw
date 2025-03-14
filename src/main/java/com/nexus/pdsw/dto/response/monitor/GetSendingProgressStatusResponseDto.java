@@ -29,18 +29,22 @@ import lombok.Getter;
 @Getter
 public class GetSendingProgressStatusResponseDto extends ResponseDto {
   
+  private int waitingCounselorCnt;
   private List<SendingProgressStatusItem> sendingProgressStatusList;
 
   /*  
    *  발신진행상태 가져오기(생성자)
    *  
    *  @param List<Map<String, Object>> mapSendingProgressStatusList  발신진행상태 리스트
+   *  @param int waitingCounselorCnt                                 대기상담원수
    */
   private GetSendingProgressStatusResponseDto(
-    List<Map<String, Object>> mapSendingProgressStatusList
+    List<Map<String, Object>> mapSendingProgressStatusList,
+    int waitingCounselorCnt
   ) {
 
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    this.waitingCounselorCnt = waitingCounselorCnt;
     this.sendingProgressStatusList = SendingProgressStatusItem.getSendingProgressStatus(mapSendingProgressStatusList);
   }
 
@@ -48,12 +52,14 @@ public class GetSendingProgressStatusResponseDto extends ResponseDto {
    *  발신진행상태 가져오기(성공)
    *  
    *  @param List<Map<String, Object>> mapSendingProgressStatusList  발신진행상태 리스트
+   *  @param int waitingCounselorCnt                                 대기상담원수
    *  @return ResponseEntity<GetSendingProgressStatusResponseDto>
    */
   public static ResponseEntity<GetSendingProgressStatusResponseDto> success(
-    List<Map<String, Object>> mapSendingProgressStatusList
+    List<Map<String, Object>> mapSendingProgressStatusList,
+    int waitingCounselorCnt
   ) {
-    GetSendingProgressStatusResponseDto result = new GetSendingProgressStatusResponseDto(mapSendingProgressStatusList);
+    GetSendingProgressStatusResponseDto result = new GetSendingProgressStatusResponseDto(mapSendingProgressStatusList, waitingCounselorCnt);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
