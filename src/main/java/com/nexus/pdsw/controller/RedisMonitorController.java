@@ -91,7 +91,7 @@ public class RedisMonitorController {
    *  @param PostSendingProgressStatusRequestDto requestDto
    *  @return ResponseEntity<? super GetSendingProgressStatusResponseDto>
    */
-  @GetMapping("/tenant/campaign/dial")
+  @PostMapping("/tenant/campaign/dial")
   public ResponseEntity<? super GetSendingProgressStatusResponseDto> getSendingProgressStatus(
     @RequestBody PostSendingProgressStatusRequestDto requestDto
   ) {
