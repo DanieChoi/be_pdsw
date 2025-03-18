@@ -7,6 +7,12 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: pdsw_app
     password: pdswDev136!
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none      
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   data:
     redis:
       lettuce:

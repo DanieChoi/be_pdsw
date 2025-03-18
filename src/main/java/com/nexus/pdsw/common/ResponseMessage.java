@@ -22,6 +22,8 @@ public interface ResponseMessage {
   // HTTP Status 400(Bad Request)
   String VALIDATION_FAILED = "Validation failed.";
   String NOT_EXISTED_DIALER = "다이얼 장비가 존재하지 않습니다.";
+  String NOT_EXISTED_ROLE = "역할이 존재하지 않습니다.";
+  String NOT_EXISTED_MENU = "메뉴가 존재하지 않습니다.";
 
   // HTTP Status 401(Unauthorized)
 

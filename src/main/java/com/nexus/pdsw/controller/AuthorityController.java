@@ -1,0 +1,49 @@
+/*------------------------------------------------------------------------------
+ * NAME : AuthorityController.java
+ * DESC : 권한관리리
+ * VER  : V1.0
+ * PROJ : 웹 기반 PDS 구축 프로젝트
+ * Copyright 2024 Dootawiz All rights reserved
+ *------------------------------------------------------------------------------
+ *                               MODIFICATION LOG
+ *------------------------------------------------------------------------------
+ *    DATE     AUTHOR                       DESCRIPTION
+ * ----------  ------  -----------------------------------------------------------
+ * 2025/03/18  최상원                       초기작성
+ *------------------------------------------------------------------------------*/
+package com.nexus.pdsw.controller;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
+import com.nexus.pdsw.service.AuthorityService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
+public class AuthorityController {
+
+  private final AuthorityService authorityService;
+
+  /*
+   *  사용가능한 메뉴 리스트 가져오기
+   *
+   *  @param int roleId    역할ID(1: 시스템관리자, 2: 테넌트관리자01, 3: 테넌트관리자02)
+   *  @return ResponseEntity<? super GetAvailableMenuListResponseDto>
+   */
+  @GetMapping("/availableMenuList")
+  public ResponseEntity<?super GetAvailableMenuListResponseDto> getAvailableMenuList(
+    @RequestParam(required = true, value = "roleId") int roleId
+  ) {
+    ResponseEntity<?super GetAvailableMenuListResponseDto> response = authorityService.getAvailableMenuList(roleId);
+    return response;
+  }
+}

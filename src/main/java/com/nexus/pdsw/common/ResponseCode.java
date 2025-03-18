@@ -22,6 +22,8 @@ public interface ResponseCode {
   // HTTP Status 400(Bad Request)
   String VALIDATION_FAILED = "VF";
   String NOT_EXISTED_DIALER = "NED";                  //다이얼 장비가 존재하지 않습니다.
+  String NOT_EXISTED_ROLE = "NR";                     //존재하지 않는 역할
+  String NOT_EXISTED_MENU = "NM";                     //존재하지 않는 메뉴
 
   // HTTP Status 401(Unauthorized)
 

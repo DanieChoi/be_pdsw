@@ -13,9 +13,7 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.entity;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.nexus.pdsw.common.AesEncDecConverter;
 import com.nexus.pdsw.dto.request.PostEventLogRequestDto;
