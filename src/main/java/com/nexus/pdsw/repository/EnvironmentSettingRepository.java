@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
- * NAME : MenuByRoleRepository.java
- * DESC : 역할별 메뉴 레포지토리 개체
+ * NAME : EnvironmentSettingRepository.java
+ * DESC : 환경설정 레포지토리 개체
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
  * Copyright 2024 Dootawiz All rights reserved
@@ -9,21 +9,19 @@
  *------------------------------------------------------------------------------
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
- * 2025/03/18  최상원                       초기작성
+ * 2025/03/19  최상원                       초기작성
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.repository;
-
-import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.nexus.pdsw.entity.MenuByRoleEntity;
-import com.nexus.pdsw.entity.RoleEntity;
+import com.nexus.pdsw.entity.EnvironmentSettingEntity;
+import java.util.Optional;
+
 
 @SuppressWarnings("null")
 @Repository
-public interface MenuByRoleRepository extends JpaRepository<MenuByRoleEntity, Long> {
-  
-  List<MenuByRoleEntity> findByRole(RoleEntity role);
+public interface EnvironmentSettingRepository extends JpaRepository<EnvironmentSettingEntity, String> {
+  Optional findById(String id);
 }

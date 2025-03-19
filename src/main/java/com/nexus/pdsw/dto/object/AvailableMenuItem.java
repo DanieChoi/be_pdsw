@@ -35,7 +35,7 @@ public class AvailableMenuItem {
   private String connectionScreenId;
   
 	/*
-     * 생성자
+   * 생성자
 	 * 
 	 * @param MenuByRoleEntity menuByRole
 	*/
@@ -54,8 +54,8 @@ public class AvailableMenuItem {
     this.connectionScreenId = menuByRole.getMenu().getConnectionScreenId();
   }
 
-    /*
-     * 역할별 메뉴 리스트 가져오기
+  /*
+   * 역할별 메뉴 리스트 가져오기
 	 * 
 	 * @param       List<MenuByRoleEntity> menuListByRole
 	 * @return      List<AvailableMenuItem> availableMenuList

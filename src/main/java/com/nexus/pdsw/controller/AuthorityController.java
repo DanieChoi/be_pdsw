@@ -10,9 +10,9 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/03/18  최상원                       초기작성
+ * 2025/03/19  최상원                       사용자별 환경설정 가져오기 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.controller;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
+import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
 import com.nexus.pdsw.service.AuthorityService;
-
+import com.nexus.pdsw.service.impl.AuthorityServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,6 +45,20 @@ public class AuthorityController {
     @RequestParam(required = true, value = "roleId") int roleId
   ) {
     ResponseEntity<?super GetAvailableMenuListResponseDto> response = authorityService.getAvailableMenuList(roleId);
+    return response;
+  }
+
+  /*
+   *  사용자별 환경설정 가져오기
+   *
+   *  @param String id    상담원ID
+   *  @return ResponseEntity<? super GetEnvironmentSettingResponseDto>
+   */
+  @GetMapping("/environment")
+  public ResponseEntity<? super GetEnvironmentSettingResponseDto> getEnvironmentSetting(
+    @RequestParam(required = true, value = "id") String id
+  ) {
+    ResponseEntity<? super GetEnvironmentSettingResponseDto> response = authorityService.getEnvironmentSetting(id);
     return response;
   }
 }

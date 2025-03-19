@@ -10,12 +10,14 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/03/18  최상원                       초기작성
+ * 2025/03/19  최상원                       사용자별 환경설정 가져오기 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service;
 
 import org.springframework.http.ResponseEntity;
 
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
+import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
 
 public interface AuthorityService {
   
@@ -26,4 +28,12 @@ public interface AuthorityService {
    *  @return ResponseEntity<? super GetAvailableMenuListResponseDto>
    */
   public ResponseEntity<?super GetAvailableMenuListResponseDto> getAvailableMenuList(int roleId);
+
+  /*
+   *  사용자별 환경설정 가져오기
+   *
+   *  @param String id    상담원ID
+   *  @return ResponseEntity<? super GetEnvironmentSettingResponseDto>
+   */
+  public ResponseEntity<? super GetEnvironmentSettingResponseDto> getEnvironmentSetting(String id);
 }
