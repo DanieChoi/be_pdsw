@@ -74,7 +74,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
     try {
       
-      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
+      HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJsonMonitorProcess = new JSONArray();
 
