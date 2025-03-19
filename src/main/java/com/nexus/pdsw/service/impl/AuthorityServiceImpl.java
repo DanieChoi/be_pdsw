@@ -19,9 +19,13 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import com.nexus.pdsw.dto.request.PostEnvironmentSettingRequestDto;
+import com.nexus.pdsw.dto.request.PostEnvironmentSettingSaveRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
+import com.nexus.pdsw.dto.response.authority.PostEnvironmentSettingSaveResponseDto;
 import com.nexus.pdsw.entity.EnvironmentSettingEntity;
 import com.nexus.pdsw.entity.MenuByRoleEntity;
 import com.nexus.pdsw.entity.RoleEntity;
@@ -76,24 +80,50 @@ public class AuthorityServiceImpl implements AuthorityService {
   /*
    *  사용자별 환경설정 가져오기
    *
-   *  @param String id    상담원ID
+   *  @param PostEnvironmentSettingRequestDto requestDto    전달 DTO
    *  @return ResponseEntity<? super GetEnvironmentSettingResponseDto>
    */
   @Override
-  public ResponseEntity<? super GetEnvironmentSettingResponseDto> getEnvironmentSetting(String id) {
+  public ResponseEntity<? super GetEnvironmentSettingResponseDto> getEnvironmentSetting(PostEnvironmentSettingRequestDto requestDto) {
+    
+    EnvironmentSettingEntity environmentSetting = null;
     try {
-      Optional environmentSetting = environmentSettingRepository.findById(id);
+      environmentSetting = environmentSettingRepository.findByEmployeeId(requestDto.getEmployeeId());
 
       //환경설정 내역이 존재하지 않을 경우
       if (environmentSetting == null) {
-        EnvironmentSettingEntity defaultEnvironmentSetting = new EnvironmentSettingEntity(id);
+        EnvironmentSettingEntity defaultEnvironmentSetting = new EnvironmentSettingEntity(requestDto);
         environmentSettingRepository.save(defaultEnvironmentSetting);
+        environmentSetting = defaultEnvironmentSetting;
       }
     } catch (Exception e) {
       e.printStackTrace();
       ResponseDto.databaseError();
     }
-    return GetEnvironmentSettingResponseDto.success();
+    return GetEnvironmentSettingResponseDto.success(environmentSetting);
+  }
+
+  /*
+   *  사용자별 환경설정 저장하기
+   *
+   *  @param PostEnvironmentSettingSaveRequestDto requestDto    전달 DTO
+   *  @return ResponseEntity<? super PostEnvironmentSettingSaveResponseDto>
+   */
+  @Override
+  public ResponseEntity<? super PostEnvironmentSettingSaveResponseDto> postEnvironmentSetting(
+    PostEnvironmentSettingSaveRequestDto requestDto
+  ) {
+
+    try {
+      EnvironmentSettingEntity environmentSetting = environmentSettingRepository.findByEmployeeId(requestDto.getEmployeeId());
+      environmentSetting.modifySetting(requestDto);
+      environmentSettingRepository.save(environmentSetting);
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+      ResponseDto.databaseError();
+    }
+    return PostEnvironmentSettingSaveResponseDto.success();
   }
   
 }

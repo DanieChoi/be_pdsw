@@ -16,8 +16,11 @@ package com.nexus.pdsw.service;
 
 import org.springframework.http.ResponseEntity;
 
+import com.nexus.pdsw.dto.request.PostEnvironmentSettingRequestDto;
+import com.nexus.pdsw.dto.request.PostEnvironmentSettingSaveRequestDto;
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
+import com.nexus.pdsw.dto.response.authority.PostEnvironmentSettingSaveResponseDto;
 
 public interface AuthorityService {
   
@@ -32,8 +35,16 @@ public interface AuthorityService {
   /*
    *  사용자별 환경설정 가져오기
    *
-   *  @param String id    상담원ID
+   *  @param PostEnvironmentSettingRequestDto requestDto    전달 DTO
    *  @return ResponseEntity<? super GetEnvironmentSettingResponseDto>
    */
-  public ResponseEntity<? super GetEnvironmentSettingResponseDto> getEnvironmentSetting(String id);
+  public ResponseEntity<? super GetEnvironmentSettingResponseDto> getEnvironmentSetting(PostEnvironmentSettingRequestDto requestDto);
+
+  /*
+   *  사용자별 환경설정 저장하기
+   *
+   *  @param PostEnvironmentSettingSaveRequestDto requestDto    전달 DTO
+   *  @return ResponseEntity<? super PostEnvironmentSettingSaveResponseDto>
+   */
+  public ResponseEntity<? super PostEnvironmentSettingSaveResponseDto> postEnvironmentSetting(PostEnvironmentSettingSaveRequestDto requestDto);
 }

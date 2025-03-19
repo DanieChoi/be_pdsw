@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
- * NAME : EnvironmentSettingRepository.java
- * DESC : 환경설정 레포지토리 개체
+ * NAME : PostEnvironmentSettingRequestDto.java
+ * DESC : 환경설정 가져오기 전달 DTO
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
  * Copyright 2024 Dootawiz All rights reserved
@@ -11,16 +11,17 @@
  * ----------  ------  -----------------------------------------------------------
  * 2025/03/19  최상원                       초기작성
  *------------------------------------------------------------------------------*/
-package com.nexus.pdsw.repository;
+package com.nexus.pdsw.dto.request;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import com.nexus.pdsw.entity.EnvironmentSettingEntity;
-import com.nexus.pdsw.entity.primaryKey.EnvironmentSettingPk;
-
-@SuppressWarnings("null")
-@Repository
-public interface EnvironmentSettingRepository extends JpaRepository<EnvironmentSettingEntity, EnvironmentSettingPk> {
-  EnvironmentSettingEntity findByEmployeeId(String employeeId);
+@Getter
+@Setter
+@NoArgsConstructor
+public class PostEnvironmentSettingRequestDto {
+  private int centerId;
+  private int tenantId;
+  private String employeeId;  
 }
