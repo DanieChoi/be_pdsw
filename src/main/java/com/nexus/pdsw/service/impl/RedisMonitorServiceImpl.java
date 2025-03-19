@@ -304,6 +304,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         for (Object tenantKey : redisTenantList.keySet()) {
 
+          // log.info(">>>테넌트 키: {}", tenantKey);
           redisKey = "monitor:tenant:" + tenantKey + ":campaign:dial";
 
           redisSendingProgressStatus = hashOperations.entries(redisKey);
@@ -455,7 +456,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         for (Object tenantKey : redisTenantList.keySet()) {
 
-          redisCounselorStatusList = hashOperations.entries("st.employee.state-1-" + tenantKey);
+          redisCounselorStatusList = hashOperations1.entries("st.employee.state-1-" + tenantKey);
 
           arrJsonCounselorState = (JSONArray) jsonParser.parse(redisCounselorStatusList.values().toString());
 
