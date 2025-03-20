@@ -27,7 +27,6 @@ import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
 import com.nexus.pdsw.dto.response.authority.PostEnvironmentSettingSaveResponseDto;
 import com.nexus.pdsw.service.AuthorityService;
-import com.nexus.pdsw.service.impl.AuthorityServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +48,7 @@ public class AuthorityController {
   public ResponseEntity<?super GetAvailableMenuListResponseDto> getAvailableMenuList(
     @RequestParam(required = true, value = "roleId") int roleId
   ) {
+    log.info(">>>역할ID: {}", roleId);
     ResponseEntity<?super GetAvailableMenuListResponseDto> response = authorityService.getAvailableMenuList(roleId);
     return response;
   }
