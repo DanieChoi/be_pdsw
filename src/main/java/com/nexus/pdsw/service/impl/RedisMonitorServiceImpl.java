@@ -159,11 +159,13 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
           Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
           arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
+
           Map<String, Object> mapItem = null;
 
           for(Object jsonItem : arrJson) {
             try {
               mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+              mapItem.put("deviceId", mapDialer.get("device_id"));
             } catch (JsonMappingException e) {
               throw new RuntimeException(e);
             }
@@ -177,11 +179,13 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
         arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
+
         Map<String, Object> mapItem = null;
 
         for(Object jsonItem : arrJson) {
           try {
             mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+            mapItem.put("deviceId", requestDto.getDeviceId());
           } catch (JsonMappingException e) {
             throw new RuntimeException(e);
           }

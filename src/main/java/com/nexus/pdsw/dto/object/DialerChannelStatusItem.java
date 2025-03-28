@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/01/31  최상원                       초기작성
+ * 2025/03/28  최상원                       DeviceId 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.dto.object;
 
@@ -19,11 +20,14 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @NoArgsConstructor
 public class DialerChannelStatusItem {
   
+  private String deviceId;
   private String id;
   private String state;
   private String event;
@@ -40,6 +44,8 @@ public class DialerChannelStatusItem {
   private DialerChannelStatusItem(
     Map<String, Object> mapDialerChannelStatus
   ) {
+    log.info(">>>반환 값: {}", mapDialerChannelStatus.toString());
+    this.deviceId = mapDialerChannelStatus.get("deviceId").toString();
     this.id = mapDialerChannelStatus.get("id").toString();
     this.state = mapDialerChannelStatus.get("state").toString();
     this.event = mapDialerChannelStatus.get("event").toString();
