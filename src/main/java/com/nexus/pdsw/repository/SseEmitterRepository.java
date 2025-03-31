@@ -30,8 +30,8 @@ public class SseEmitterRepository {
     return sseEmitter;
   }
 
-  public Optional<SseEmitter> findById(String counselorId) {
-    return Optional.ofNullable(emitters.get(counselorId));
+  public Optional<SseEmitter> findById(String eventId) {
+    return Optional.ofNullable(emitters.get(eventId));
   }
 
   public void deleteById(String eventId) {
@@ -42,7 +42,7 @@ public class SseEmitterRepository {
     return emitters.size();
   }
 
-  public boolean containKey(String counselorId) {
-    return emitters.containsKey(counselorId);
+  public boolean containKey(String eventId) {
+    return emitters.containsKey(eventId);
   }
 }

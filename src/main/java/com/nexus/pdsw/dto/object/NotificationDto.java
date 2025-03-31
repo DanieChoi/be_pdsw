@@ -14,8 +14,10 @@
 package com.nexus.pdsw.dto.object;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class NotificationDto {
   
   private String kind;
