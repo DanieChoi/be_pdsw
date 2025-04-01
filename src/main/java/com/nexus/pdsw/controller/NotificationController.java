@@ -50,10 +50,7 @@ public class NotificationController {
   public ResponseEntity<SseEmitter> subscribe(
     @PathVariable("tenantId") String tenantId
   ) {
-    
-    log.info(">>>테넌트 ID: {}", tenantId);
     return ResponseEntity.ok(notificationService.subscribe(tenantId));
-
   }
 
   /*

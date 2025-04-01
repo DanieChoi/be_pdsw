@@ -26,4 +26,4 @@ spring:
       timeout: 2000
 
 sse:
-  timeout: 3600000
+  timeout: 3000000
