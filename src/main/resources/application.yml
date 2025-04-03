@@ -24,6 +24,9 @@ spring:
       port: 6379
       password: nexus!234
       timeout: 2000
+  mvc:
+    async:
+      request-timeout: -1 
 
 sse:
-  timeout: 3000000
+  timeout: 36000000
