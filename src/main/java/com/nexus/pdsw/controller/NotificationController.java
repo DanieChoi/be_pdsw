@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.nexus.pdsw.common.CounselorId;
 import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 import com.nexus.pdsw.service.NotificationService;
 import com.nexus.pdsw.service.RedisMessageService;
