@@ -13,7 +13,6 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -34,30 +33,16 @@ public class RedisMessageServiceImpl implements RedisMessageService {
   
   private final RedisMessageListenerContainer container;
   private final RedisSubscriber subscriber;
-  // @Qualifier("2")
   private final RedisTemplate<String, Object> redisTemplate;
-
-  // public RedisMessageServiceImpl(
-  //   RedisMessageListenerContainer container,
-  //   RedisSubscriber subscriber,
-  //   @Qualifier("2") RedisTemplate<String, String> redisTemplate2
-  // ) {
-  //   this.redisTemplate2 = redisTemplate2;
-  //   this.container = container;
-  //   this.subscriber = subscriber;
-  // }
-
 
   /*
    *  Redis 채널 구독
    *  
    *  @param String channel   채널정보
-   *  @param String counselorId  상담원ID
    *  @return void
    */
   @Override
-  public void subscribe(String channel, String counselorId) {
-    subscriber.setCounselorId(counselorId);
+  public void subscribe(String channel) {
     container.addMessageListener(subscriber, ChannelTopic.of(getChannelName(channel)));
   }
 

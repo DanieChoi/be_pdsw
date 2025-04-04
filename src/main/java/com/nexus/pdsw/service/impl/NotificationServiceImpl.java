@@ -40,12 +40,12 @@ public class NotificationServiceImpl implements NotificationService {
    */
   @Override
   public SseEmitter subscribe(String tenantId, String counselorId) {
-    String emitterKey = counselorId;
+    String emitterKey = "pds:tenant:" + tenantId;
 
     SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);
     sseEmitterService.send("Connected!!", emitterKey, sseEmitter);
 
-    redisMessageService.subscribe(tenantId, counselorId);
+    redisMessageService.subscribe(tenantId);
 
     sseEmitter.onTimeout(sseEmitter::complete);
     sseEmitter.onError((e) -> sseEmitter.complete());
