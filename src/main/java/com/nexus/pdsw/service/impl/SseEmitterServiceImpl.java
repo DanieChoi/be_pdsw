@@ -45,7 +45,6 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    */
   @Override
   public SseEmitter createEmitter(String emitterKey) {
-    log.info("타임아웃 {}", timeout);
     return sseEmitterRepository.save(emitterKey, new SseEmitter(timeout));
   }
 

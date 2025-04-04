@@ -38,7 +38,7 @@ public class RedisSubscriber implements MessageListener {
   
   private final ObjectMapper objectMapper;
   private final SseEmitterService sseEmitterService;
-  private String counselorId;
+  private final String counselorId;
   
   @Override
   public void onMessage(Message message, @Nullable byte[] pattern) {
