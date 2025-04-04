@@ -42,9 +42,7 @@ public class RedisSubscriber implements MessageListener {
       String channel = new String(message.getChannel());
 
       NotificationDto notificationDto = objectMapper.readValue(message.getBody(), NotificationDto.class);
-      log.info(">>>수신 메시지: {} [{}]", notificationDto.getData(), channel);
       sseEmitterService.sendNotificationToClient(channel, notificationDto);
-      // sseEmitterService.sendNotificationToClient(this.counselorId, notificationDto);
 
     } catch (IOException e) {
       log.error("IOException is occurred. ", e);

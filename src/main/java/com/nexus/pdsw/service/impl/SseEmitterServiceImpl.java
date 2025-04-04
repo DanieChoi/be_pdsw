@@ -68,6 +68,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    */
   @Override
   public void sendNotificationToClient(String emitterKey, NotificationDto notificationDto) {
+    log.info(">>>키: {}", emitterKey);
     sseEmitterRepository.findById(emitterKey).ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
   }
 
