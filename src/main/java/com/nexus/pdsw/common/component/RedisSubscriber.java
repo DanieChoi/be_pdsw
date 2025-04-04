@@ -39,7 +39,7 @@ public class RedisSubscriber implements MessageListener {
   public void onMessage(Message message, @Nullable byte[] pattern) {
     try {
 
-      String channel = message.getChannel().toString();
+      String channel = new String(message.getChannel());
 
       NotificationDto notificationDto = objectMapper.readValue(message.getBody(), NotificationDto.class);
       log.info(">>>수신 메시지: {} [{}]", notificationDto.getData(), channel);
