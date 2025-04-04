@@ -48,7 +48,6 @@ public class AuthorityController {
   public ResponseEntity<?super GetAvailableMenuListResponseDto> getAvailableMenuList(
     @RequestParam(required = true, value = "roleId") int roleId
   ) {
-    log.info(">>>역할ID: {}", roleId);
     ResponseEntity<?super GetAvailableMenuListResponseDto> response = authorityService.getAvailableMenuList(roleId);
     return response;
   }

@@ -45,6 +45,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    */
   @Override
   public SseEmitter createEmitter(String emitterKey) {
+    log.info("SSE 키 {}", emitterKey);
     return sseEmitterRepository.save(emitterKey, new SseEmitter(timeout));
   }
 
