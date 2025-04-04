@@ -35,16 +35,17 @@ public class NotificationServiceImpl implements NotificationService {
    *  알림 이벤트 구독
    *  
    *  @param String tenantId  테넌트ID
+   *  @param String counselorId  상담원ID
    *  @return SseEmitter
    */
   @Override
-  public SseEmitter subscribe(String tenantId) {
-    String emitterKey = "pds:tenant:" + tenantId;
+  public SseEmitter subscribe(String tenantId, String counselorId) {
+    String emitterKey = counselorId;
 
     SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);
     sseEmitterService.send("Connected!!", emitterKey, sseEmitter);
 
-    redisMessageService.subscribe(tenantId);
+    redisMessageService.subscribe(tenantId, counselorId);
 
     sseEmitter.onTimeout(sseEmitter::complete);
     sseEmitter.onError((e) -> sseEmitter.complete());

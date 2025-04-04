@@ -22,9 +22,10 @@ public interface RedisMessageService {
    *  Redis 채널 구독
    *  
    *  @param String channel   채널정보
+   *  @param String counselorId  상담원ID
    *  @return void
    */
-  public void subscribe(String channel);
+  public void subscribe(String channel, String counselorId);
 
   /*
    *  Redis 채널 배포

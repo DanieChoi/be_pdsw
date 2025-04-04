@@ -24,31 +24,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.object.NotificationDto;
 import com.nexus.pdsw.service.SseEmitterService;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
+@Getter
+@Setter
 @Component
 public class RedisSubscriber implements MessageListener {
   
   private final ObjectMapper objectMapper;
   private final SseEmitterService sseEmitterService;
+  private String counselorId;
   
   @Override
   public void onMessage(Message message, @Nullable byte[] pattern) {
     try {
 
-      String channel = new String(message.getChannel());
-
       NotificationDto notificationDto = objectMapper.readValue(message.getBody(), NotificationDto.class);
 
-      sseEmitterService.sendNotificationToClient(channel, notificationDto);
+      sseEmitterService.sendNotificationToClient(this.counselorId, notificationDto);
 
     } catch (IOException e) {
       log.error("IOException is occurred. ", e);
     }
-  }
-
-  
+  }  
 }

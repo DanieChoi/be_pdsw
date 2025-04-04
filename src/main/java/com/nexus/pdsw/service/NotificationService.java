@@ -21,9 +21,10 @@ public interface NotificationService {
    *  알림 이벤트 구독
    *  
    *  @param String tenantId  테넌트ID
+   *  @param String counselorId  상담원ID
    *  @return SseEmitter
    */
-  public SseEmitter subscribe(String tenantId);
+  public SseEmitter subscribe(String tenantId, String counselorId);
 
   /*
    *  알림 이벤트 전송

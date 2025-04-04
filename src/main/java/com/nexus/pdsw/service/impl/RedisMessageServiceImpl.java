@@ -24,36 +24,40 @@ import com.nexus.pdsw.dto.object.NotificationDto;
 import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 import com.nexus.pdsw.service.RedisMessageService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RedisMessageServiceImpl implements RedisMessageService {
   
   private final RedisMessageListenerContainer container;
   private final RedisSubscriber subscriber;
-  @Qualifier("2")
-  private final RedisTemplate<String, String> redisTemplate2;
+  // @Qualifier("2")
+  private final RedisTemplate<String, Object> redisTemplate;
 
-  public RedisMessageServiceImpl(
-    RedisMessageListenerContainer container,
-    RedisSubscriber subscriber,
-    @Qualifier("2") RedisTemplate<String, String> redisTemplate2
-  ) {
-    this.redisTemplate2 = redisTemplate2;
-    this.container = container;
-    this.subscriber = subscriber;
-  }
+  // public RedisMessageServiceImpl(
+  //   RedisMessageListenerContainer container,
+  //   RedisSubscriber subscriber,
+  //   @Qualifier("2") RedisTemplate<String, String> redisTemplate2
+  // ) {
+  //   this.redisTemplate2 = redisTemplate2;
+  //   this.container = container;
+  //   this.subscriber = subscriber;
+  // }
 
 
   /*
    *  Redis 채널 구독
    *  
    *  @param String channel   채널정보
+   *  @param String counselorId  상담원ID
    *  @return void
    */
   @Override
-  public void subscribe(String channel) {
+  public void subscribe(String channel, String counselorId) {
+    subscriber.setCounselorId(counselorId);
     container.addMessageListener(subscriber, ChannelTopic.of(getChannelName(channel)));
   }
 
@@ -69,7 +73,7 @@ public class RedisMessageServiceImpl implements RedisMessageService {
     String tenantId,
     NotificationDto notificationDto
   ) {
-    redisTemplate2.convertAndSend(getChannelName(tenantId), notificationDto);
+    redisTemplate.convertAndSend(getChannelName(tenantId), notificationDto);
   }
 
   /*
@@ -80,7 +84,7 @@ public class RedisMessageServiceImpl implements RedisMessageService {
    */
   @Override
   public void publicNotification(PostRedisMessagePublishRequestDto requestBody) {
-    redisTemplate2.convertAndSend(getChannelName(requestBody.getTenantId()), requestBody.getNotification());
+    redisTemplate.convertAndSend(getChannelName(requestBody.getTenantId()), requestBody.getNotification());
   }
 
   /*

@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/02/05  최상원                       초기작성
+ * 2025/04/04  최상원                       구독 요청 시 상담원ID 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.controller;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.nexus.pdsw.common.CounselorId;
 import com.nexus.pdsw.dto.request.PostRedisMessagePublishRequestDto;
 import com.nexus.pdsw.service.NotificationService;
 import com.nexus.pdsw.service.RedisMessageService;
@@ -44,13 +46,15 @@ public class NotificationController {
    *  실시간 이벤트 구독
    *  
    *  @param String tenantId  테넌트ID
+   *  @param String counselorId  상담원ID
    *  @return ResponseEntity<SseEmitter>
    */
-  @GetMapping(value = "/{tenantId}/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  @GetMapping(value = "/{tenantId}/subscribe/{counselorId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public ResponseEntity<SseEmitter> subscribe(
-    @PathVariable("tenantId") String tenantId
+    @PathVariable("tenantId") String tenantId,
+    @PathVariable("counselorId") String counselorId
   ) {
-    return ResponseEntity.ok(notificationService.subscribe(tenantId));
+    return ResponseEntity.ok(notificationService.subscribe(tenantId, counselorId));
   }
 
   /*
