@@ -45,7 +45,7 @@ public class RedisSubscriber implements MessageListener {
     try {
 
       NotificationDto notificationDto = objectMapper.readValue(message.getBody(), NotificationDto.class);
-
+      log.info(">>>수신 메시지: {} [{}]", notificationDto.getData(), this.counselorId);
       sseEmitterService.sendNotificationToClient(this.counselorId, notificationDto);
 
     } catch (IOException e) {
