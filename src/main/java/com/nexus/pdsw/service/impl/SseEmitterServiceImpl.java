@@ -68,11 +68,17 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    *  @return void
    */
   @Override
-  public void sendNotificationToClient(String emitterKey, NotificationDto notificationDto) {
+  public void sendNotificationToClient(String channelKey, NotificationDto notificationDto) {
     Map<String, SseEmitter> emitters = sseEmitterRepository.findAll();
-    emitters.forEach((key, value) -> {
-      System.out.println(key + " : " + value);
-      send(notificationDto, key, value);
+    String[] arrEmitterKey = channelKey.split(":");
+    log.info(">>>체널 태넌트ID: {}", arrEmitterKey[2]);
+    emitters.forEach((counselorId, emitter) -> {
+      String[] arrCounselorId = counselorId.split("_");
+      log.info(">>>로그인 테넌트ID: {}, 저장 테넌트ID: {}", arrEmitterKey[2], arrCounselorId[1]);
+      if (arrEmitterKey[2].equals(arrCounselorId[1])) {
+        log.info(">>>SSE_KEY: {}", counselorId);
+        send(notificationDto, counselorId, emitter);
+      }
     });
     // sseEmitterRepository.findById(emitterKey).ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
   }

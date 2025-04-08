@@ -40,7 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
    */
   @Override
   public SseEmitter subscribe(String tenantId, String counselorId) {
-    String emitterKey = counselorId;
+    String emitterKey = counselorId + "_" + tenantId;
     // String emitterKey = "pds:tenant:" + tenantId;
 
     SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);

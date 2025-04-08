@@ -27,7 +27,7 @@ spring:
       timeout: 2000
   mvc:
     async:
-      request-timeout: -1 
+      request-timeout: 6000 
 
 sse:
   timeout: 3600000
