@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- * NAME : RedisMessageServiceImpl.java
+ * NAME : SseEmitterServiceImpl.java
  * DESC : SseEmitter 관련 기능 구현체
  * VER  : V1.0
  * PROJ : 웹 기반 PDS 구축 프로젝트
@@ -68,7 +68,6 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    */
   @Override
   public void sendNotificationToClient(String emitterKey, NotificationDto notificationDto) {
-    log.info(">>>키: {}", emitterKey);
     sseEmitterRepository.findById(emitterKey).ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
   }
 

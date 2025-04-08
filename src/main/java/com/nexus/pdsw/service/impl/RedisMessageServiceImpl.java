@@ -15,6 +15,7 @@ package com.nexus.pdsw.service.impl;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
 
@@ -39,10 +40,11 @@ public class RedisMessageServiceImpl implements RedisMessageService {
    *  Redis 채널 구독
    *  
    *  @param String channel   채널정보
+   *  @param String counselorId  상담원ID
    *  @return void
    */
   @Override
-  public void subscribe(String channel) {
+  public void subscribe(String channel, String counselorId) {
     container.addMessageListener(subscriber, ChannelTopic.of(getChannelName(channel)));
   }
 
