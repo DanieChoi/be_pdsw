@@ -14,6 +14,7 @@
 package com.nexus.pdsw.service.impl;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -68,7 +69,12 @@ public class SseEmitterServiceImpl implements SseEmitterService {
    */
   @Override
   public void sendNotificationToClient(String emitterKey, NotificationDto notificationDto) {
-    sseEmitterRepository.findById(emitterKey).ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
+    Map<String, SseEmitter> emitters = sseEmitterRepository.findAll();
+    emitters.forEach((key, value) -> {
+      System.out.println(key + " : " + value);
+      send(notificationDto, key, value);
+    });
+    // sseEmitterRepository.findById(emitterKey).ifPresent(emitter -> send(notificationDto, emitterKey, emitter));
   }
 
   /*

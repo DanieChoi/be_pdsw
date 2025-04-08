@@ -34,6 +34,10 @@ public class SseEmitterRepository {
     return Optional.ofNullable(emitters.get(eventId));
   }
 
+  public Map<String, SseEmitter> findAll() {
+    return emitters;
+  }
+
   public void deleteById(String eventId) {
     emitters.remove(eventId);
   }
