@@ -70,8 +70,8 @@ public class CounselorController {
     public ResponseEntity<? super PostCounselorStatusListResponseDto> getCounselorStatusList(
       @RequestBody PostCounselorListRequestDto requestBody
     ) {
-      log.info(">>>SessionKey: {}", requestBody.getSessionKey());
       ResponseEntity<? super PostCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(requestBody);
+      log.info(">>>반환값: {}", response.toString());
       return response;
     }
 
