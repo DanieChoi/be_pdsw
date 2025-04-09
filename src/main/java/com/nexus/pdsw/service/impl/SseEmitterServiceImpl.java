@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/02/04  최상원                       초기작성
+ * 2025/04/08  최상원                       클라이언트로 SSE 메시지 전송 수정
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
@@ -71,12 +72,9 @@ public class SseEmitterServiceImpl implements SseEmitterService {
   public void sendNotificationToClient(String channelKey, NotificationDto notificationDto) {
     Map<String, SseEmitter> emitters = sseEmitterRepository.findAll();
     String[] arrEmitterKey = channelKey.split(":");
-    log.info(">>>체널 태넌트ID: {}", arrEmitterKey[2]);
     emitters.forEach((counselorId, emitter) -> {
       String[] arrCounselorId = counselorId.split("_");
-      log.info(">>>로그인 테넌트ID: {}, 저장 테넌트ID: {}", arrEmitterKey[2], arrCounselorId[1]);
       if (arrEmitterKey[2].equals(arrCounselorId[1])) {
-        log.info(">>>SSE_KEY: {}", counselorId);
         send(notificationDto, counselorId, emitter);
       }
     });

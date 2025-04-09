@@ -9,7 +9,6 @@ spring:
     password: pdswDev136!
   jpa:
     generate-ddl: false
-    open-in-view: false
     hibernate:
       ddl-auto: none      
       naming:
@@ -30,4 +29,4 @@ spring:
       request-timeout: 6000 
 
 sse:
-  timeout: 3600000
+  timeout: 3000000
