@@ -23,6 +23,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
     this.redisTemplate1 = redisTemplate1;
   }
 
+  @Value("${restapi.baseurl}")
+  private String baseUrl;
 
   /*
    *  타 시스템 프로세스 상태정보 가져오기
@@ -126,7 +129,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
         WebClient webClient =
           WebClient
             .builder()
-            .baseUrl("http://10.10.40.145:8010")
+            // .baseUrl("http://10.10.40.145:8010")
+            .baseUrl(baseUrl)
             .defaultHeaders(httpHeaders -> {
               httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
               httpHeaders.add("Session-Key", requestDto.getSessionKey());
@@ -269,7 +273,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       WebClient webClient =
         WebClient
           .builder()
-          .baseUrl("http://10.10.40.145:8010")
+          // .baseUrl("http://10.10.40.145:8010")
+          .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             httpHeaders.add("Session-Key", requestDto.getSessionKey());
