@@ -159,15 +159,11 @@ public class CounselorServiceImpl implements CounselorService {
       //사이드 바(캠페인)에서 센터나 테넌트에서 상담원 상태 모니터를 호출했을 때
       if (requestBody.getTenantId().equals("0") || requestBody.getCampaignId().equals("0")) {
       
-        filterMap.put("tenant_id", null);
-        // filterMap.put("dial_mode", null);
-        // filterMap.put("start_flag", null);
-        // filterMap.put("end_flag", null);
-        // filterMap.put("callback_kind", null);
+        filterMap.put("tenant_id", 0);
 
         bodyMap.put("filter", filterMap);
-        bodyMap.put("sort", sortMap);
-        bodyMap.put("page", pageMap);
+        // bodyMap.put("sort", sortMap);
+        // bodyMap.put("page", pageMap);
 
         //모든 캠페인 가져오기 API 요청
         Map<String, Object> apiCampaign =
