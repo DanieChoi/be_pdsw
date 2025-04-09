@@ -44,7 +44,7 @@ public class DialerChannelStatusItem {
   private DialerChannelStatusItem(
     Map<String, Object> mapDialerChannelStatus
   ) {
-    log.info(">>>반환 값: {}", mapDialerChannelStatus.toString());
+    // log.info(">>>반환 값: {}", mapDialerChannelStatus.toString());
     this.deviceId = mapDialerChannelStatus.get("deviceId").toString();
     this.id = mapDialerChannelStatus.get("id").toString();
     this.state = mapDialerChannelStatus.get("state").toString();

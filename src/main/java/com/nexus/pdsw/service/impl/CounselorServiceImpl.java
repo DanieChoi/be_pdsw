@@ -175,7 +175,15 @@ public class CounselorServiceImpl implements CounselorService {
 
         //센터 내 모든 캠페인 가져오기 API 요청이 실패했을 때
         if (!apiCampaign.get("result_code").equals(0)) {
-          ResponseDto result = new ResponseDto(apiCampaign.get("result_code").toString(), apiCampaign.get("result_message").toString());
+          String resultCode = "";
+          String resultMessage = "";
+          if (apiCampaign.get("result_code") != null) {
+            resultCode = apiCampaign.get("result_code").toString();
+          }
+          if (apiCampaign.get("result_message") != null) {
+            resultMessage = apiCampaign.get("result_message").toString();
+          }
+          ResponseDto result = new ResponseDto(resultCode, resultMessage);
           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
 
