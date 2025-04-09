@@ -45,7 +45,7 @@ public class EventLogServiceImpl implements EventLogService {
     try {
       
       EventLogEntity rsEventLog = new EventLogEntity(dto);
-      log.info(">>>로그내용: {}", dto.toString());
+      log.info(">>>이벤트명: {}, 상담사ID: {}", dto.getEventName().toString(), dto.getEmployeeId().toString());
       eventLogRepository.save(rsEventLog);
       
     } catch (Exception e) {
