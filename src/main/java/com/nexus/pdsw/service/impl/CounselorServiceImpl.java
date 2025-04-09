@@ -129,6 +129,8 @@ public class CounselorServiceImpl implements CounselorService {
 
       Map<String, Object> mapCounselorState = new HashMap<>();
 
+      log.info(">>>BaseUrl: {}", baseUrl);
+
       //WebClient로 API서버와 연결
       WebClient webClient =
         WebClient
