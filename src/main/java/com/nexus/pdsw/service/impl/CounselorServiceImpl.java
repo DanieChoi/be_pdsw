@@ -207,6 +207,8 @@ public class CounselorServiceImpl implements CounselorService {
             continue;
           }
 
+          log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id"));
+
           bodyMap.clear();
           filterMap.clear();
           arrCampaignId[0] = (int) mapCampaign.get("campaign_id");
