@@ -172,7 +172,7 @@ public class CounselorServiceImpl implements CounselorService {
             .post()
             .uri(uriBuilder ->
               uriBuilder
-                .path("/pds/collections/campaign-list")
+                .path("/pds/collections/campaign")
                 .build()
             )
             .bodyValue(bodyMap)
