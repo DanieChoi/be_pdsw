@@ -180,8 +180,6 @@ public class CounselorServiceImpl implements CounselorService {
             .bodyToMono(Map.class)
             .block();
 
-        log.info(">>>캠페인 반환값: {}", apiCampaign.toString());
-
         //센터 내 모든 캠페인 가져오기 API 요청이 실패했을 때
         if (!apiCampaign.get("result_code").equals(0)) {
           String resultCode = "";
@@ -198,8 +196,6 @@ public class CounselorServiceImpl implements CounselorService {
 
         List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
-        log.info(">>>캠페인 : {}", mapCampaignList.size());
-
         //모든 캠페인에 할당된 상담원 가져오기
         for (Map<String, Object> mapCampaign : mapCampaignList) {
 
@@ -208,9 +204,6 @@ public class CounselorServiceImpl implements CounselorService {
             !requestBody.getTenantId().equals(mapCampaign.get("tenant_id").toString())) {
             continue;
           }
-
-          log.info(">>>캠페인: {}", mapCampaign.toString());
-          log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id"));
 
           bodyMap.clear();
           filterMap.clear();
