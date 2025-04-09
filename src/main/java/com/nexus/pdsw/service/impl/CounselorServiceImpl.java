@@ -233,7 +233,6 @@ public class CounselorServiceImpl implements CounselorService {
               .bodyToMono(Map.class)
               .block();
 
-          log.info(">>>할당상담사 반환값: {}", apiAssignedCounselor.toString());
           //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
           if (!apiAssignedCounselor.get("result_code").equals(0)) {
             String resultCode = "";
@@ -299,6 +298,7 @@ public class CounselorServiceImpl implements CounselorService {
       //수집된 할당된 상담사ID 중복제거
       List<Object> assignedCounselorDuplicatesRemovedList = assignedCounselorList.stream().distinct().collect(Collectors.toList());
 
+      log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
       Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
 
       for (Object assignedCounselor : assignedCounselorDuplicatesRemovedList){
