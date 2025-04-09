@@ -198,7 +198,7 @@ public class CounselorServiceImpl implements CounselorService {
 
         List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
-        log.info(">>>캠페인 : {}", mapCampaignList.toString());
+        log.info(">>>캠페인 : {}", mapCampaignList.size());
 
         //모든 캠페인에 할당된 상담원 가져오기
         for (Map<String, Object> mapCampaign : mapCampaignList) {
@@ -209,6 +209,7 @@ public class CounselorServiceImpl implements CounselorService {
             continue;
           }
 
+          log.info(">>>캠페인: {}", mapCampaign.toString());
           log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id"));
 
           bodyMap.clear();
