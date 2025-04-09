@@ -129,8 +129,6 @@ public class CounselorServiceImpl implements CounselorService {
 
       Map<String, Object> mapCounselorState = new HashMap<>();
 
-      // log.info(">>>SessionKey: {}", requestBody.getSessionKey());
-
       //WebClient로 API서버와 연결
       WebClient webClient =
         WebClient
@@ -153,18 +151,23 @@ public class CounselorServiceImpl implements CounselorService {
 
       List<Object> assignedCounselorList = new ArrayList<>();
 
+      //사이드 바(캠페인)에서 센터 노드에서 상담원 상태 모니터를 호출했을 때
+      // if (requestBody.getTenantId().equals("0")) {
+      //   filterMap.put("tenant_id", null);
+        
+      // }
       //사이드 바(캠페인)에서 센터나 테넌트에서 상담원 상태 모니터를 호출했을 때
       if (requestBody.getTenantId().equals("0") || requestBody.getCampaignId().equals("0")) {
       
-        filterMap.put("campaign_id", null);
-        filterMap.put("dial_mode", null);
-        filterMap.put("start_flag", null);
-        filterMap.put("end_flag", null);
-        filterMap.put("callback_kind", null);
+        filterMap.put("tenant_id", null);
+        // filterMap.put("dial_mode", null);
+        // filterMap.put("start_flag", null);
+        // filterMap.put("end_flag", null);
+        // filterMap.put("callback_kind", null);
 
         bodyMap.put("filter", filterMap);
         bodyMap.put("sort", sortMap);
-        bodyMap.put("sort", pageMap);
+        bodyMap.put("page", pageMap);
 
         //모든 캠페인 가져오기 API 요청
         Map<String, Object> apiCampaign =
@@ -172,7 +175,7 @@ public class CounselorServiceImpl implements CounselorService {
             .post()
             .uri(uriBuilder ->
               uriBuilder
-                .path("/pds/collections/campaign")
+                .path("/pds/collections/campaign-list")
                 .build()
             )
             .bodyValue(bodyMap)
