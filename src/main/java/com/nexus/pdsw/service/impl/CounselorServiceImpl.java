@@ -194,6 +194,7 @@ public class CounselorServiceImpl implements CounselorService {
         }
   
       } else {
+        log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         filterMap.put("tenant_id", Integer.parseInt(requestBody.getTenantId()));
 
         bodyMap.put("filter", filterMap);
