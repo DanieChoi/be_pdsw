@@ -129,7 +129,7 @@ public class CounselorServiceImpl implements CounselorService {
 
       Map<String, Object> mapCounselorState = new HashMap<>();
 
-      log.info(">>>SessionKey: {}", requestBody.getSessionKey());
+      // log.info(">>>SessionKey: {}", requestBody.getSessionKey());
 
       //WebClient로 API서버와 연결
       WebClient webClient =
