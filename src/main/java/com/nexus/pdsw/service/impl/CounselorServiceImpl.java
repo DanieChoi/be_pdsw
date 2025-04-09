@@ -180,7 +180,7 @@ public class CounselorServiceImpl implements CounselorService {
             .bodyToMono(Map.class)
             .block();
 
-        log.info(">>>반환값: {}", apiCampaign.toString());
+        log.info(">>>캠페인 반환값: {}", apiCampaign.toString());
 
         //센터 내 모든 캠페인 가져오기 API 요청이 실패했을 때
         if (!apiCampaign.get("result_code").equals(0)) {
@@ -228,6 +228,7 @@ public class CounselorServiceImpl implements CounselorService {
               .bodyToMono(Map.class)
               .block();
 
+          log.info(">>>할당상담사 반환값: {}", apiAssignedCounselor.toString());
           //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
           if (!apiAssignedCounselor.get("result_code").equals(0)) {
             String resultCode = "";
