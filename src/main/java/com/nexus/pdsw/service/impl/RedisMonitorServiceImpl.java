@@ -224,13 +224,13 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
       String redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
-      log.info(">>>레디스키: {}", redisKey);
+      // log.info(">>>레디스키: {}", redisKey);
 
       Map<Object, Object> redisProgressInfo = hashOperations.entries(redisKey);
       arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
       Map<String, Object> mapItem = null;
 
-      log.info(">>>진행정보: {}", arrJson.toString());
+      // log.info(">>>진행정보: {}", arrJson.toString());
 
       for(Object jsonItem : arrJson) {
         try {
@@ -439,7 +439,15 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
         if (!apiAssignedCounselor.get("result_code").equals(0)) {
-          ResponseDto result = new ResponseDto(apiAssignedCounselor.get("result_code").toString(), apiAssignedCounselor.get("result_message").toString());
+          String resultCode = "";
+          String resultMessage = "";
+          if (apiAssignedCounselor.get("result_code") != null) {
+            resultCode = apiAssignedCounselor.get("result_code").toString();
+          }
+          if (apiAssignedCounselor.get("result_message") != null) {
+            resultMessage = apiAssignedCounselor.get("result_message").toString();
+          }
+          ResponseDto result = new ResponseDto(resultCode, resultMessage);
           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
 
