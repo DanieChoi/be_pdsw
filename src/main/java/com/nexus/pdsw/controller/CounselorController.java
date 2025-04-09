@@ -71,7 +71,6 @@ public class CounselorController {
       @RequestBody PostCounselorListRequestDto requestBody
     ) {
       ResponseEntity<? super PostCounselorStatusListResponseDto> response = counselorService.getCounselorStatusList(requestBody);
-      log.info(">>>반환값: {}", response.toString());
       return response;
     }
 
