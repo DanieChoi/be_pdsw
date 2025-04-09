@@ -172,7 +172,15 @@ public class CounselorServiceImpl implements CounselorService {
   
         //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
         if (!apiAssignedCounselor.get("result_code").equals(0)) {
-          ResponseDto result = new ResponseDto(apiAssignedCounselor.get("result_code").toString(), apiAssignedCounselor.get("result_message").toString());
+          String resultCode = "";
+          String resultMessage = "";
+          if (apiAssignedCounselor.get("result_code") != null) {
+            resultCode = apiAssignedCounselor.get("result_code").toString();
+          }
+          if (apiAssignedCounselor.get("result_message") != null) {
+            resultMessage = apiAssignedCounselor.get("result_message").toString();
+          }
+          ResponseDto result = new ResponseDto(resultCode, resultMessage);
           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
         }
   
