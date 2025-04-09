@@ -129,7 +129,7 @@ public class CounselorServiceImpl implements CounselorService {
 
       Map<String, Object> mapCounselorState = new HashMap<>();
 
-      log.info(">>>BaseUrl: {}", baseUrl);
+      // log.info(">>>BaseUrl: {}", baseUrl);
 
       //WebClient로 API서버와 연결
       WebClient webClient =
@@ -143,6 +143,7 @@ public class CounselorServiceImpl implements CounselorService {
           })
           .build();
 
+      log.info(">>>API연결: {}", webClient.toString());
       //API 호출 시 Request 개체 자료구조
       Map<String, Object> bodyMap = new HashMap<>();
       Map<String, Object> filterMap = new HashMap<>();
