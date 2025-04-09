@@ -28,6 +28,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -62,6 +63,9 @@ public class CounselorServiceImpl implements CounselorService {
   ) {
     this.redisTemplate1 = redisTemplate1;
   }
+
+  @Value("${restapi.baseurl}")
+  private String baseUrl;
 
   /*  
    *  상담사 리스트 가져오기
@@ -129,7 +133,8 @@ public class CounselorServiceImpl implements CounselorService {
       WebClient webClient =
         WebClient
           .builder()
-          .baseUrl("http://10.10.40.145:8010")
+          // .baseUrl("http://10.10.40.145:8010")
+          .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             httpHeaders.add("Session-Key", requestBody.getSessionKey());
@@ -345,7 +350,8 @@ public class CounselorServiceImpl implements CounselorService {
       WebClient webClient =
         WebClient
           .builder()
-          .baseUrl("http://10.10.40.145:8010")
+          // .baseUrl("http://10.10.40.145:8010")
+          .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             httpHeaders.add("Session-Key", requestBody.getSessionKey());
@@ -460,7 +466,8 @@ public class CounselorServiceImpl implements CounselorService {
       WebClient webClient =
         WebClient
           .builder()
-          .baseUrl("http://10.10.40.145:8010")
+          // .baseUrl("http://10.10.40.145:8010")
+          .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             httpHeaders.add("Session-Key", requestBody.getSessionKey());
