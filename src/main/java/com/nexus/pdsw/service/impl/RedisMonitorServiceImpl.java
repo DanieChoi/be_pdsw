@@ -234,7 +234,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
       Map<String, Object> mapItem = null;
 
-      // log.info(">>>진행정보: {}", arrJson.toString());
+      log.info(">>>진행정보: {}", arrJson.toString());
 
       for(Object jsonItem : arrJson) {
         try {

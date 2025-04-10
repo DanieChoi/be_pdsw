@@ -14,9 +14,7 @@
  *------------------------------------------------------------------------------*/
 // src\main\java\com\nexus\pdsw\controller\RedisMonitorController.java
 package com.nexus.pdsw.controller;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
@@ -42,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class RedisMonitorController {
 
   private final RedisMonitorService redisMonitorService;
-  private final StringRedisTemplate redisTemplate;
 
   /*
    *  타 시스템 프로세스 상태정보 가져오기
