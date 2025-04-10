@@ -52,9 +52,13 @@ public class NotificationServiceImpl implements NotificationService {
       log.info("Server Sent Event timed out : emiterKey={}", emitterKey);
       sseEmitter.complete();      
     });
-    sseEmitter.onError((e) -> sseEmitter.complete());
+    sseEmitter.onError(e -> {
+      log.info("Server Sent Event error occurred : emiterKey={}, message={}", emitterKey, e.getMessage());
+      sseEmitter.complete();
+    });
     sseEmitter.onCompletion(() -> {
       sseEmitterService.deleteEmitter(emitterKey);
+      log.info("disconnected by completed Server Sent Event : emiterKey={}", emitterKey);
       redisMessageService.removeSubscribe(tenantId);
     });
 
