@@ -226,8 +226,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
       String redisKey = "";
-      Map<Object, Object> redisProgressInfo = null;
-      Map<String, Object> mapItem = null;
+      Map<Object, Object> redisProgressInfo = new HashMap<>();
+      Map<String, Object> mapItem = new HashMap<>();
 
       //호출 하는 상담원의 테넌트 ID가 "0"이면
       if (tenantId.equals("0")) {
@@ -265,8 +265,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
           mapProgressInfoList.add(mapItem);
         }
       }
-      // log.info(">>>레디스키: {}", redisKey);
-      // log.info(">>>진행정보: {}", arrJson.toString());
     } catch (Exception e) {
       e.printStackTrace();
       ResponseDto.databaseError();
@@ -306,8 +304,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       //API 호출 시 Request 개체 자료구조
       Map<String, Object> bodyMap = new HashMap<>();
       Map<String, Object> filterMap = new HashMap<>();
-      Map<String, Object> sortMap = new HashMap<>();
-      Map<String, Object> pageMap = new HashMap<>();
 
       List<Object> assignedCounselorList = new ArrayList<>();
 
@@ -322,52 +318,60 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       String strCounselorId = "";
       String strStateCode = "";
 
-      Map<Object, Object> redisTenantList = hashOperations1.entries("master.tenant-1");
-
+      String redisKey = "";
       Map<Object, Object> redisSendingProgressStatus = new HashMap<>();
       Map<Object, Object> redisCounselorStatusList = new HashMap<>();
       Map<String, Object> mapItem = new HashMap<>();
 
-      String redisKey = "";
+      Map<Object, Object> redisTenantList = hashOperations1.entries("master.tenant-1");
 
-      //전체 캠페인인 경우
+      //특정 캠페인이 아닌 경우
       if (requestDto.getCampaignId().equals("0")) {
 
-        for (Object tenantKey : redisTenantList.keySet()) {
-
-          // log.info(">>>테넌트 키: {}", tenantKey);
-          redisKey = "monitor:tenant:" + tenantKey + ":campaign:dial";
-
-          redisSendingProgressStatus = hashOperations.entries(redisKey);
-          arrJson = (JSONArray) jsonParser.parse(redisSendingProgressStatus.values().toString());  
-
-          for(Object jsonItem : arrJson) {
-            try {
-              mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
-            } catch (JsonMappingException e) {
-              throw new RuntimeException(e);
-            }
-            mapSendingProgressStatusList.add(mapItem);
-          }
-        }  
+        //로긴 상담원의 테넌트ID가 "0"인 경우
+        if (requestDto.getTenantId().equals("0")) {
+          for (Object tenantKey : redisTenantList.keySet()) {
+            redisKey = "monitor:tenant:" + tenantKey + ":campaign:dial";
   
-        filterMap.put("campaign_id", null);
-        filterMap.put("dial_mode", null);
-        filterMap.put("start_flag", null);
-        filterMap.put("end_flag", null);
-        filterMap.put("callback_kind", null);
+            redisSendingProgressStatus = hashOperations.entries(redisKey);
+            arrJson = (JSONArray) jsonParser.parse(redisSendingProgressStatus.values().toString());  
+  
+            for(Object jsonItem : arrJson) {
+              try {
+                mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+              } catch (JsonMappingException e) {
+                throw new RuntimeException(e);
+              }
+              mapSendingProgressStatusList.add(mapItem);
+            }
+          }  
+        } else {
+            redisKey = "monitor:tenant:" + requestDto.getTenantId() + ":campaign:dial";
+  
+            redisSendingProgressStatus = hashOperations.entries(redisKey);
+            arrJson = (JSONArray) jsonParser.parse(redisSendingProgressStatus.values().toString());  
+  
+            for(Object jsonItem : arrJson) {
+              try {
+                mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+              } catch (JsonMappingException e) {
+                throw new RuntimeException(e);
+              }
+              mapSendingProgressStatusList.add(mapItem);
+            }
+        }
+  
+        filterMap.put("tenant_id", Integer.parseInt(requestDto.getTenantId()));
 
         bodyMap.put("filter", filterMap);
-        bodyMap.put("sort", sortMap);
-        bodyMap.put("sort", pageMap);
 
-        //모든 캠페인 가져오기 API 요청
+        //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청
         Map<String, Object> apiCampaign =
           webClient
             .post()
             .uri(uriBuilder ->
               uriBuilder
-                .path("/pds/collections/campaign")
+                .path("/pds/collections/campaign-list")
                 .build()
             )
             .bodyValue(bodyMap)
@@ -375,7 +379,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
             .bodyToMono(Map.class)
             .block();
 
-        //모든 캠페인 가져오기 API 요청이 실패했을 때
+        //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청이 실패했을 때
         if (!apiCampaign.get("result_code").equals(0)) {
           ResponseDto result = new ResponseDto(apiCampaign.get("result_code").toString(), apiCampaign.get("result_msg").toString());
           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
@@ -383,7 +387,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
-        //모든 캠페인에 할당된 상담원 가져오기
+        //로그인 상담사 테넌트ID에 따른 캠페인에 할당된 상담원 가져오기
         for (Map<String, Object> mapCampaign : mapCampaignList) {
 
           bodyMap.clear();
@@ -408,13 +412,10 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
               .block();
 
           //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
-          // if (!apiAssignedCounselor.get("result_code").equals(0)) {
-          //   log.info(">>>캠페인ID: {}", mapCampaign.get("campaign_id"));
-          //   log.info(">>>결과코드: {}", apiAssignedCounselor.get("result_code"));
-          //   log.info(">>>결과메시지지: {}", apiAssignedCounselor.get("result_msg"));
-          //   ResponseDto result = new ResponseDto(apiAssignedCounselor.get("result_code").toString(), apiAssignedCounselor.get("result_msg").toString());
-          //   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-          // }
+          if (!apiAssignedCounselor.get("result_code").equals(0)) {
+            ResponseDto result = new ResponseDto(apiAssignedCounselor.get("result_code").toString(), apiAssignedCounselor.get("result_msg").toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+          }
 
           //캠페인에 할당된 상담원이 존재하면
           if (apiAssignedCounselor.get("result_data") != null) {            
