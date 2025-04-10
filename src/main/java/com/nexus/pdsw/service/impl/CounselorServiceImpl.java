@@ -361,6 +361,16 @@ public class CounselorServiceImpl implements CounselorService {
 
     try {
 
+      //테넌트ID 값 없이 호출하였을 때
+      if (requestBody.getTenantId() == null || requestBody.getTenantId().trim().isEmpty()) {
+        return GetCounselorInfoListResponseDto.notExistTenantId();        
+      }
+
+      //캠페인ID 값 없이 호출하였을 때
+      if (requestBody.getCampaignId() == null || requestBody.getCampaignId().trim().isEmpty()) {
+        return GetCounselorInfoListResponseDto.notExistCampaignId();        
+      }
+
       //API 인증 세션키가 없이 호출하였을 때
       if (requestBody.getSessionKey() == null || requestBody.getSessionKey().trim().isEmpty()) {
         return GetCounselorInfoListResponseDto.notExistSessionKey();        
@@ -383,7 +393,7 @@ public class CounselorServiceImpl implements CounselorService {
 
       int[] arrCampaignId = new int[1];
       arrCampaignId[0] = Integer.parseInt(requestBody.getCampaignId());
-          
+
       filterMap.put("campaign_id", arrCampaignId);
       bodyMap.put("filter", filterMap);
 
@@ -481,6 +491,16 @@ public class CounselorServiceImpl implements CounselorService {
     List<Map<String, Object>> mapSkillAssignedCounselorList = new ArrayList<Map<String, Object>>();
 
     try {
+
+      //테넌트ID 값 없이 호출하였을 때
+      if (requestBody.getTenantId() == null || requestBody.getTenantId().trim().isEmpty()) {
+        return PostSkillAssignedCounselorListResponseDto.notExistTenantId();        
+      }
+
+      //스킬ID 값 없이 호출하였을 때
+      if (requestBody.getSkillId() == null) {
+        return PostSkillAssignedCounselorListResponseDto.notExistSkillId();        
+      }
 
       //API 인증 세션키가 없이 호출하였을 때
       if (requestBody.getSessionKey() == null || requestBody.getSessionKey().trim().isEmpty()) {

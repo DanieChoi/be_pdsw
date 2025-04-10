@@ -27,6 +27,7 @@ public interface ResponseMessage {
   String NOT_EXISTED_SESSIONKEY = "API 인증 세션키가 존재하지 않습니다.";
   String NOT_EXISTED_TENANTID = "테넌트ID가 존재하지 않습니다.";
   String NOT_EXISTED_CAMPAIGNID = "캠페인ID가 존재하지 않습니다.";
+  String NOT_EXISTED_SKILLID = "스킬ID가 존재하지 않습니다.";
 
   // HTTP Status 401(Unauthorized)
 

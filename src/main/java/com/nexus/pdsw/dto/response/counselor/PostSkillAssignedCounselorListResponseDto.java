@@ -64,9 +64,29 @@ public class PostSkillAssignedCounselorListResponseDto extends ResponseDto {
   }
 
   /*  
+   *  스킬 할당 상담사 리스트 가져오기(테넌트ID가 없을 경우)
+   *  
+   *  @return ResponseEntity<ResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistTenantId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_TENANTID, ResponseMessage.NOT_EXISTED_TENANTID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
+   *  스킬 할당 상담사 리스트 가져오기(스킬ID가 존재하지 않을 경우)
+   *  
+   *  @return ResponseEntity<ResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistSkillId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SKILLID, ResponseMessage.NOT_EXISTED_SKILLID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
    *  스킬 할당 상담사 리스트 가져오기(API 인증 세션키가 없을 경우)
    *  
-   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<ResponseDto>
    */
   public static ResponseEntity<ResponseDto> notExistSessionKey() {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SESSIONKEY, ResponseMessage.NOT_EXISTED_SESSIONKEY);

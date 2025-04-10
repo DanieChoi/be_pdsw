@@ -59,6 +59,26 @@ public class GetCounselorInfoListResponseDto extends ResponseDto {
   }
 
   /*  
+   *  캠페인 할당상담사 정보 리스트 가져오기(테넌트ID가 없을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistTenantId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_TENANTID, ResponseMessage.NOT_EXISTED_TENANTID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
+   *  캠페인 할당상담사 정보 리스트 가져오기(캠페인ID가 존재하지 않을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistCampaignId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_CAMPAIGNID, ResponseMessage.NOT_EXISTED_CAMPAIGNID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
    *  캠페인 할당상담사 정보 리스트 가져오기(API 인증 세션키가 없을 경우)
    *  
    *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
