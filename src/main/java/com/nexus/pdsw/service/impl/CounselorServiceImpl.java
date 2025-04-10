@@ -165,6 +165,7 @@ public class CounselorServiceImpl implements CounselorService {
 
       //사이드 바(캠페인)에서 캠페인 노드에서 상담원 상태 모니터를 호출했을 때
       if (!requestBody.getCampaignId().equals("0")) {
+        log.info(">>>테넌트ID={}", requestBody.getTenantId());
         log.info(">>>캠페인ID={}", requestBody.getCampaignId());
         arrCampaignId[0] = Integer.parseInt(requestBody.getCampaignId());
 
@@ -207,7 +208,7 @@ public class CounselorServiceImpl implements CounselorService {
             assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
           }
         }
-  
+        log.info(">>>할당상담원: {}", assignedCounselorList.toString());
       } else {
         // log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         filterMap.put("tenant_id", Integer.parseInt(requestBody.getTenantId()));
