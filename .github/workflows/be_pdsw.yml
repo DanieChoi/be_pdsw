@@ -29,10 +29,10 @@ jobs:
           distribution: 'temurin'
           cache: gradle # 빌드 속도를 높이기 위해 gradle 캐시 설정 (매번 gradle 종속성을 계속 설치할 순 없으니)
 
-      - name: application.yml 동적 생성
-        run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+      # - name: application.yml 동적 생성
+        # run: |
+        #   mkdir -p ./src/main/resources
+        #   echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
           
       - name: 빌드
         run: |
