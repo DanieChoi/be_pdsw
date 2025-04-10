@@ -57,4 +57,13 @@ public class PostCounselorStatusListResponseDto extends ResponseDto {
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
+  /*  
+   *  상담사 상태정보 리스트 가져오기(API 인증 세션키가 없을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistSessionKey() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SESSIONKEY, ResponseMessage.NOT_EXISTED_SESSIONKEY);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
 }

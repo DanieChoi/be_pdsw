@@ -66,4 +66,14 @@ public class PostDialerChannelStatusInfoResponseDto extends ResponseDto {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_DIALER, ResponseMessage.NOT_EXISTED_DIALER);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
   }
+
+  /*  
+   *  장비별 채널 할당 상태정보 가져오기(API 인증 세션키가 없을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistSessionKey() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SESSIONKEY, ResponseMessage.NOT_EXISTED_SESSIONKEY);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
 }

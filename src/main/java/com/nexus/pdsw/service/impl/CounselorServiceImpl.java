@@ -47,6 +47,7 @@ import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PostSkillAssignedCounselorListResponseDto;
+import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -126,6 +127,11 @@ public class CounselorServiceImpl implements CounselorService {
       String strStateCode = "";
 
       Map<String, Object> mapCounselorState = new HashMap<>();
+
+      //API 인증 세션키가 없이 호출하였을 때
+      if (requestBody.getSessionKey() == null || requestBody.getSessionKey().trim().isEmpty()) {
+        return PostCounselorStatusListResponseDto.notExistSessionKey();        
+      }
 
       //WebClient로 API서버와 연결
       WebClient webClient =
@@ -345,6 +351,11 @@ public class CounselorServiceImpl implements CounselorService {
 
     try {
 
+      //API 인증 세션키가 없이 호출하였을 때
+      if (requestBody.getSessionKey() == null || requestBody.getSessionKey().trim().isEmpty()) {
+        return GetCounselorInfoListResponseDto.notExistSessionKey();        
+      }
+
       //WebClient로 API서버와 연결
       WebClient webClient =
         WebClient
@@ -460,6 +471,11 @@ public class CounselorServiceImpl implements CounselorService {
     List<Map<String, Object>> mapSkillAssignedCounselorList = new ArrayList<Map<String, Object>>();
 
     try {
+
+      //API 인증 세션키가 없이 호출하였을 때
+      if (requestBody.getSessionKey() == null || requestBody.getSessionKey().trim().isEmpty()) {
+        return PostSkillAssignedCounselorListResponseDto.notExistSessionKey();        
+      }
 
       //WebClient로 API서버와 연결
       WebClient webClient =

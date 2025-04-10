@@ -62,4 +62,14 @@ public class PostSkillAssignedCounselorListResponseDto extends ResponseDto {
     PostSkillAssignedCounselorListResponseDto result = new PostSkillAssignedCounselorListResponseDto(redisTemplate1, mapSkillAssignedCounselorList);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
+
+  /*  
+   *  스킬 할당 상담사 리스트 가져오기(API 인증 세션키가 없을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistSessionKey() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SESSIONKEY, ResponseMessage.NOT_EXISTED_SESSIONKEY);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
 }

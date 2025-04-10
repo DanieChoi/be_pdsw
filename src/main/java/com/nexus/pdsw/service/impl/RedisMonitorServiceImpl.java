@@ -123,6 +123,11 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
 
+      //API 인증 세션키가 없이 호출하였을 때
+      if (requestDto.getSessionKey() == null || requestDto.getSessionKey().trim().isEmpty()) {
+        return PostDialerChannelStatusInfoResponseDto.notExistSessionKey();        
+      }
+      
       //전체 Device에 대한 채널상태
       if (requestDto.getDeviceId().equals("0")) {        
         // Map<String, Object> bodyMap = new HashMap<>();
@@ -289,6 +294,11 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
     try {
       
+      //API 인증 세션키가 없이 호출하였을 때
+      if (requestDto.getSessionKey() == null || requestDto.getSessionKey().trim().isEmpty()) {
+        return GetSendingProgressStatusResponseDto.notExistSessionKey();        
+      }
+
       //WebClient로 API서버와 연결
       WebClient webClient =
         WebClient
