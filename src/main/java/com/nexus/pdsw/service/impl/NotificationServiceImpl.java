@@ -45,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);
     sseEmitterService.send("Connected!!", emitterKey, sseEmitter);
-    log.info("생성된 Emitter : TimeOut={}", sseEmitter.getTimeout());    
+    // log.info("생성된 Emitter : TimeOut={}", sseEmitter.getTimeout());    
 
     redisMessageService.subscribe(tenantId, counselorId);
 
