@@ -117,7 +117,7 @@ public class CounselorServiceImpl implements CounselorService {
     try {
 
       String redisKey = "";
-      String redisCounselorIdx = "";
+      // String redisCounselorIdx = "";
       HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
       Map<Object, Object> redisCounselorStatusList = new HashMap<>();
 
@@ -194,7 +194,7 @@ public class CounselorServiceImpl implements CounselorService {
         }
   
       } else {
-        log.info(">>>테넌트ID: {}", requestBody.getTenantId());
+        // log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         filterMap.put("tenant_id", Integer.parseInt(requestBody.getTenantId()));
 
         bodyMap.put("filter", filterMap);
@@ -281,7 +281,7 @@ public class CounselorServiceImpl implements CounselorService {
       //수집된 할당된 상담사ID 중복제거
       List<Object> assignedCounselorDuplicatesRemovedList = assignedCounselorList.stream().distinct().collect(Collectors.toList());
 
-      log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
+      // log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
       Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
 
       for (Object assignedCounselor : assignedCounselorDuplicatesRemovedList){
