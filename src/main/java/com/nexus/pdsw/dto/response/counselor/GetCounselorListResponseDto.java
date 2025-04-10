@@ -37,36 +37,32 @@ public class GetCounselorListResponseDto extends ResponseDto  {
    *  상담사 리스트 가져오기(생성자)
    *  
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String roleId                                  로그인 상담사 레벨ID
    *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param JSONArray arrJsonCenter                        센터 정보
    */
   private GetCounselorListResponseDto(
     RedisTemplate<String, Object> redisTemplate1,
-    String roleId,
     String tenantId,
     JSONArray arrJsonCenter
   ) {
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.organizationList = OrganizationItem.getOrganizationList(redisTemplate1, roleId, tenantId, arrJsonCenter);
+    this.organizationList = OrganizationItem.getOrganizationList(redisTemplate1, tenantId, arrJsonCenter);
   }
 
   /*  
    *  상담사 리스트 가져오기(성공)
    *  
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String roleId                                  로그인 상담사 레벨ID
    *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param JSONArray arrJsonCenter                        센터 정보
    *  @return ResponseEntity<GetCounselorListResponseDto>
    */
   public static ResponseEntity<GetCounselorListResponseDto> success(
     RedisTemplate<String, Object> redisTemplate1,
-    String roleId,
     String tenantId,
     JSONArray arrJsonCenter
   ) {
-    GetCounselorListResponseDto result = new GetCounselorListResponseDto(redisTemplate1, roleId, tenantId, arrJsonCenter);
+    GetCounselorListResponseDto result = new GetCounselorListResponseDto(redisTemplate1, tenantId, arrJsonCenter);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 }

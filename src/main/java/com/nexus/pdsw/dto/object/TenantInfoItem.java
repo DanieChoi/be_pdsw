@@ -58,7 +58,7 @@ public class TenantInfoItem {
     this.tenantId = jsonObjTenantData.get("id").toString();
     this.tenantName = jsonObjTenantData.get("name").toString();
 
-    this.groupInfo = GroupInfoItem.getTenantList(redisTemplate1, centerId, jsonObjTenantData.get("id").toString());
+    this.groupInfo = GroupInfoItem.getGroupList(redisTemplate1, centerId, jsonObjTenantData.get("id").toString());
 
   }
 
@@ -66,13 +66,11 @@ public class TenantInfoItem {
    *  상담사 테넌트 조직 리스트 반환 DTO로 변환하기
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String roleId                                  로그인 상담사 레벨ID
    *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param String centerId                                센터ID
   */
   public static List<TenantInfoItem> getTenantList(
     RedisTemplate<String, Object> redisTemplate1,
-    String roleId,
     String tenantId,
     String centerId
   ) {
@@ -98,8 +96,8 @@ public class TenantInfoItem {
 
     for (Object jsonTenant : arrJsonTenant) {
       JSONObject jsonObjTenant = (JSONObject) jsonTenant;
-      //로그인 상담사의 레벨이 4이고 테넌트ID가 로그인 상담사 소속 테넌트ID가 아닌 경우
-      if (roleId.equals("4") && !jsonObjTenant.get("TENANT").equals(tenantId)) {
+      //로그인 상담사의 테넌트ID가 "0"이 아니고 해당 테넌트ID와 다를 경우 테넌트를 미포함한다.
+      if (!tenantId.equals("0") && !jsonObjTenant.get("TENANT").equals(tenantId)) {
         continue;
       }
       TenantInfoItem tanantInfo = new TenantInfoItem(redisTemplate1, centerId, jsonObjTenant);

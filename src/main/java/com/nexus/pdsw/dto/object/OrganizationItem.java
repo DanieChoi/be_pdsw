@@ -41,13 +41,11 @@ public class OrganizationItem {
    *  상담사 조직 리스트 반환 DTO 생성자
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String roleId                                  로그인 상담사 레벨ID
    *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param JSONObject jsonObjCenter                       센터 정보
   */
   private OrganizationItem(
     RedisTemplate<String, Object> redisTemplate1,
-    String roleId,
     String tenantId,
     JSONObject jsonObjCenter
   ) {
@@ -57,7 +55,7 @@ public class OrganizationItem {
     this.centerId = jsonObjCentereData.get("center_id").toString();
     this.centerName = jsonObjCentereData.get("name").toString();
 
-    this.tenantInfo = TenantInfoItem.getTenantList(redisTemplate1, roleId, tenantId, jsonObjCentereData.get("center_id").toString());
+    this.tenantInfo = TenantInfoItem.getTenantList(redisTemplate1, tenantId, jsonObjCentereData.get("center_id").toString());
 
   }
 
@@ -65,13 +63,11 @@ public class OrganizationItem {
    *  상담사 조직 리스트 반환 DTO로 변환하기
 	 * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String roleId                                  로그인 상담사 레벨ID
    *  @param String tenantId                                로그인 상담사 소속 테넌트ID
    *  @param JSONArray arrJsonCenter                        센터 정보
 	*/
   public static List<OrganizationItem> getOrganizationList(
     RedisTemplate<String, Object> redisTemplate1,
-    String roleId,
     String tenantId,
     JSONArray arrJsonCenter
   ) {
@@ -80,7 +76,7 @@ public class OrganizationItem {
 
     for (Object jsonCenter : arrJsonCenter) {
       JSONObject jsonObjCenter = (JSONObject) jsonCenter;
-      OrganizationItem organizationInfo = new OrganizationItem(redisTemplate1, roleId, tenantId, jsonObjCenter);
+      OrganizationItem organizationInfo = new OrganizationItem(redisTemplate1, tenantId, jsonObjCenter);
       organizationList.add(organizationInfo);
     }
 

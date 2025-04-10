@@ -68,7 +68,7 @@ public class GroupInfoItem {
    *  @param String tenantId                                테넌트ID
 	 *  @return List<GroupInfoItem>
 	*/
-  public static List<GroupInfoItem> getTenantList(
+  public static List<GroupInfoItem> getGroupList(
     RedisTemplate<String, Object> redisTemplate1,
     String centerId,
     String tenantId

@@ -71,13 +71,11 @@ public class CounselorServiceImpl implements CounselorService {
    *  상담사 리스트 가져오기
    *  
    *  @param String tenantId  상담사 소속 테넌트ID
-   *  @param String roleId    상담사 역할 ID(1: 상담사, 2: 파트매니저, 3: 그룹매니저, 4: 테넌트메니저, 5: 시스템 메니저, 6: 전체)
    *  @return ResponseEntity<? super GetCounselorListResponseDto>
    */
   @Override
   public ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(
-    String tenantId,
-    String roleId
+    String tenantId
   ) {
 
     JSONArray arrJsonCenter = new JSONArray();
@@ -98,7 +96,7 @@ public class CounselorServiceImpl implements CounselorService {
       e.printStackTrace();
       ResponseDto.databaseError();
     }
-    return GetCounselorListResponseDto.success(redisTemplate1, roleId, tenantId, arrJsonCenter);
+    return GetCounselorListResponseDto.success(redisTemplate1, tenantId, arrJsonCenter);
   }
 
   /*
