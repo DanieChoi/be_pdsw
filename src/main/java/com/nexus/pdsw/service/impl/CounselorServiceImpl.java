@@ -128,6 +128,16 @@ public class CounselorServiceImpl implements CounselorService {
 
       Map<String, Object> mapCounselorState = new HashMap<>();
 
+      //테넌트ID 값 없이 호출하였을 때
+      if (requestBody.getTenantId() == null || requestBody.getTenantId().trim().isEmpty()) {
+        return PostCounselorStatusListResponseDto.notExistTenantId();        
+      }
+
+      //캠페인ID 값 없이 호출하였을 때
+      if (requestBody.getCampaignId() == null || requestBody.getCampaignId().trim().isEmpty()) {
+        return PostCounselorStatusListResponseDto.notExistCampaignId();        
+      }
+
       //API 인증 세션키가 없이 호출하였을 때
       if (requestBody.getSessionKey() == null || requestBody.getSessionKey().trim().isEmpty()) {
         return PostCounselorStatusListResponseDto.notExistSessionKey();        

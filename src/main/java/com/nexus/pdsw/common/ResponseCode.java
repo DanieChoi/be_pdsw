@@ -25,6 +25,8 @@ public interface ResponseCode {
   String NOT_EXISTED_ROLE = "NR";                     //존재하지 않는 역할
   String NOT_EXISTED_MENU = "NM";                     //존재하지 않는 메뉴
   String NOT_EXISTED_SESSIONKEY = "NES";              //API 인증 세션키가 존재하지 않습니다.
+  String NOT_EXISTED_TENANTID = "NET";                //테넌트ID가 존재하지 않습니다.
+  String NOT_EXISTED_CAMPAIGNID = "NEC";              //캠페인ID가 존재하지 않습니다.
   // HTTP Status 401(Unauthorized)
 
   // HTTP Status 403(Forbidden)
