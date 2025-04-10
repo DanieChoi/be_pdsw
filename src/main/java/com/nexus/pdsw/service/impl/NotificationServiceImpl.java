@@ -48,7 +48,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     redisMessageService.subscribe(tenantId, counselorId);
 
-    sseEmitter.onTimeout(sseEmitter::complete);
+    sseEmitter.onTimeout(() -> {
+      log.info("Server Sent Event timed out : emiterKey={}", emitterKey);
+      sseEmitter.complete();      
+    });
     sseEmitter.onError((e) -> sseEmitter.complete());
     sseEmitter.onCompletion(() -> {
       sseEmitterService.deleteEmitter(emitterKey);
