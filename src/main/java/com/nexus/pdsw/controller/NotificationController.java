@@ -31,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Slf4j
 @RequestMapping("/api/v1/notification")
@@ -51,7 +52,8 @@ public class NotificationController {
   @GetMapping(value = "/{tenantId}/subscribe/{counselorId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public ResponseEntity<SseEmitter> subscribe(
     @PathVariable("tenantId") String tenantId,
-    @PathVariable("counselorId") String counselorId
+    @PathVariable("counselorId") String counselorId,
+    @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId
   ) {
     return ResponseEntity.ok(notificationService.subscribe(tenantId, counselorId));
   }
