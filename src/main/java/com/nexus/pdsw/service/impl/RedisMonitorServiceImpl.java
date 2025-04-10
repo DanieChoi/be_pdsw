@@ -225,26 +225,48 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();
-
-      String redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
-
-      log.info(">>>레디스키: {}", redisKey);
-
-      Map<Object, Object> redisProgressInfo = hashOperations.entries(redisKey);
-      arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
+      String redisKey = "";
+      Map<Object, Object> redisProgressInfo = null;
       Map<String, Object> mapItem = null;
 
-      log.info(">>>진행정보: {}", arrJson.toString());
+      //호출 하는 상담원의 테넌트 ID가 "0"이면
+      if (tenantId.equals("0")) {
+        HashOperations<String, Object, Object> hashOperations1 = redisTemplate1.opsForHash();
 
-      for(Object jsonItem : arrJson) {
-        try {
-          mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
-        } catch (JsonMappingException e) {
-          throw new RuntimeException(e);
+        Map<Object, Object> redisTenantList = hashOperations1.entries("master.tenant-1");
+        
+        for (Object tenantKey : redisTenantList.keySet()) {
+          redisKey = "monitor:tenant:" + tenantKey + ":campaign:" + campaignId + ":statistics";
+
+          redisProgressInfo = hashOperations.entries(redisKey);
+          arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
+        
+          for(Object jsonItem : arrJson) {
+            try {
+              mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+            } catch (JsonMappingException e) {
+              throw new RuntimeException(e);
+            }
+            mapProgressInfoList.add(mapItem);
+          }
         }
-        mapProgressInfoList.add(mapItem);
-      }
+      } else {
+        redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
+        redisProgressInfo = hashOperations.entries(redisKey);
+        arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
+
+        for(Object jsonItem : arrJson) {
+          try {
+            mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+          } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+          }
+          mapProgressInfoList.add(mapItem);
+        }
+      }
+      // log.info(">>>레디스키: {}", redisKey);
+      // log.info(">>>진행정보: {}", arrJson.toString());
     } catch (Exception e) {
       e.printStackTrace();
       ResponseDto.databaseError();
