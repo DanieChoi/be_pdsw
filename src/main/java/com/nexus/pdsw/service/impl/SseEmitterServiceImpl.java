@@ -98,6 +98,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
         .name("message")
         .id(emitterKey)
         .data(data, MediaType.APPLICATION_JSON)
+        .reconnectTime(1000L)
       );
     } catch (IOException | IllegalStateException e) {
       log.error("IOException | IllegalStateException is occurred. ", e);
