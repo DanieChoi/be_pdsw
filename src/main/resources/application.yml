@@ -26,10 +26,10 @@ spring:
       timeout: 2000
   mvc:
     async:
-      request-timeout: -1
+      request-timeout: 0
 
 restapi:
   baseurl: http://10.10.40.145:8010
   
 sse:
-  timeout: 60000
+  timeout: 600000
