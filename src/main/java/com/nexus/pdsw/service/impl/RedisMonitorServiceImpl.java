@@ -228,7 +228,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
       String redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
-      // log.info(">>>레디스키: {}", redisKey);
+      log.info(">>>레디스키: {}", redisKey);
 
       Map<Object, Object> redisProgressInfo = hashOperations.entries(redisKey);
       arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
