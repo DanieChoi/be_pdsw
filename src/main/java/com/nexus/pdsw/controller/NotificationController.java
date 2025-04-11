@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @Slf4j
-@RequestMapping("/api/v1/notification")
+@RequestMapping("notification")
 @RequiredArgsConstructor
 @RestController
 public class NotificationController {
