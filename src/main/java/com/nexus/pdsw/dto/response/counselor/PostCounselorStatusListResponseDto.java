@@ -60,7 +60,7 @@ public class PostCounselorStatusListResponseDto extends ResponseDto {
   /*  
    *  상담사 상태정보 리스트 가져오기(테넌트ID가 없을 경우)
    *  
-   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<ResponseDto>
    */
   public static ResponseEntity<ResponseDto> notExistTenantId() {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_TENANTID, ResponseMessage.NOT_EXISTED_TENANTID);
@@ -70,7 +70,7 @@ public class PostCounselorStatusListResponseDto extends ResponseDto {
   /*  
    *  상담사 상태정보 리스트 가져오기(캠페인ID가 존재하지 않을 경우)
    *  
-   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<ResponseDto>
    */
   public static ResponseEntity<ResponseDto> notExistCampaignId() {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_CAMPAIGNID, ResponseMessage.NOT_EXISTED_CAMPAIGNID);
@@ -80,7 +80,7 @@ public class PostCounselorStatusListResponseDto extends ResponseDto {
   /*  
    *  상담사 상태정보 리스트 가져오기(API 인증 세션키가 없을 경우)
    *  
-   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<ResponseDto>
    */
   public static ResponseEntity<ResponseDto> notExistSessionKey() {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SESSIONKEY, ResponseMessage.NOT_EXISTED_SESSIONKEY);

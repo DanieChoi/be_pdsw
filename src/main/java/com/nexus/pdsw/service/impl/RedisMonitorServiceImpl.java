@@ -37,7 +37,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.request.PostSendingProgressStatusRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
-import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
 import com.nexus.pdsw.dto.response.monitor.PostDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
@@ -279,8 +278,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
           return GetProgressInfoResponseDto.notExistRedisHash();
         }
 
-        log.info(">>>결과값={}", redisProgressInfo.toString());
-
         arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
 
         for(Object jsonItem : arrJson) {
@@ -325,7 +322,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       WebClient webClient =
         WebClient
           .builder()
-          // .baseUrl("http://10.10.40.145:8010")
           .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);

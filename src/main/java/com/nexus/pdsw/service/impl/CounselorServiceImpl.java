@@ -14,6 +14,7 @@
  * 2025/01/21  최상원                       상담사 내역 가져오기에 센터명, 테넌트명, 그룹명, 팀명 추가
  * 2025/02/14  최상원                       상담사 상태 모니터, 캠페인별 할당 상담사 정보 가져오기 API 수정
  * 2025/02/20  최상원                       스킬 할당된 상담사 리스트 가져오기 추가
+ * 2025/04/11  최상원                       상담사 이름 가져오기 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
@@ -47,7 +48,6 @@ import com.nexus.pdsw.dto.response.counselor.GetCounselorInfoListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.GetCounselorListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
 import com.nexus.pdsw.dto.response.counselor.PostSkillAssignedCounselorListResponseDto;
-import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 import com.nexus.pdsw.service.CounselorService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -147,7 +147,6 @@ public class CounselorServiceImpl implements CounselorService {
       WebClient webClient =
         WebClient
           .builder()
-          // .baseUrl("http://10.10.40.145:8010")
           .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -382,7 +381,6 @@ public class CounselorServiceImpl implements CounselorService {
       WebClient webClient =
         WebClient
           .builder()
-          // .baseUrl("http://10.10.40.145:8010")
           .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
@@ -513,7 +511,6 @@ public class CounselorServiceImpl implements CounselorService {
       WebClient webClient =
         WebClient
           .builder()
-          // .baseUrl("http://10.10.40.145:8010")
           .baseUrl(baseUrl)
           .defaultHeaders(httpHeaders -> {
             httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
