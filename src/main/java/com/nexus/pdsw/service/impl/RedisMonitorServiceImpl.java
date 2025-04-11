@@ -279,6 +279,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
           return GetProgressInfoResponseDto.notExistRedisHash();
         }
 
+        log.info(">>>결과값={}", redisProgressInfo.toString());
+
         arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
 
         for(Object jsonItem : arrJson) {
