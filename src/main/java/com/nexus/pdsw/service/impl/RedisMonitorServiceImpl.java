@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nexus.pdsw.dto.request.PostDialerChannelStatusInfoRequestDto;
 import com.nexus.pdsw.dto.request.PostSendingProgressStatusRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
+import com.nexus.pdsw.dto.response.counselor.PostCounselorStatusListResponseDto;
 import com.nexus.pdsw.dto.response.monitor.PostDialerChannelStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProcessStatusInfoResponseDto;
 import com.nexus.pdsw.dto.response.monitor.GetProgressInfoResponseDto;
@@ -227,6 +228,16 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
     try {
       
+      //테넌트ID 값 없이 호출하였을 때
+      if (tenantId == null || tenantId.trim().isEmpty()) {
+        return GetProgressInfoResponseDto.notExistTenantId();        
+      }
+
+      //캠페인ID 값 없이 호출하였을 때
+      if (campaignId == null || campaignId.trim().isEmpty()) {
+        return GetProgressInfoResponseDto.notExistCampaignId();        
+      }
+
       HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
       JSONParser jsonParser = new JSONParser();
       JSONArray arrJson = new JSONArray();

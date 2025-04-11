@@ -56,4 +56,24 @@ public class GetProgressInfoResponseDto extends ResponseDto {
     GetProgressInfoResponseDto result = new GetProgressInfoResponseDto(mapProgressInfoList);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
+
+  /*  
+   *  캠페인별 진행정보 가져오기(테넌트ID가 없을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistTenantId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_TENANTID, ResponseMessage.NOT_EXISTED_TENANTID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
+   *  캠페인별 진행정보 가져오기(캠페인ID가 존재하지 않을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistCampaignId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_CAMPAIGNID, ResponseMessage.NOT_EXISTED_CAMPAIGNID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
 }
