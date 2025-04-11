@@ -28,6 +28,7 @@ public interface ResponseCode {
   String NOT_EXISTED_TENANTID = "NET";                //테넌트ID가 존재하지 않습니다.
   String NOT_EXISTED_CAMPAIGNID = "NEC";              //캠페인ID가 존재하지 않습니다.
   String NOT_EXISTED_SKILLID = "NEK";                 //스킬ID가 존재하지 않습니다.
+  String NOT_EXISTED_REDISHASH = "NER";               //레디스 Hash 테이브이 존재하지 않습니다.
   // HTTP Status 401(Unauthorized)
 
   // HTTP Status 403(Forbidden)

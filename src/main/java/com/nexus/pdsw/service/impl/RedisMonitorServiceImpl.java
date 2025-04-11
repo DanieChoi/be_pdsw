@@ -255,6 +255,10 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
           redisKey = "monitor:tenant:" + tenantKey + ":campaign:" + campaignId + ":statistics";
 
           redisProgressInfo = hashOperations.entries(redisKey);
+
+          if (redisProgressInfo == null) {
+            continue;
+          }
           arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
         
           for(Object jsonItem : arrJson) {
@@ -269,8 +273,12 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       } else {
         redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
-        log.info(">>>Redis Key: {}", redisKey);
         redisProgressInfo = hashOperations.entries(redisKey);
+
+        if (redisProgressInfo == null) {
+          return GetProgressInfoResponseDto.notExistRedisHash();
+        }
+
         arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
 
         for(Object jsonItem : arrJson) {

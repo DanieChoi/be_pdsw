@@ -76,4 +76,14 @@ public class GetProgressInfoResponseDto extends ResponseDto {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_CAMPAIGNID, ResponseMessage.NOT_EXISTED_CAMPAIGNID);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
   }
+
+  /*  
+   *  캠페인별 진행정보 가져오기(레디스 Hash 테이브이 존재하지 않을 경우)
+   *  
+   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistRedisHash() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_REDISHASH, ResponseMessage.NOT_EXISTED_REDISHASH);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
 }
