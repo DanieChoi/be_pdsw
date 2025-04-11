@@ -269,6 +269,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       } else {
         redisKey = "monitor:tenant:" + tenantId + ":campaign:" + campaignId + ":statistics";
 
+        log.info(">>>Redis Key: {}", redisKey);
         redisProgressInfo = hashOperations.entries(redisKey);
         arrJson = (JSONArray) jsonParser.parse(redisProgressInfo.values().toString());
 
