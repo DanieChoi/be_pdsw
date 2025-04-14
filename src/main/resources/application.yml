@@ -32,4 +32,4 @@ restapi:
   baseurl: http://10.10.40.145:8010
   
 sse:
-  timeout: 3600000
+  timeout: 300000
