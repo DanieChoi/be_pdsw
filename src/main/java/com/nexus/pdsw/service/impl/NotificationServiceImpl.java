@@ -44,11 +44,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     SseEmitter sseEmitter = sseEmitterService.createEmitter(emitterKey);
     sseEmitterService.send("Connected!!", emitterKey, sseEmitter);
+    log.info("생성된 Emitter={}", sseEmitter.toString());    
 
     redisMessageService.subscribe(tenantId, counselorId);
 
     sseEmitter.onTimeout(() -> {
-      log.info("Server Sent Event timed out : emiterKey={}", emitterKey);
+      log.info("Server Sent Event timed out : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
       sseEmitter.complete();      
     });
     sseEmitter.onError(e -> {
@@ -57,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
     });
     sseEmitter.onCompletion(() -> {
       sseEmitterService.deleteEmitter(emitterKey);
-      log.info("disconnected by completed Server Sent Event : emiterKey={}", emitterKey);
+      log.info("disconnected by completed Server Sent Event : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
       redisMessageService.removeSubscribe(tenantId);
     });
 
