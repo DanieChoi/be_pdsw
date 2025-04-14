@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/api/v1/log")
+@RequestMapping("/api_upds/v1/log")
 @RequiredArgsConstructor
 @RestController
 public class EventLogController {

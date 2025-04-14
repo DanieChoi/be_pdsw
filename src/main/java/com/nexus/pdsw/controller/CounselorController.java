@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/counselor")
+@RequestMapping("/api_upds/v1/counselor")
 @RequiredArgsConstructor
 public class CounselorController {
 

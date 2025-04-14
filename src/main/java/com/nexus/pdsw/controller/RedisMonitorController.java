@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api/v1/monitor")
+@RequestMapping("/api_upds/v1/monitor")
 @RequiredArgsConstructor
 public class RedisMonitorController {
 
