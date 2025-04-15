@@ -10,6 +10,7 @@
  *    DATE     AUTHOR                       DESCRIPTION
  * ----------  ------  -----------------------------------------------------------
  * 2025/02/05  최상원                       초기작성
+ * 2025/04/15  최상원                       campaignId 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.dto.object;
 
@@ -22,15 +23,15 @@ public class NotificationDto {
   
   private String kind;
   private String command;
-  // private String api;
   private String announce;
   private Object data;
+  private String campaignId;
 
-  public NotificationDto(String kind, String command, String announce, Object data) {
+  public NotificationDto(String kind, String command, String announce, Object data, String campaignId) {
     this.kind = kind;
     this.command = command;
-    // this.api = api;
     this.announce = announce;
     this.data = data;
+    this.campaignId = campaignId;
   }
 }
