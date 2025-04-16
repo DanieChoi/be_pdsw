@@ -68,7 +68,7 @@ jobs:
             rm -rf /home/nexus/be_pdsw/api
             mkdir /home/nexus/be_pdsw/api
             mv /home/nexus/be_pdsw/upload/be_pdsw.jar /home/nexus/be_pdsw/api/be_pdsw.jar
-            mv /home/nexus/be_pdsw/upload/application.yml /home/nexus/be_pdsw/api/application.yml
+            cp /home/nexus/be_pdsw/upload/application.yml /home/nexus/be_pdsw/api/application.yml
             cd /home/nexus/be_pdsw/api
             sudo fuser -k -n tcp 4000 || true
             nohup java -jar be_pdsw.jar --spring.config.name=application > ./output.log 2>&1 &
