@@ -59,7 +59,7 @@ public class NotificationController {
   }
 
   /*
-   *  실시간 이벤트 발행
+   *  실시간 이벤트 발행 수정 필요할 듯
    *  
    *  @param PostRedisMessagePublishRequestDto requestBody  발행 메시지 전달 개체 DTO
    *  @return void
