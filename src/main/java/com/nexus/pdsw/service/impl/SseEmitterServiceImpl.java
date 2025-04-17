@@ -94,6 +94,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
 
     try {
       log.info("send to client {}:[{}]", emitterKey, data);
+      log.info("emitterValue {}", sseEmitter);
       sseEmitter.send(SseEmitter.event()
         .name("message")
         .id(emitterKey)
