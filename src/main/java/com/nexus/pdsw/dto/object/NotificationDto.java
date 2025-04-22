@@ -26,12 +26,14 @@ public class NotificationDto {
   private String announce;
   private Object data;
   private String campaign_id;
+  private String skill_id;
 
-  public NotificationDto(String kind, String command, String announce, Object data, String campaign_id) {
+  public NotificationDto(String kind, String command, String announce, Object data, String campaign_id, String skill_id) {
     this.kind = kind;
     this.command = command;
     this.announce = announce;
     this.data = data;
     this.campaign_id = campaign_id;
+    this.skill_id = skill_id;
   }
 }
