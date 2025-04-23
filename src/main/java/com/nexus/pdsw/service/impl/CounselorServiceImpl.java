@@ -164,9 +164,6 @@ public class CounselorServiceImpl implements CounselorService {
 
       //사이드 바(캠페인)에서 캠페인 노드에서 상담원 상태 모니터를 호출했을 때
       if (!requestBody.getCampaignId().equals("0")) {
-        // log.info(">>>세션키={}", requestBody.getSessionKey());
-        // log.info(">>>테넌트ID={}", requestBody.getTenantId());
-        // log.info(">>>캠페인ID={}", requestBody.getCampaignId());
         arrCampaignId[0] = Integer.parseInt(requestBody.getCampaignId());
 
         filterMap.put("campaign_id", arrCampaignId);
@@ -214,6 +211,8 @@ public class CounselorServiceImpl implements CounselorService {
         filterMap.put("tenant_id", Integer.parseInt(requestBody.getTenantId()));
 
         bodyMap.put("filter", filterMap);
+
+        log.info(">>>필터: {}", bodyMap.toString());
         
         //센터 노드에서 호출했으면 전체 캠페인을 테넌트 노드에서 호출했으면 해당 테넌트의 캠페인을 가져오기 API 요청
         Map<String, Object> apiCampaign =
