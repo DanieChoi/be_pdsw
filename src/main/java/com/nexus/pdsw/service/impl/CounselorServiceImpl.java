@@ -318,7 +318,10 @@ public class CounselorServiceImpl implements CounselorService {
 
             strCounselorId = jsonObjCounselorState.get("EMPLOYEE").toString();
 
+            log.info(">>>상담사ID: {}", strCounselorId);
+            log.info(">>>할당 상담사ID: {}", assignedCounselor.toString());
             if (assignedCounselor.toString().equals(strCounselorId)) {
+              log.info(">>>할당 상담사ID: {}", assignedCounselor.toString());
 
               JSONObject jsonObjCounselorStateData = (JSONObject) jsonObjCounselorState.get("Data");
               strStateCode = jsonObjCounselorStateData.get("state").toString();
