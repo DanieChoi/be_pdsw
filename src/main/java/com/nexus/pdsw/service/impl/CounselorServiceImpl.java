@@ -244,6 +244,8 @@ public class CounselorServiceImpl implements CounselorService {
 
         List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
+        log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
+
         //가져온 캠페인의 할당 상담원 가져오기
         for (Map<String, Object> mapCampaign : mapCampaignList) {
           bodyMap.clear();
