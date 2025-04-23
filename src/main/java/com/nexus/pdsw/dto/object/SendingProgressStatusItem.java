@@ -19,7 +19,9 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @NoArgsConstructor
 public class SendingProgressStatusItem {
@@ -45,6 +47,8 @@ public class SendingProgressStatusItem {
   private SendingProgressStatusItem(
     Map<String, Object> mapSendingProgressStatus
   ) {
+
+    log.info("mapSendingProgressStatus: {}", mapSendingProgressStatus.toString());
 
     this.campaignId = (int) mapSendingProgressStatus.get("campaign_id");
     this.campaignName = (String) mapSendingProgressStatus.get("campaign_name");
