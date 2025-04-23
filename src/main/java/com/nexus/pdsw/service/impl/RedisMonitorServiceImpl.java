@@ -388,6 +388,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
               mapSendingProgressStatusList.add(mapItem);
             }
         }
+        log.info("mapSendingProgressStatusList : {}", mapSendingProgressStatusList.toString());
   
         filterMap.put("tenant_id", Integer.parseInt(requestDto.getTenantId()));
 
