@@ -74,15 +74,11 @@ public class SendingProgressStatusItem {
     log.info("customerKey: {}", mapSendingProgressStatus.get("customer_key"));
     this.customerKey = (String) mapSendingProgressStatus.get("customer_key");
 
-    this.phoneNumber = (List<String>) mapSendingProgressStatus.get("phone_dial_count");
+    this.phoneNumber = (List<String>) mapSendingProgressStatus.get("phone_number");
     log.info("phoneNumber: {}", this.phoneNumber.toString());
 
-    this.phoneDialCount = new ArrayList<>();
-    JSONArray phoneDialCountJsonArray = (JSONArray) mapSendingProgressStatus.get("phone_dial_count");
-    log.info("phone_dial_count: {}", phoneDialCountJsonArray.toString());
-    for (int i = 0; i < phoneDialCountJsonArray.size(); i++) {
-      this.phoneDialCount.add((int) phoneDialCountJsonArray.get(i));
-    }
+    this.phoneDialCount = (List<Integer>) mapSendingProgressStatus.get("phone_dial_count");
+    log.info("phoneDialCount: {}", this.phoneDialCount.toString());
 
     this.dialedPhone = (int) mapSendingProgressStatus.get("dialed_phone");
     this.reuseCount = (int) mapSendingProgressStatus.get("reuse_count");
