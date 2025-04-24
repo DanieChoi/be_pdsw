@@ -35,8 +35,8 @@ public class SendingProgressStatusItem {
   private int dialResult;           //발신 결과 코드(0(NONE), 1(MAN), 2(BUSY), 3(NO_ANSWER), 4(FAX_MODEM), 5(ANSWERING_MACHINE), 6(ETC_FAIL), 7(INVALID_NUMBER), 8(DIALING), 9(LINE_STOP), 10(CUSTOMER_ONHOOK), 11(SILENCE), 12(DIALTONE_SILENCE), 13(BLACK_LIST), 14(ROUTE_FAIL), 15(BEFORE_BLACKLIST), 2501(MACHINE_BUSY), 2502(MACHINE_NOANSWER), 2503(MACHINE_POWEROFF), 2504(MACHINE_ROAMING), 2505(MACHINE_MISSING_NUMBER), 2506(MACHINE_ETC))
   private String customerName;      //고객 이름
   private String customerKey;       //고객 키
-  private String[] phoneNumber;     //발신 번호
-  private int[] phoneDialCount;     //발신 번호 별 시도 회수
+  private List<String> phoneNumber;     //발신 번호
+  private List<Integer> phoneDialCount;     //발신 번호 별 시도 회수
   private int dialedPhone;          //발신 번호 인덱스
   private int reuseCount;           //캠페인 재사용 회수 : 1(최초발신), 2~(재발신)
   private int retryCall;            //재시도 여부 : 0(재시도 없음), 1(재시도 있음)
@@ -51,8 +51,6 @@ public class SendingProgressStatusItem {
   ) {
 
     log.info("mapSendingProgressStatus: {}", mapSendingProgressStatus.toString());
-    log.info("phone_number: {}", mapSendingProgressStatus.get("phone_number").getClass());
-    log.info("phone_dial_count: {}", mapSendingProgressStatus.get("phone_dial_count"));
 
     log.info("campaignId: {}", mapSendingProgressStatus.get("campaign_id"));
     this.campaignId = (int) mapSendingProgressStatus.get("campaign_id");
@@ -75,19 +73,19 @@ public class SendingProgressStatusItem {
     log.info("customerKey: {}", mapSendingProgressStatus.get("customer_key"));
     this.customerKey = (String) mapSendingProgressStatus.get("customer_key");
 
+    this.phoneNumber = new ArrayList<>();
     JSONArray phoneNumberJsonArray = (JSONArray) mapSendingProgressStatus.get("phone_number");
-    log.info("phoneNumber: {}", phoneNumberJsonArray.toString());
     for (int i = 0; i < phoneNumberJsonArray.size(); i++) {
-      this.phoneNumber[i] = (String) phoneNumberJsonArray.get(i);
+      this.phoneNumber.add((String) phoneNumberJsonArray.get(i));
     }
 
+    this.phoneDialCount = new ArrayList<>();
     JSONArray phoneDialCountJsonArray = (JSONArray) mapSendingProgressStatus.get("phone_dial_count");
     log.info("phone_dial_count: {}", phoneDialCountJsonArray.toString());
     for (int i = 0; i < phoneDialCountJsonArray.size(); i++) {
-      this.phoneDialCount[i] = (int) phoneDialCountJsonArray.get(i);
+      this.phoneDialCount.add((int) phoneDialCountJsonArray.get(i));
     }
 
-    this.phoneDialCount = (int[]) mapSendingProgressStatus.get("phone_dial_count");
     this.dialedPhone = (int) mapSendingProgressStatus.get("dialed_phone");
     this.reuseCount = (int) mapSendingProgressStatus.get("reuse_count");
     this.retryCall = (int) mapSendingProgressStatus.get("retry_call");
