@@ -491,6 +491,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         bodyMap.clear();
         filterMap.clear();
+        log.info("requestDto.getCampaignId() : {}", requestDto.getCampaignId());
         arrCampaignId[0] = Integer.parseInt(requestDto.getCampaignId());
 
         filterMap.put("campaign_id", arrCampaignId);
