@@ -366,6 +366,8 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
       Map<Object, Object> redisTenantList = hashOperations1.entries("master.tenant-1");
 
+      log.info("requestDto.getCampaignId() : {}", requestDto.getCampaignId());
+      
       //특정 캠페인이 아닌 경우
       if (requestDto.getCampaignId().equals("0")) {
 
@@ -491,7 +493,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         bodyMap.clear();
         filterMap.clear();
-        log.info("requestDto.getCampaignId() : {}", requestDto.getCampaignId());
+
         arrCampaignId[0] = Integer.parseInt(requestDto.getCampaignId());
 
         filterMap.put("campaign_id", arrCampaignId);
