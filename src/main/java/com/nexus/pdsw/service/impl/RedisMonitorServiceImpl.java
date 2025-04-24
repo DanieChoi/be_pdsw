@@ -327,7 +327,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       }
 
       //캠페인ID가 없이 호출하였을 때
-      if (requestDto.getCampaignId() == null || requestDto.getCampaignId().trim().isEmpty()) {
+      if (requestDto.getCampaignId() == "undefined" || requestDto.getCampaignId() == null || requestDto.getCampaignId().trim().isEmpty()) {
         return GetSendingProgressStatusResponseDto.notExistCampaignId();
       }
 
