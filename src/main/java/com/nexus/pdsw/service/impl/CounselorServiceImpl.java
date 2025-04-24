@@ -168,44 +168,50 @@ public class CounselorServiceImpl implements CounselorService {
 
         filterMap.put("campaign_id", arrCampaignId);
         bodyMap.put("filter", filterMap);
+
+        try {
+          //캠페인에 할당된 상담원 가져오기 API 요청
+          Map<String, Object> apiAssignedCounselor =
+            webClient
+              .post()
+              .uri(uriBuilder ->
+                uriBuilder
+                  .path("/pds/collections/campaign-agent")
+                  .build()
+              )
+              .bodyValue(bodyMap)
+              .retrieve()
+              .bodyToMono(Map.class)
+              .block();
   
-        //캠페인에 할당된 상담원 가져오기 API 요청
-        Map<String, Object> apiAssignedCounselor =
-          webClient
-            .post()
-            .uri(uriBuilder ->
-              uriBuilder
-                .path("/pds/collections/campaign-agent")
-                .build()
-            )
-            .bodyValue(bodyMap)
-            .retrieve()
-            .bodyToMono(Map.class)
-            .block();
+          //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
+          if (!apiAssignedCounselor.get("result_code").equals(0)) {
+            String resultCode = "";
+            String resultMessage = "";
+            if (apiAssignedCounselor.get("result_code") != null) {
+              resultCode = apiAssignedCounselor.get("result_code").toString();
+            }
+            if (apiAssignedCounselor.get("result_message") != null) {
+              resultMessage = apiAssignedCounselor.get("result_message").toString();
+            }
+            ResponseDto result = new ResponseDto(resultCode, resultMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+          }
   
-        //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
-        if (!apiAssignedCounselor.get("result_code").equals(0)) {
-          String resultCode = "";
-          String resultMessage = "";
-          if (apiAssignedCounselor.get("result_code") != null) {
-            resultCode = apiAssignedCounselor.get("result_code").toString();
+          //캠페인에 할당된 상담원이 존재하면
+          if (apiAssignedCounselor.get("result_data") != null) {          
+            List<Map<String, Object>> mapAssignedCounselorList = (List<Map<String, Object>>) apiAssignedCounselor.get("result_data");
+          
+            for (Map<String, Object> mapAssignedCounselor : mapAssignedCounselorList) {
+              assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
+            }
           }
-          if (apiAssignedCounselor.get("result_message") != null) {
-            resultMessage = apiAssignedCounselor.get("result_message").toString();
-          }
-          ResponseDto result = new ResponseDto(resultCode, resultMessage);
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+          // log.info(">>>할당상담원: {}", assignedCounselorList.toString());
+          
+        } catch (Exception e) {
+          e.printStackTrace();
         }
   
-        //캠페인에 할당된 상담원이 존재하면
-        if (apiAssignedCounselor.get("result_data") != null) {          
-          List<Map<String, Object>> mapAssignedCounselorList = (List<Map<String, Object>>) apiAssignedCounselor.get("result_data");
-  
-          for (Map<String, Object> mapAssignedCounselor : mapAssignedCounselorList) {
-            assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
-          }
-        }
-        // log.info(">>>할당상담원: {}", assignedCounselorList.toString());
       } else {
         // log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         int[] arrTenantId = new int[1];
