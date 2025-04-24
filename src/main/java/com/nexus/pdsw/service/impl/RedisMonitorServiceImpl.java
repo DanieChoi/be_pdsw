@@ -315,7 +315,17 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       
       //API 인증 세션키가 없이 호출하였을 때
       if (requestDto.getSessionKey() == null || requestDto.getSessionKey().trim().isEmpty()) {
-        return GetSendingProgressStatusResponseDto.notExistSessionKey();        
+        return GetSendingProgressStatusResponseDto.notExistSessionKey();
+      }
+
+      //테넌터ID가 없이 호출하였을 때
+      if (requestDto.getTenantId() == null || requestDto.getTenantId().trim().isEmpty()) {
+        return GetSendingProgressStatusResponseDto.notExistTenanatId();
+      }
+
+      //캠페인ID가 없이 호출하였을 때
+      if (requestDto.getCampaignId() == null || requestDto.getCampaignId().trim().isEmpty()) {
+        return GetSendingProgressStatusResponseDto.notExistCampaignId();
       }
 
       //WebClient로 API서버와 연결

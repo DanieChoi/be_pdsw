@@ -66,7 +66,27 @@ public class GetSendingProgressStatusResponseDto extends ResponseDto {
   /*  
    *  발신진행상태 가져오기(API 인증 세션키가 없을 경우)
    *  
-   *  @return ResponseEntity<GetDialerChannelStatusInfoResponseDto>
+   *  @return ResponseEntity<ResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistTenanatId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_TENANTID, ResponseMessage.NOT_EXISTED_TENANTID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
+   *  발신진행상태 가져오기(테넌트ID가 없을 경우)
+   *  
+   *  @return ResponseEntity<ResponseDto>
+   */
+  public static ResponseEntity<ResponseDto> notExistCampaignId() {
+    ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_CAMPAIGNID, ResponseMessage.NOT_EXISTED_CAMPAIGNID);
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+  }
+
+  /*  
+   *  발신진행상태 가져오기(캠페인ID가 없을 경우)
+   *  
+   *  @return ResponseEntity<ResponseDto>
    */
   public static ResponseEntity<ResponseDto> notExistSessionKey() {
     ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_SESSIONKEY, ResponseMessage.NOT_EXISTED_SESSIONKEY);
