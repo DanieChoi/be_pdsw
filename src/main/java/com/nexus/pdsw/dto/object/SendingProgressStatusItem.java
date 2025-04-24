@@ -54,8 +54,12 @@ public class SendingProgressStatusItem {
     log.info("phone_number: {}", mapSendingProgressStatus.get("phone_number").getClass());
     log.info("phone_dial_count: {}", mapSendingProgressStatus.get("phone_dial_count"));
 
+    log.info("campaignId: {}", mapSendingProgressStatus.get("campaign_id"));
     this.campaignId = (int) mapSendingProgressStatus.get("campaign_id");
+
+    log.info("campaignName: {}", mapSendingProgressStatus.get("campaign_name"));
     this.campaignName = (String) mapSendingProgressStatus.get("campaign_name");
+    
     this.event = (int) mapSendingProgressStatus.get("event");
     this.dialSequence = (int) mapSendingProgressStatus.get("dial_sequence");
     this.dialResult = (int) mapSendingProgressStatus.get("dial_result");
