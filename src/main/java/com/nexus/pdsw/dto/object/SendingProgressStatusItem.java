@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +61,17 @@ public class SendingProgressStatusItem {
     this.dialResult = (int) mapSendingProgressStatus.get("dial_result");
     this.customerName = (String) mapSendingProgressStatus.get("customer_name");
     this.customerKey = (String) mapSendingProgressStatus.get("customer_key");
-    this.phoneNumber = (String[]) mapSendingProgressStatus.get("phone_number");
+
+    JSONArray phoneNumberJsonArray = (JSONArray) mapSendingProgressStatus.get("phone_number");
+    for (int i = 0; i < phoneNumberJsonArray.size(); i++) {
+      this.phoneNumber[i] = (String) phoneNumberJsonArray.get(i);
+    }
+
+    JSONArray phoneDialCountJsonArray = (JSONArray) mapSendingProgressStatus.get("phone_dial_count");
+    for (int i = 0; i < phoneDialCountJsonArray.size(); i++) {
+      this.phoneDialCount[i] = (int) phoneDialCountJsonArray.get(i);
+    }
+
     this.phoneDialCount = (int[]) mapSendingProgressStatus.get("phone_dial_count");
     this.dialedPhone = (int) mapSendingProgressStatus.get("dialed_phone");
     this.reuseCount = (int) mapSendingProgressStatus.get("reuse_count");
