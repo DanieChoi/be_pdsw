@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,7 +49,7 @@ public class SendingProgressStatusItem {
 	*/
   private SendingProgressStatusItem(
     Map<String, Object> mapSendingProgressStatus
-  ) throws ParseException {
+  ) {
 
     log.info("mapSendingProgressStatus: {}", mapSendingProgressStatus.toString());
 
@@ -75,16 +74,7 @@ public class SendingProgressStatusItem {
     log.info("customerKey: {}", mapSendingProgressStatus.get("customer_key"));
     this.customerKey = (String) mapSendingProgressStatus.get("customer_key");
 
-    this.phoneNumber = new ArrayList<>();
-
-    JSONParser jsonParser = new JSONParser();
-    JSONArray phoneNumberJsonArray= new JSONArray();
-
-    phoneNumberJsonArray = (JSONArray) jsonParser.parse(mapSendingProgressStatus.get("phone_number").toString());
-
-    for (int i = 0; i < phoneNumberJsonArray.size(); i++) {
-      this.phoneNumber.add((String) phoneNumberJsonArray.get(i));
-    }
+    this.phoneNumber = (List<String>) mapSendingProgressStatus.get("phone_dial_count");
     log.info("phoneNumber: {}", this.phoneNumber.toString());
 
     this.phoneDialCount = new ArrayList<>();
