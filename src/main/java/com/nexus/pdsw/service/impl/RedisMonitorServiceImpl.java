@@ -134,53 +134,56 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
         WebClient webClient =
           WebClient
             .builder()
-            // .baseUrl("http://10.10.40.145:8010")
             .baseUrl(baseUrl)
             .defaultHeaders(httpHeaders -> {
               httpHeaders.add(org.springframework.http.HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
               httpHeaders.add("Session-Key", requestDto.getSessionKey());
             })
             .build();
-      
-        //API 요청
-        Map<String, Object> apiDialer =
-          webClient
-            .post()
-            .uri(uriBuilder ->
-              uriBuilder
-                .path("/pds/collections/dialing-device")
-                .build()
-            )
-            .retrieve()
-            .bodyToMono(Map.class)
-            .block();
+            
+        try {        
+          //API 요청
+          Map<String, Object> apiDialer =
+            webClient
+              .post()
+              .uri(uriBuilder ->
+                uriBuilder
+                  .path("/pds/collections/dialing-device")
+                  .build()
+              )
+              .retrieve()
+              .bodyToMono(Map.class)
+              .block();
 
-        //장비 내역 가져오기 API 요청이 실패했을 때
-        if (!apiDialer.get("result_code").equals(0)) {
-          return PostDialerChannelStatusInfoResponseDto.notExistDialerDevice();
-        }
-
-        List<Map<String, Object>> mapDialerList = (List<Map<String, Object>>) apiDialer.get("result_data");
-
-        for(Map<String, Object> mapDialer : mapDialerList) {
-
-          redisKey = "monitor:dialer:" + mapDialer.get("device_id") + ":channel";
-
-          Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
-          arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
-
-          Map<String, Object> mapItem = null;
-
-          for(Object jsonItem : arrJson) {
-            try {
-              mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
-              mapItem.put("deviceId", mapDialer.get("device_id"));
-            } catch (JsonMappingException e) {
-              throw new RuntimeException(e);
-            }
-            mapDialerChannelStatusList.add(mapItem);
+          //장비 내역 가져오기 API 요청이 실패했을 때
+          if (!apiDialer.get("result_code").equals(0)) {
+            return PostDialerChannelStatusInfoResponseDto.notExistDialerDevice();
           }
+          List<Map<String, Object>> mapDialerList = (List<Map<String, Object>>) apiDialer.get("result_data");
+
+          for(Map<String, Object> mapDialer : mapDialerList) {
+  
+            redisKey = "monitor:dialer:" + mapDialer.get("device_id") + ":channel";
+  
+            Map<Object, Object> redisDialerChannelStatus = hashOperations.entries(redisKey);
+            arrJson = (JSONArray) jsonParser.parse(redisDialerChannelStatus.values().toString());
+  
+            Map<String, Object> mapItem = null;
+  
+            for(Object jsonItem : arrJson) {
+              try {
+                mapItem = new ObjectMapper().readValue(jsonItem.toString(), Map.class);
+                mapItem.put("deviceId", mapDialer.get("device_id"));
+              } catch (JsonMappingException e) {
+                throw new RuntimeException(e);
+              }
+              mapDialerChannelStatusList.add(mapItem);
+            }
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
         }
+
       //특정 Device에 대한 채널상태
       } else {
 
