@@ -49,7 +49,7 @@ public class SendingProgressStatusItem {
   ) {
 
     log.info("mapSendingProgressStatus: {}", mapSendingProgressStatus.toString());
-    log.info("phone_number: {}", mapSendingProgressStatus.get("phone_number"));
+    log.info("phone_number: {}", mapSendingProgressStatus.get("phone_number").getClass());
     log.info("phone_dial_count: {}", mapSendingProgressStatus.get("phone_dial_count"));
 
     this.campaignId = (int) mapSendingProgressStatus.get("campaign_id");
