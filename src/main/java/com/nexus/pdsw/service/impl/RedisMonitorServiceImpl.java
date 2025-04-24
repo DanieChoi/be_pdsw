@@ -401,7 +401,6 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
               mapSendingProgressStatusList.add(mapItem);
             }
         }
-        log.info("mapSendingProgressStatusList : {}", mapSendingProgressStatusList.toString());
   
         filterMap.put("tenant_id", Integer.parseInt(requestDto.getTenantId()));
 
@@ -439,34 +438,38 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
           filterMap.put("campaign_id", arrCampaignId);
           bodyMap.put("filter", filterMap);
 
-          //캠페인에 할당된 상담원 가져오기 API 요청
-          Map<String, Object> apiAssignedCounselor =
-            webClient
-              .post()
-              .uri(uriBuilder ->
-                uriBuilder
-                  .path("/pds/collections/campaign-agent")
-                  .build()
-              )
-              .bodyValue(bodyMap)
-              .retrieve()
-              .bodyToMono(Map.class)
-              .block();
+          try {
+            //캠페인에 할당된 상담원 가져오기 API 요청
+            Map<String, Object> apiAssignedCounselor =
+              webClient
+                .post()
+                .uri(uriBuilder ->
+                  uriBuilder
+                    .path("/pds/collections/campaign-agent")
+                    .build()
+                )
+                .bodyValue(bodyMap)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
 
-          //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
-          if (!apiAssignedCounselor.get("result_code").equals(0)) {
-            ResponseDto result = new ResponseDto(apiAssignedCounselor.get("result_code").toString(), apiAssignedCounselor.get("result_msg").toString());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-          }
-
-          //캠페인에 할당된 상담원이 존재하면
-          if (apiAssignedCounselor.get("result_data") != null) {            
-            List<Map<String, Object>> mapAssignedCounselorList = (List<Map<String, Object>>) apiAssignedCounselor.get("result_data");
-
-            //할당된 상담원 리스트에 누적 추가
-            for (Map<String, Object> mapAssignedCounselor : mapAssignedCounselorList) {
-              assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
+            //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
+            if (!apiAssignedCounselor.get("result_code").equals(0)) {
+              ResponseDto result = new ResponseDto(apiAssignedCounselor.get("result_code").toString(), apiAssignedCounselor.get("result_msg").toString());
+              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
             }
+
+            //캠페인에 할당된 상담원이 존재하면
+            if (apiAssignedCounselor.get("result_data") != null) {            
+              List<Map<String, Object>> mapAssignedCounselorList = (List<Map<String, Object>>) apiAssignedCounselor.get("result_data");
+
+              //할당된 상담원 리스트에 누적 추가
+              for (Map<String, Object> mapAssignedCounselor : mapAssignedCounselorList) {
+                assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
+              }
+            }            
+          } catch (Exception e) {
+            e.printStackTrace();
           }
         }
 
@@ -493,43 +496,50 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
         filterMap.put("campaign_id", arrCampaignId);
         bodyMap.put("filter", filterMap);
 
-        //캠페인에 할당된 상담원 가져오기 API 요청
-        Map<String, Object> apiAssignedCounselor =
-          webClient
-            .post()
-            .uri(uriBuilder ->
-              uriBuilder
-                .path("/pds/collections/campaign-agent")
-                .build()
-            )
-            .bodyValue(bodyMap)
-            .retrieve()
-            .bodyToMono(Map.class)
-            .block();
+        try {
+          //캠페인에 할당된 상담원 가져오기 API 요청
+          Map<String, Object> apiAssignedCounselor =
+            webClient
+              .post()
+              .uri(uriBuilder ->
+                uriBuilder
+                  .path("/pds/collections/campaign-agent")
+                  .build()
+              )
+              .bodyValue(bodyMap)
+              .retrieve()
+              .bodyToMono(Map.class)
+              .block();
 
-        //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
-        if (!apiAssignedCounselor.get("result_code").equals(0)) {
-          String resultCode = "";
-          String resultMessage = "";
-          if (apiAssignedCounselor.get("result_code") != null) {
-            resultCode = apiAssignedCounselor.get("result_code").toString();
+          //해당 캠페인에 할당된 상담원ID 가져오기 API 요청이 실패했을 때
+          if (!apiAssignedCounselor.get("result_code").equals(0)) {
+            String resultCode = "";
+            String resultMessage = "";
+            if (apiAssignedCounselor.get("result_code") != null) {
+              resultCode = apiAssignedCounselor.get("result_code").toString();
+            }
+            if (apiAssignedCounselor.get("result_message") != null) {
+              resultMessage = apiAssignedCounselor.get("result_message").toString();
+            }
+            ResponseDto result = new ResponseDto(resultCode, resultMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
           }
-          if (apiAssignedCounselor.get("result_message") != null) {
-            resultMessage = apiAssignedCounselor.get("result_message").toString();
-          }
-          ResponseDto result = new ResponseDto(resultCode, resultMessage);
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-        }
 
-        //캠페인에 할당된 상담원이 존재하면
-        if (apiAssignedCounselor.get("result_data") != null) {          
-          List<Map<String, Object>> mapAssignedCounselorList = (List<Map<String, Object>>) apiAssignedCounselor.get("result_data");
+          //캠페인에 할당된 상담원이 존재하면
+          if (apiAssignedCounselor.get("result_data") != null) {          
+            List<Map<String, Object>> mapAssignedCounselorList = (List<Map<String, Object>>) apiAssignedCounselor.get("result_data");
 
-          for (Map<String, Object> mapAssignedCounselor : mapAssignedCounselorList) {
-            assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
+            for (Map<String, Object> mapAssignedCounselor : mapAssignedCounselorList) {
+              assignedCounselorList.addAll((List<Object>) mapAssignedCounselor.get("agent_id"));
+            }
           }
+          
+        } catch (Exception e) {
+          e.printStackTrace();
         }
       }
+
+      log.info("mapSendingProgressStatusList : {}", mapSendingProgressStatusList.toString());
 
       //수집된 할당된 상담사ID 중복제거
       List<Object> assignedCounselorDuplicatesRemovedList = assignedCounselorList.stream().distinct().collect(Collectors.toList());
