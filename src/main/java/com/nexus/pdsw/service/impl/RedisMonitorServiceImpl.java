@@ -543,7 +543,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
         }
       }
 
-      log.info("mapSendingProgressStatusList : {}", mapSendingProgressStatusList.toString());
+      // log.info("mapSendingProgressStatusList : {}", mapSendingProgressStatusList.toString());
 
       //수집된 할당된 상담사ID 중복제거
       List<Object> assignedCounselorDuplicatesRemovedList = assignedCounselorList.stream().distinct().collect(Collectors.toList());
