@@ -330,7 +330,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       if (requestDto.getCampaignId() == null || requestDto.getCampaignId().trim().isEmpty()) {
         return GetSendingProgressStatusResponseDto.notExistCampaignId();
       }
-      log.info("requestDto.getCampaignId().clss : {}", requestDto.getCampaignId().getClass().getName());
+      // log.info("requestDto.getCampaignId().clss : {}", requestDto.getCampaignId().getClass().getName());
 
       //WebClient로 API서버와 연결
       WebClient webClient =
@@ -367,7 +367,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
       Map<Object, Object> redisTenantList = hashOperations1.entries("master.tenant-1");
 
-      log.info("requestDto.getCampaignId() : {}", requestDto.getCampaignId());
+      // log.info("requestDto.getCampaignId() : {}", requestDto.getCampaignId());
 
       //특정 캠페인이 아닌 경우
       if (requestDto.getCampaignId().equals("0")) {
