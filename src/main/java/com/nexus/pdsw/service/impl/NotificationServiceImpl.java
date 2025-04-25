@@ -49,16 +49,16 @@ public class NotificationServiceImpl implements NotificationService {
     redisMessageService.subscribe(tenantId, counselorId);
 
     sseEmitter.onTimeout(() -> {
-      // log.info("Server Sent Event timed out : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
+      log.info("Server Sent Event timed out : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
       sseEmitter.complete();      
     });
     sseEmitter.onError(e -> {
-      // log.info("Server Sent Event error occurred : emiterKey={}, message={}", emitterKey, e.getMessage());
+      log.info("Server Sent Event error occurred : emiterKey={}, message={}", emitterKey, e.getMessage());
       sseEmitter.complete();
     });
     sseEmitter.onCompletion(() -> {
       sseEmitterService.deleteEmitter(emitterKey);
-      // log.info("disconnected by completed Server Sent Event : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
+      log.info("disconnected by completed Server Sent Event : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
       redisMessageService.removeSubscribe(tenantId);
     });
 

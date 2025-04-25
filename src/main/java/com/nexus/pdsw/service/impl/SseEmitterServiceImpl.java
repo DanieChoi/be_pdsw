@@ -93,8 +93,8 @@ public class SseEmitterServiceImpl implements SseEmitterService {
   public void send(Object data, String emitterKey, SseEmitter sseEmitter) {
 
     try {
-      // log.info("send to client {}:[{}]", emitterKey, data);
-      // log.info("emitterValue {}", sseEmitter);
+      log.info("send to client {}:[{}]", emitterKey, data);
+      log.info("emitterValue {}", sseEmitter);
       sseEmitter.send(SseEmitter.event()
         .name("message")
         .id(emitterKey)
