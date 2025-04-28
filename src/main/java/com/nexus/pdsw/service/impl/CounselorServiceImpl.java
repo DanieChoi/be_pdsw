@@ -258,7 +258,7 @@ public class CounselorServiceImpl implements CounselorService {
             List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
             for (Map<String, Object> mapCampaign : mapCampaignList) {
-              campaignList.addAll((List<Object>) mapCampaign.get("campaign_id"));
+              campaignList.add((Object) mapCampaign.get("campaign_id"));
             }
     
           }        
@@ -302,7 +302,7 @@ public class CounselorServiceImpl implements CounselorService {
 
           for (Map<String, Object> mapCampaign : mapCampaignList) {
             log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id").toString());
-            campaignList.addAll((List<Object>) mapCampaign.get("campaign_id"));
+            campaignList.add((Object) mapCampaign.get("campaign_id"));
           }
 
         }
