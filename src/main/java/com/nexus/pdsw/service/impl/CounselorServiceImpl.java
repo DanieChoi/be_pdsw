@@ -222,7 +222,7 @@ public class CounselorServiceImpl implements CounselorService {
         if (requestBody.getTenantId().equals("A")) {
 
           for (Object tenantKey : redisTenantList.keySet()) {
-            arrTenantId[0] = (int) tenantKey;
+            arrTenantId[0] = (Integer) tenantKey;
             filterMap.put("tenant_id", arrTenantId);
     
             bodyMap.put("filter", filterMap);
