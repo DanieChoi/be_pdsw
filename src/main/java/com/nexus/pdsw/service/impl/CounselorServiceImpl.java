@@ -217,7 +217,6 @@ public class CounselorServiceImpl implements CounselorService {
       } else {
         log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         int[] arrTenantId = new int[1];
-        // List<Map<String, Object>> mapCampaignList = new ArrayList<>();
         List<Object> campaignList = new ArrayList<>();
 
         if (requestBody.getTenantId().equals("A")) {
@@ -302,6 +301,7 @@ public class CounselorServiceImpl implements CounselorService {
           log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
 
           for (Map<String, Object> mapCampaign : mapCampaignList) {
+            log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id").toString());
             campaignList.addAll((List<Object>) mapCampaign.get("campaign_id"));
           }
 
