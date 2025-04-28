@@ -297,16 +297,16 @@ public class CounselorServiceImpl implements CounselorService {
 
           List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
-          log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
+          // log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
 
           for (Map<String, Object> mapCampaign : mapCampaignList) {
-            log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id").toString());
+            // log.info(">>>캠페인 ID: {}", mapCampaign.get("campaign_id").toString());
             campaignList.add((Object) mapCampaign.get("campaign_id"));
           }
 
         }
 
-        log.info(">>>소속 캠페인: {}", campaignList.toString());
+        // log.info(">>>소속 캠페인: {}", campaignList.toString());
         //가져온 캠페인의 할당 상담원 가져오기
         for (Object campaign : campaignList) {
           bodyMap.clear();
@@ -359,7 +359,7 @@ public class CounselorServiceImpl implements CounselorService {
       //수집된 할당된 상담사ID 중복제거
       List<Object> assignedCounselorDuplicatesRemovedList = assignedCounselorList.stream().distinct().collect(Collectors.toList());
 
-      log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
+      // log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
 
       for (Object assignedCounselor : assignedCounselorDuplicatesRemovedList){
 
