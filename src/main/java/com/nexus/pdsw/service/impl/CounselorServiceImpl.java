@@ -215,14 +215,13 @@ public class CounselorServiceImpl implements CounselorService {
         }
   
       } else {
-        log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         int[] arrTenantId = new int[1];
         List<Object> campaignList = new ArrayList<>();
 
         if (requestBody.getTenantId().equals("A")) {
 
           for (Object tenantKey : redisTenantList.keySet()) {
-            arrTenantId[0] = (Integer) tenantKey;
+            arrTenantId[0] = Integer.parseInt(tenantKey.toString());
             filterMap.put("tenant_id", arrTenantId);
     
             bodyMap.put("filter", filterMap);
