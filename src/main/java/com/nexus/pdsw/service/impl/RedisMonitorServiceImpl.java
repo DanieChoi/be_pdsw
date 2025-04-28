@@ -581,7 +581,7 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
       e.printStackTrace();
       ResponseDto.databaseError();
     }
-    return GetSendingProgressStatusResponseDto.success(mapSendingProgressStatusList, waitingCounselorCnt);
+    return GetSendingProgressStatusResponseDto.success(mapSendingProgressStatusList, waitingCounselorCnt, requestDto.getCampaignId());
   }
   
 }

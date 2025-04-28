@@ -30,6 +30,7 @@ import lombok.Getter;
 public class GetSendingProgressStatusResponseDto extends ResponseDto {
   
   private int waitingCounselorCnt;
+  private String campaignId;
   private List<SendingProgressStatusItem> sendingProgressStatusList;
 
   /*  
@@ -37,14 +38,17 @@ public class GetSendingProgressStatusResponseDto extends ResponseDto {
    *  
    *  @param List<Map<String, Object>> mapSendingProgressStatusList  발신진행상태 리스트
    *  @param int waitingCounselorCnt                                 대기상담원수
+   *  @param String campaignId                                       캠페인ID
    */
   private GetSendingProgressStatusResponseDto(
     List<Map<String, Object>> mapSendingProgressStatusList,
-    int waitingCounselorCnt
+    int waitingCounselorCnt,
+    String campaignId
   ) {
 
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     this.waitingCounselorCnt = waitingCounselorCnt;
+    this.campaignId = campaignId;
     this.sendingProgressStatusList = SendingProgressStatusItem.getSendingProgressStatus(mapSendingProgressStatusList);
   }
 
@@ -53,13 +57,15 @@ public class GetSendingProgressStatusResponseDto extends ResponseDto {
    *  
    *  @param List<Map<String, Object>> mapSendingProgressStatusList  발신진행상태 리스트
    *  @param int waitingCounselorCnt                                 대기상담원수
+   *  @param String campaignId                                       캠페인ID
    *  @return ResponseEntity<GetSendingProgressStatusResponseDto>
    */
   public static ResponseEntity<GetSendingProgressStatusResponseDto> success(
     List<Map<String, Object>> mapSendingProgressStatusList,
-    int waitingCounselorCnt
+    int waitingCounselorCnt,
+    String campaignId
   ) {
-    GetSendingProgressStatusResponseDto result = new GetSendingProgressStatusResponseDto(mapSendingProgressStatusList, waitingCounselorCnt);
+    GetSendingProgressStatusResponseDto result = new GetSendingProgressStatusResponseDto(mapSendingProgressStatusList, waitingCounselorCnt, campaignId);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
