@@ -217,7 +217,7 @@ public class CounselorServiceImpl implements CounselorService {
       } else {
         log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         int[] arrTenantId = new int[1];
-        List<Map<String, Object>> mapCampaignList = new ArrayList<>();
+        // List<Map<String, Object>> mapCampaignList = new ArrayList<>();
         List<Object> campaignList = new ArrayList<>();
 
         if (requestBody.getTenantId().equals("A")) {
@@ -256,7 +256,7 @@ public class CounselorServiceImpl implements CounselorService {
               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
             }
 
-            mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
+            List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
             for (Map<String, Object> mapCampaign : mapCampaignList) {
               campaignList.addAll((List<Object>) mapCampaign.get("campaign_id"));
@@ -297,7 +297,9 @@ public class CounselorServiceImpl implements CounselorService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
           }
 
-          mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
+          List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
+
+          log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
 
           for (Map<String, Object> mapCampaign : mapCampaignList) {
             campaignList.addAll((List<Object>) mapCampaign.get("campaign_id"));
