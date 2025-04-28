@@ -213,14 +213,14 @@ public class CounselorServiceImpl implements CounselorService {
         }
   
       } else {
-        // log.info(">>>테넌트ID: {}", requestBody.getTenantId());
+        log.info(">>>테넌트ID: {}", requestBody.getTenantId());
         int[] arrTenantId = new int[1];
         arrTenantId[0] = Integer.parseInt(requestBody.getTenantId());
         filterMap.put("tenant_id", arrTenantId);
 
         bodyMap.put("filter", filterMap);
 
-        // log.info(">>>필터: {}", bodyMap.toString());
+        log.info(">>>필터: {}", bodyMap.toString());
         
         //센터 노드에서 호출했으면 전체 캠페인을 테넌트 노드에서 호출했으면 해당 테넌트의 캠페인을 가져오기 API 요청
         Map<String, Object> apiCampaign =
@@ -252,7 +252,7 @@ public class CounselorServiceImpl implements CounselorService {
 
         List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
-        // log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
+        log.info(">>>소속 캠페인: {}", mapCampaignList.toString());
 
         //가져온 캠페인의 할당 상담원 가져오기
         for (Map<String, Object> mapCampaign : mapCampaignList) {
@@ -306,7 +306,7 @@ public class CounselorServiceImpl implements CounselorService {
       //수집된 할당된 상담사ID 중복제거
       List<Object> assignedCounselorDuplicatesRemovedList = assignedCounselorList.stream().distinct().collect(Collectors.toList());
 
-      // log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
+      log.info(">>>중복 제거 할당 상담사: {}", assignedCounselorDuplicatesRemovedList.toString());
       Map<Object, Object> redisTenantList = hashOperations.entries("master.tenant-1");
 
       for (Object assignedCounselor : assignedCounselorDuplicatesRemovedList){
