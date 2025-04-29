@@ -59,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
     sseEmitter.onCompletion(() -> {
       sseEmitterService.deleteEmitter(emitterKey);
       log.info("disconnected by completed Server Sent Event : emiterKey={}, emitter={}", emitterKey, sseEmitter.toString());
-      redisMessageService.removeSubscribe(tenantId);
+      // redisMessageService.removeSubscribe(tenantId);
     });
 
     // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방    
