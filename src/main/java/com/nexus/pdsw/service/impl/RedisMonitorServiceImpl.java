@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +45,7 @@ import com.nexus.pdsw.dto.response.monitor.GetSendingProgressStatusResponseDto;
 import com.nexus.pdsw.service.RedisMonitorService;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -421,6 +423,10 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
             .bodyValue(bodyMap)
             .retrieve()
             .bodyToMono(Map.class)
+            .doOnError(WebClientResponseException.class, ex -> {
+              // 추가적인 로깅이나 예외 처리
+              log.error("WebClientResponseException: ", ex);
+            })
             .block();
 
         //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청이 실패했을 때
