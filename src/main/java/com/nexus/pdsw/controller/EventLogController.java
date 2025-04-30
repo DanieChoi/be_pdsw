@@ -23,6 +23,7 @@ import com.nexus.pdsw.dto.request.PostEventLogRequestDto;
 import com.nexus.pdsw.dto.response.eventLog.PostEventLogResponseDto;
 import com.nexus.pdsw.service.EventLogService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,8 +43,10 @@ public class EventLogController {
    */
   @PostMapping("/save")
   public ResponseEntity<? super PostEventLogResponseDto> saveEventLog(
-    @RequestBody PostEventLogRequestDto requestBody
+    @RequestBody PostEventLogRequestDto requestBody,
+    HttpServletRequest request
   ) {
+    log.info(">>>IP 주소: {}", request.getRemoteAddr());
     ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody);
     return response;
   }
