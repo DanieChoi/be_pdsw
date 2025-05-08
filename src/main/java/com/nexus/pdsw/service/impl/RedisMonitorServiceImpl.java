@@ -377,6 +377,10 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
 
         //로긴 상담원의 테넌트ID가 "0"인 경우
         if (requestDto.getTenantId().equals("0")) {
+
+          int[] arrTenantId = new int[redisTenantList.size()];
+          int i = 0;
+
           for (Object tenantKey : redisTenantList.keySet()) {
             redisKey = "monitor:tenant:" + tenantKey + ":campaign:dial";
   
@@ -392,36 +396,13 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
               mapSendingProgressStatusList.add(mapItem);
             }
 
-            filterMap.put("tenant_id", Integer.parseInt(tenantKey.toString()));
+            arrTenantId[i] = Integer.parseInt(tenantKey.toString());
+            i++;
+          }
 
-            bodyMap.put("filter", filterMap);
+          filterMap.put("tenant_id", arrTenantId);
+          bodyMap.put("filter", filterMap);
 
-            //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청
-            Map<String, Object> apiCampaign =
-              webClient
-                .post()
-                .uri(uriBuilder ->
-                  uriBuilder
-                    .path("/pds/collections/campaign-list")
-                    .build()
-                )
-                .bodyValue(bodyMap)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .doOnError(WebClientResponseException.class, ex -> {
-                  // 추가적인 로깅이나 예외 처리
-                  log.error("WebClientResponseException: ", ex);
-                })
-                .block();
-
-            //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청이 실패했을 때
-            if (!apiCampaign.get("result_code").equals(0)) {
-              ResponseDto result = new ResponseDto(apiCampaign.get("result_code").toString(), apiCampaign.get("result_msg").toString());
-              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-            }
-
-            mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
-          }  
         } else {
           redisKey = "monitor:tenant:" + requestDto.getTenantId() + ":campaign:dial";
   
@@ -438,35 +419,35 @@ public class RedisMonitorServiceImpl implements RedisMonitorService {
           }
 
           filterMap.put("tenant_id", Integer.parseInt(requestDto.getTenantId()));
-
           bodyMap.put("filter", filterMap);
 
-          //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청
-          Map<String, Object> apiCampaign =
-            webClient
-              .post()
-              .uri(uriBuilder ->
-                uriBuilder
-                  .path("/pds/collections/campaign-list")
-                  .build()
-              )
-              .bodyValue(bodyMap)
-              .retrieve()
-              .bodyToMono(Map.class)
-              .doOnError(WebClientResponseException.class, ex -> {
-                // 추가적인 로깅이나 예외 처리
-                log.error("WebClientResponseException: ", ex);
-              })
-              .block();
+        }
 
-          //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청이 실패했을 때
-          if (!apiCampaign.get("result_code").equals(0)) {
-            ResponseDto result = new ResponseDto(apiCampaign.get("result_code").toString(), apiCampaign.get("result_msg").toString());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-          }
+        //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청
+        Map<String, Object> apiCampaign =
+          webClient
+            .post()
+            .uri(uriBuilder ->
+              uriBuilder
+                .path("/pds/collections/campaign-list")
+                .build()
+            )
+            .bodyValue(bodyMap)
+            .retrieve()
+            .bodyToMono(Map.class)
+            .doOnError(WebClientResponseException.class, ex -> {
+              // 추가적인 로깅이나 예외 처리
+              log.error("WebClientResponseException: ", ex);
+            })
+            .block();
 
-          mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
-        }  
+        //로그인 상담사 테넌트ID에 따른 캠페인 가져오기 API 요청이 실패했을 때
+        if (!apiCampaign.get("result_code").equals(0)) {
+          ResponseDto result = new ResponseDto(apiCampaign.get("result_code").toString(), apiCampaign.get("result_msg").toString());
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+        }
+
+        mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
 
         bodyMap.clear();
         filterMap.clear();

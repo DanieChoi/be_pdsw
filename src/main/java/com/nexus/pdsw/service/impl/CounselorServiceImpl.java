@@ -216,55 +216,99 @@ public class CounselorServiceImpl implements CounselorService {
         }
   
       } else {
-        int[] arrTenantId = new int[1];
+        int[] arrTenantId = null;
+        int i = 0;
         List<Object> campaignList = new ArrayList<>();
 
         if (requestBody.getTenantId().equals("A")) {
+          arrTenantId = new int[redisTenantList.size()];
 
           for (Object tenantKey : redisTenantList.keySet()) {
-            arrTenantId[0] = Integer.parseInt(tenantKey.toString());
-            filterMap.put("tenant_id", arrTenantId);
+            arrTenantId[i] = Integer.parseInt(tenantKey.toString());
+            i++;
+          }
 
-            // log.info(">>>테넌트ID: {}", filterMap.toString());
-    
-            bodyMap.put("filter", filterMap);
+          filterMap.put("tenant_id", arrTenantId);
+          bodyMap.put("filter", filterMap);
 
-            //센터 노드에서 호출했으면 전체 캠페인을 테넌트 노드에서 호출했으면 해당 테넌트의 캠페인을 가져오기 API 요청
-            Map<String, Object> apiCampaign =
-              webClient
-                .post()
-                .uri(uriBuilder ->
-                  uriBuilder
-                    .path("/pds/collections/campaign-list")
-                    .build()
-                )
-                .bodyValue(bodyMap)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
+          //센터 노드에서 호출했으면 전체 캠페인을 테넌트 노드에서 호출했으면 해당 테넌트의 캠페인을 가져오기 API 요청
+          Map<String, Object> apiCampaign =
+            webClient
+              .post()
+              .uri(uriBuilder ->
+                uriBuilder
+                  .path("/pds/collections/campaign-list")
+                  .build()
+              )
+              .bodyValue(bodyMap)
+              .retrieve()
+              .bodyToMono(Map.class)
+              .block();
 
-            //캠페인 가져오기 API 요청이 실패했을 때
-            if (!apiCampaign.get("result_code").equals(0)) {
-              String resultCode = "";
-              String resultMessage = "";
-              if (apiCampaign.get("result_code") != null) {
-                resultCode = apiCampaign.get("result_code").toString();
-              }
-              if (apiCampaign.get("result_message") != null) {
-                resultMessage = apiCampaign.get("result_message").toString();
-              }
-              ResponseDto result = new ResponseDto(resultCode, resultMessage);
-              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+          //캠페인 가져오기 API 요청이 실패했을 때
+          if (!apiCampaign.get("result_code").equals(0)) {
+            String resultCode = "";
+            String resultMessage = "";
+            if (apiCampaign.get("result_code") != null) {
+              resultCode = apiCampaign.get("result_code").toString();
             }
-
-            List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
-
-            for (Map<String, Object> mapCampaign : mapCampaignList) {
-              campaignList.add((Object) mapCampaign.get("campaign_id"));
+            if (apiCampaign.get("result_message") != null) {
+              resultMessage = apiCampaign.get("result_message").toString();
             }
+            ResponseDto result = new ResponseDto(resultCode, resultMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+          }
+
+          List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
+          for (Map<String, Object> mapCampaign : mapCampaignList) {
+            campaignList.add((Object) mapCampaign.get("campaign_id"));
+          }
+
+          // for (Object tenantKey : redisTenantList.keySet()) {
+          //   arrTenantId[0] = Integer.parseInt(tenantKey.toString());
+          //   filterMap.put("tenant_id", arrTenantId);
+
+          //   // log.info(">>>테넌트ID: {}", filterMap.toString());
     
-          }        
+          //   bodyMap.put("filter", filterMap);
+
+          //   //센터 노드에서 호출했으면 전체 캠페인을 테넌트 노드에서 호출했으면 해당 테넌트의 캠페인을 가져오기 API 요청
+          //   Map<String, Object> apiCampaign =
+          //     webClient
+          //       .post()
+          //       .uri(uriBuilder ->
+          //         uriBuilder
+          //           .path("/pds/collections/campaign-list")
+          //           .build()
+          //       )
+          //       .bodyValue(bodyMap)
+          //       .retrieve()
+          //       .bodyToMono(Map.class)
+          //       .block();
+
+          //   //캠페인 가져오기 API 요청이 실패했을 때
+          //   if (!apiCampaign.get("result_code").equals(0)) {
+          //     String resultCode = "";
+          //     String resultMessage = "";
+          //     if (apiCampaign.get("result_code") != null) {
+          //       resultCode = apiCampaign.get("result_code").toString();
+          //     }
+          //     if (apiCampaign.get("result_message") != null) {
+          //       resultMessage = apiCampaign.get("result_message").toString();
+          //     }
+          //     ResponseDto result = new ResponseDto(resultCode, resultMessage);
+          //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+          //   }
+
+          //   List<Map<String, Object>> mapCampaignList = (List<Map<String, Object>>) apiCampaign.get("result_data");
+
+          //   for (Map<String, Object> mapCampaign : mapCampaignList) {
+          //     campaignList.add((Object) mapCampaign.get("campaign_id"));
+          //   }
+    
+          // }        
         } else {
+          arrTenantId = new int[1];
           arrTenantId[0] = Integer.parseInt(requestBody.getTenantId());
           filterMap.put("tenant_id", arrTenantId);
   
@@ -312,12 +356,12 @@ public class CounselorServiceImpl implements CounselorService {
         // log.info(">>>소속 캠페인: {}", campaignList.toString());
 
         arrCampaignId = new int[campaignList.size()];
-        int i = 0;
+        int j = 0;
 
         //가져온 캠페인의 할당 상담원 가져오기
         for (Object campaign : campaignList) {
-          arrCampaignId[i] = (int) campaign;
-          i++;
+          arrCampaignId[j] = (int) campaign;
+          j++;
         }
 
         filterMap.put("campaign_id", arrCampaignId);
