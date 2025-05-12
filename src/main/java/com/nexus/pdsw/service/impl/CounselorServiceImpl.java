@@ -308,6 +308,11 @@ public class CounselorServiceImpl implements CounselorService {
     
           // }        
         } else {
+
+          if (!requestBody.getTenantId().chars().allMatch(Character::isDigit)) {
+            return PostCounselorStatusListResponseDto.notExistCampaignId();        
+          }
+          
           arrTenantId = new int[1];
           arrTenantId[0] = Integer.parseInt(requestBody.getTenantId());
           filterMap.put("tenant_id", arrTenantId);
