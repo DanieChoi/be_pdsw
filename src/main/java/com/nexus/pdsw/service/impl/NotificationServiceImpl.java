@@ -54,7 +54,8 @@ public class NotificationServiceImpl implements NotificationService {
     });
     sseEmitter.onError(e -> {
       log.info("Server Sent Event error occurred : emiterKey={}, message={}", emitterKey, e.getMessage());
-      sseEmitter.complete();
+      sseEmitter.completeWithError(e);
+      sseEmitterService.deleteEmitter(emitterKey);
     });
     sseEmitter.onCompletion(() -> {
       sseEmitterService.deleteEmitter(emitterKey);
