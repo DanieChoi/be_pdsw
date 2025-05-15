@@ -37,14 +37,15 @@ public class EventLogServiceImpl implements EventLogService {
    *  이벤트 로그 저장하기
    *  
    *  @param PostEventLogRequestDto requestBody  이벤트 로그 전달 DTO
+   *  @param String clientIp                     클라이언트IP
    *  @return ResponseEntity<? super PostEventLogResponseDto>
    */
   @Override
-  public ResponseEntity<? super PostEventLogResponseDto> saveEventLog(PostEventLogRequestDto dto) {
+  public ResponseEntity<? super PostEventLogResponseDto> saveEventLog(PostEventLogRequestDto dto, String clientIp) {
 
     try {
       
-      EventLogEntity rsEventLog = new EventLogEntity(dto);
+      EventLogEntity rsEventLog = new EventLogEntity(dto, clientIp);
       // log.info(">>>이벤트명: {}, 상담사ID: {}", dto.getEventName().toString(), dto.getEmployeeId().toString());
       eventLogRepository.save(rsEventLog);
       

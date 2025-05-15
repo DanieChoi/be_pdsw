@@ -50,8 +50,8 @@ public class EventLogController {
   /*
    * 이벤트 로그 저장하기
    * 
-   * @param PostEventLogRequestDto requestBody 이벤트 로그 전달 DTO
-   * 
+   * @param PostEventLogRequestDto requestBody 이벤트 로그 전달 DTO   * 
+   * @param String clientIp                    클라이언트IP
    * @return ResponseEntity<? super PostEventLogResponseDto>
    */
   @PostMapping("/save")
@@ -85,7 +85,7 @@ public class EventLogController {
         if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
             clientIp = request.getRemoteAddr();
         }    logger.info("요청 처리됨 - 클라이언트 IP: {}, 처리내용: {}", clientIp, requestBody.getDescription());
-    ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody);
+    ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody, clientIp);
     return response;
   }
 

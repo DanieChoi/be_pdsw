@@ -77,14 +77,15 @@ public class EventLogEntity {
 
 	/*
    * 생성자
-   * @param String emitterKey   Emitter 키
+   * @param PostEventLogRequestDto dto    이벤트로그 개체
+   * @param String clientIp               클라이언트IP
 	 * 
 	*/
-  public EventLogEntity(PostEventLogRequestDto dto) {
+  public EventLogEntity(PostEventLogRequestDto dto, String clientIp) {
 
     this.tenantId = dto.getTenantId();
     this.employeeId = dto.getEmployeeId();
-    this.userHost = dto.getUserHost();
+    this.userHost = clientIp;
     this.queryId = dto.getQueryId();
     this.queryType = dto.getQueryType();
     this.activation = dto.getActivation();

@@ -24,8 +24,9 @@ public interface EventLogService {
    *  이벤트 로그 저장하기
    *  
    *  @param PostEventLogRequestDto requestBody  이벤트 로그 전달 DTO
+   *  @param String clientIp                     클라이언트IP
    *  @return ResponseEntity<? super PostEventLogResponseDto>
    */
-  ResponseEntity<? super PostEventLogResponseDto> saveEventLog(PostEventLogRequestDto requestBody);
+  ResponseEntity<? super PostEventLogResponseDto> saveEventLog(PostEventLogRequestDto requestBody, String clientIp);
 
 }
