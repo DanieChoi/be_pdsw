@@ -56,9 +56,35 @@ public class EventLogController {
    */
   @PostMapping("/save")
   public ResponseEntity<? super PostEventLogResponseDto> saveEventLog(
-      @RequestBody PostEventLogRequestDto requestBody,
-      HttpServletRequest request) {
-    logger.info("요청 처리됨 - 서버 내부 IP: {}, 클라이언트 IP: {}", localIP, request.getHeader("X-Forwarded-For"));
+    @RequestBody PostEventLogRequestDto requestBody,
+    HttpServletRequest request
+  ) {
+        String clientIp = request.getHeader("X-Forwarded-For");
+
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("Proxy-Client-IP");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("X-Real-IP");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("X-RealIP");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getHeader("REMOTE_ADDR");
+        }
+        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+            clientIp = request.getRemoteAddr();
+        }    logger.info("요청 처리됨 - 서버 내부 IP: {}, 클라이언트 IP: {}", localIP, clientIp);
     ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody);
     return response;
   }
