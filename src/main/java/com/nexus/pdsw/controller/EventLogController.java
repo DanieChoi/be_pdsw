@@ -84,7 +84,7 @@ public class EventLogController {
         }
         if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
             clientIp = request.getRemoteAddr();
-        }    logger.info("요청 처리됨 - 서버 내부 IP: {}, 클라이언트 IP: {}", localIP, clientIp);
+        }    logger.info("요청 처리됨 - 클라이언트 IP: {}, 처리내용: {}", clientIp, requestBody.getDescription());
     ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody);
     return response;
   }
