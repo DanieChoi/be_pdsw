@@ -58,7 +58,7 @@ public class EventLogController {
   public ResponseEntity<? super PostEventLogResponseDto> saveEventLog(
       @RequestBody PostEventLogRequestDto requestBody,
       HttpServletRequest request) {
-    logger.info("요청 처리됨 - 서버 내부 IP: {}, 클라이언트 IP: {}", localIP, request.getRemoteAddr());
+    logger.info("요청 처리됨 - 서버 내부 IP: {}, 클라이언트 IP: {}", localIP, request.getHeader("X-Forwarded-For"));
     ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody);
     return response;
   }
