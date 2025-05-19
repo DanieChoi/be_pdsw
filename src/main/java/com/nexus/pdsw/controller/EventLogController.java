@@ -23,16 +23,6 @@ import com.nexus.pdsw.dto.request.PostEventLogRequestDto;
 import com.nexus.pdsw.dto.response.eventLog.PostEventLogResponseDto;
 import com.nexus.pdsw.service.EventLogService;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
-import java.util.Collections;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 public class EventLogController {
 
   private final EventLogService eventLogService;
-  private static final Logger logger = LoggerFactory.getLogger(EventLogController.class);
-  private static final String localIP = NetworkUtils.getLocalIPAddress(); // 서버 내부 IP
 
   /*
    * 이벤트 로그 저장하기
@@ -59,88 +47,33 @@ public class EventLogController {
     @RequestBody PostEventLogRequestDto requestBody,
     HttpServletRequest request
   ) {
-        String clientIp = request.getHeader("X-Forwarded-For");
-
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("Proxy-Client-IP");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("X-Real-IP");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("X-RealIP");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getHeader("REMOTE_ADDR");
-        }
-        if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
-            clientIp = request.getRemoteAddr();
-        }    logger.info("요청 처리됨 - 클라이언트 IP: {}, 처리내용: {}", clientIp, requestBody.getDescription());
+    String clientIp = request.getHeader("X-Forwarded-For");
+   if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("Proxy-Client-IP");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("WL-Proxy-Client-IP");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("HTTP_CLIENT_IP");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("HTTP_X_FORWARDED_FOR");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("X-Real-IP");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("X-RealIP");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getHeader("REMOTE_ADDR");
+    }
+    if (clientIp == null || clientIp.length() == 0 || "unknown".equalsIgnoreCase(clientIp)) {
+      clientIp = request.getRemoteAddr();
+    }
+    // logger.info("요청 처리됨 - 클라이언트 IP: {}, 처리내용: {}", clientIp, requestBody.getDescription());
     ResponseEntity<? super PostEventLogResponseDto> response = eventLogService.saveEventLog(requestBody, clientIp);
     return response;
-  }
-
-  // 서버 내부 IP 가져오기
-  public class NetworkUtils {
-    public static String getLocalIPAddress() {
-      try {
-        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-        while (interfaces.hasMoreElements()) {
-          NetworkInterface nic = interfaces.nextElement();
-          for (InetAddress address : Collections.list(nic.getInetAddresses())) {
-            if (!address.isLoopbackAddress() && address.isSiteLocalAddress()) {
-              return address.getHostAddress();
-            }
-          }
-        }
-      } catch (SocketException e) {
-        e.printStackTrace();
-      }
-      return "UNKNOWN";
-    }
-  }
-
-  // 클라이언트 IP 가져오기
-  // private String getClientIP(HttpServletRequest request) {
-  // String xfHeader = request.getHeader("X-Forwarded-For");
-  // return xfHeader != null ? xfHeader.split(",")[0] : request.getRemoteAddr();
-  // }
-
-  public static String getLocalIPv4() {
-    try {
-      Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-
-      while (interfaces.hasMoreElements()) {
-        NetworkInterface networkInterface = interfaces.nextElement();
-
-        // 조건: 루프백이 아니고, 활성화된 인터페이스
-        if (!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.isVirtual()) {
-          continue;
-        }
-
-        // IP 주소 목록 조회
-        Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
-        while (addresses.hasMoreElements()) {
-          InetAddress address = addresses.nextElement();
-
-          // IPv4 주소만 선택 (IPv6 제외)
-          if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
-            return address.getHostAddress(); // 예: 192.168.0.105
-          }
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return "IP Not Found";
   }
 }
