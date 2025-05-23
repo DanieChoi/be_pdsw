@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import com.nexus.pdsw.dto.request.PostEnvironmentSettingRequestDto;
 import com.nexus.pdsw.dto.request.PostEnvironmentSettingSaveRequestDto;
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
+import com.nexus.pdsw.dto.response.authority.GetCenterInfoListResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
 import com.nexus.pdsw.dto.response.authority.PostEnvironmentSettingSaveResponseDto;
 
@@ -31,6 +32,13 @@ public interface AuthorityService {
    *  @return ResponseEntity<? super GetAvailableMenuListResponseDto>
    */
   public ResponseEntity<?super GetAvailableMenuListResponseDto> getAvailableMenuList(int roleId);
+
+  /*
+   *  센터정보 가져오기
+   *
+   *  @return ResponseEntity<? super GetCenterInfoListResponseDto>
+   */
+  public ResponseEntity<? super GetCenterInfoListResponseDto> getCenterInfo();
 
   /*
    *  사용자별 환경설정 가져오기

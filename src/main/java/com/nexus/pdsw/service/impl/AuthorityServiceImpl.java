@@ -11,11 +11,19 @@
  * ----------  ------  -----------------------------------------------------------
  * 2025/03/18  최상원                       초기작성
  * 2025/03/19  최상원                       사용자별 환경설정 가져오기 추가
+ * 2025/05/23  최상원                       센터정보리스트 가져오기 추가
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +31,7 @@ import com.nexus.pdsw.dto.request.PostEnvironmentSettingRequestDto;
 import com.nexus.pdsw.dto.request.PostEnvironmentSettingSaveRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
+import com.nexus.pdsw.dto.response.authority.GetCenterInfoListResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
 import com.nexus.pdsw.dto.response.authority.PostEnvironmentSettingSaveResponseDto;
 import com.nexus.pdsw.entity.EnvironmentSettingEntity;
@@ -33,17 +42,29 @@ import com.nexus.pdsw.repository.MenuByRoleRepository;
 import com.nexus.pdsw.repository.RoleRepository;
 import com.nexus.pdsw.service.AuthorityService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AuthorityServiceImpl implements AuthorityService {
 
   private final MenuByRoleRepository menuByRoleRepository;
   private final RoleRepository roleRepository;
   private final EnvironmentSettingRepository environmentSettingRepository;
+  @Qualifier("1")
+  private final RedisTemplate<String, Object> redisTemplate1;
+
+  public AuthorityServiceImpl(
+    MenuByRoleRepository menuByRoleRepository,
+    RoleRepository roleRepository,
+    EnvironmentSettingRepository environmentSettingRepository,
+    @Qualifier("1") RedisTemplate<String, Object> redisTemplate1
+  ) {
+    this.menuByRoleRepository = menuByRoleRepository;
+    this.roleRepository = roleRepository;
+    this.environmentSettingRepository = environmentSettingRepository;
+    this.redisTemplate1 = redisTemplate1;
+  }
 
   /*
    *  사용가능한 메뉴 리스트 가져오기
@@ -74,6 +95,36 @@ public class AuthorityServiceImpl implements AuthorityService {
     } else {
       return GetAvailableMenuListResponseDto.success(menuListByRole);
     }
+  }
+
+  /*
+   *  센터정보 가져오기
+   *
+   *  @return ResponseEntity<? super GetCenterInfoListResponseDto>
+   */
+  @Override
+  public ResponseEntity<? super GetCenterInfoListResponseDto> getCenterInfo() {
+
+    JSONArray arrJsonCenter = new JSONArray();
+
+    try {
+
+      String redisKey = "";
+      HashOperations<String, Object, Object> hashOperations = redisTemplate1.opsForHash();
+      JSONParser jsonParser = new JSONParser();
+  
+      //센터정보
+      redisKey = "master.center";
+      Map<Object, Object> redisCenter = hashOperations.entries(redisKey);
+
+      arrJsonCenter = (JSONArray) jsonParser.parse(redisCenter.values().toString());
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+      ResponseDto.databaseError();
+    }
+
+    return GetCenterInfoListResponseDto.success(arrJsonCenter);
   }
 
   /*
@@ -124,5 +175,5 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
     return PostEnvironmentSettingSaveResponseDto.success();
   }
-  
+
 }

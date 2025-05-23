@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nexus.pdsw.dto.request.PostEnvironmentSettingRequestDto;
 import com.nexus.pdsw.dto.request.PostEnvironmentSettingSaveRequestDto;
 import com.nexus.pdsw.dto.response.authority.GetAvailableMenuListResponseDto;
+import com.nexus.pdsw.dto.response.authority.GetCenterInfoListResponseDto;
 import com.nexus.pdsw.dto.response.authority.GetEnvironmentSettingResponseDto;
 import com.nexus.pdsw.dto.response.authority.PostEnvironmentSettingSaveResponseDto;
 import com.nexus.pdsw.service.AuthorityService;
@@ -49,6 +50,17 @@ public class AuthorityController {
     @RequestParam(required = true, value = "roleId") int roleId
   ) {
     ResponseEntity<?super GetAvailableMenuListResponseDto> response = authorityService.getAvailableMenuList(roleId);
+    return response;
+  }
+
+  /*
+   *  센터정보 가져오기
+   *
+   *  @return ResponseEntity<? super GetCenterInfoListResponseDto>
+   */
+  @GetMapping("/centerInfo")
+  public ResponseEntity<?super GetCenterInfoListResponseDto> getCenterInfo() {
+    ResponseEntity<?super GetCenterInfoListResponseDto> response = authorityService.getCenterInfo();
     return response;
   }
 
