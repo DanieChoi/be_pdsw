@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import com.nexus.pdsw.common.ResponseCode;
 import com.nexus.pdsw.common.ResponseMessage;
 import com.nexus.pdsw.dto.object.OrganizationItem;
+import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
 import com.nexus.pdsw.dto.response.ResponseDto;
 
 import lombok.Getter;
@@ -37,32 +38,40 @@ public class GetCounselorListResponseDto extends ResponseDto  {
    *  상담사 리스트 가져오기(생성자)
    *  
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
+   *  @param String baseUrl                                  기본 URL
+   *  @param String sessionKey                               세션 키
+   *  @param String tenantId                                 테넌트 ID
    *  @param JSONArray arrJsonCenter                        센터 정보
    */
   private GetCounselorListResponseDto(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String tenantId,
     JSONArray arrJsonCenter
   ) {
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.organizationList = OrganizationItem.getOrganizationList(redisTemplate1, tenantId, arrJsonCenter);
+    this.organizationList = OrganizationItem.getOrganizationList(redisTemplate1, baseUrl, sessionKey, tenantId, arrJsonCenter);
   }
 
   /*  
    *  상담사 리스트 가져오기(성공)
    *  
-   *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
-   *  @param JSONArray arrJsonCenter                        센터 정보
+   *  @param RedisTemplate<String, Object> redisTemplate1    레디스 개체
+   *  @param String baseUrl                                  기본 URL
+   *  @param String sessionKey                               세션 키
+   *  @param String tenantId                                 테넌트 ID
+   *  @param JSONArray arrJsonCenter                         센터 정보
    *  @return ResponseEntity<GetCounselorListResponseDto>
    */
   public static ResponseEntity<GetCounselorListResponseDto> success(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String tenantId,
     JSONArray arrJsonCenter
   ) {
-    GetCounselorListResponseDto result = new GetCounselorListResponseDto(redisTemplate1, tenantId, arrJsonCenter);
+    GetCounselorListResponseDto result = new GetCounselorListResponseDto(redisTemplate1, baseUrl, sessionKey, tenantId, arrJsonCenter);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 }

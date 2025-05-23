@@ -23,6 +23,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,21 +42,25 @@ public class OrganizationItem {
    *  상담사 조직 리스트 반환 DTO 생성자
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
+   *  @param String tenantId                                테넌트 ID
    *  @param JSONObject jsonObjCenter                       센터 정보
   */
   private OrganizationItem(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String tenantId,
     JSONObject jsonObjCenter
   ) {
-    
+
     JSONObject jsonObjCentereData = (JSONObject) jsonObjCenter.get("Data");
-    
+
     this.centerId = jsonObjCentereData.get("center_id").toString();
     this.centerName = jsonObjCentereData.get("name").toString();
 
-    this.tenantInfo = TenantInfoItem.getTenantList(redisTemplate1, tenantId, jsonObjCentereData.get("center_id").toString());
+    this.tenantInfo = TenantInfoItem.getTenantList(redisTemplate1, baseUrl, sessionKey, tenantId, jsonObjCentereData.get("center_id").toString());
 
   }
 
@@ -63,11 +68,15 @@ public class OrganizationItem {
    *  상담사 조직 리스트 반환 DTO로 변환하기
 	 * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
+   *  @param String baseUrl                                  기본 URL
+   *  @param String sessionKey                               세션 키
+   *  @param String tenantId                                 테넌트 ID
    *  @param JSONArray arrJsonCenter                        센터 정보
 	*/
   public static List<OrganizationItem> getOrganizationList(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String tenantId,
     JSONArray arrJsonCenter
   ) {
@@ -76,7 +85,7 @@ public class OrganizationItem {
 
     for (Object jsonCenter : arrJsonCenter) {
       JSONObject jsonObjCenter = (JSONObject) jsonCenter;
-      OrganizationItem organizationInfo = new OrganizationItem(redisTemplate1, tenantId, jsonObjCenter);
+      OrganizationItem organizationInfo = new OrganizationItem(redisTemplate1, baseUrl, sessionKey, tenantId, jsonObjCenter);
       organizationList.add(organizationInfo);
     }
 

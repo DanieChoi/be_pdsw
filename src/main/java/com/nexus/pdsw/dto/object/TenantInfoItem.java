@@ -26,6 +26,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nexus.pdsw.dto.request.PostCounselorListRequestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,21 +45,25 @@ public class TenantInfoItem {
    *  상담사 테넌트 조직 리스트 반환 DTO 생성자
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
    *  @param String centerId                                센터ID
    *  @param JSONObject jsonObjTenant                       테넌트 정보
   */
   private TenantInfoItem(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String centerId,
     JSONObject jsonObjTenant
   ) {
-    
+
     JSONObject jsonObjTenantData = (JSONObject) jsonObjTenant.get("Data");
 
     this.tenantId = jsonObjTenantData.get("id").toString();
     this.tenantName = jsonObjTenantData.get("name").toString();
 
-    this.groupInfo = GroupInfoItem.getGroupList(redisTemplate1, centerId, jsonObjTenantData.get("id").toString());
+    this.groupInfo = GroupInfoItem.getGroupList(redisTemplate1, baseUrl, sessionKey, centerId, jsonObjTenantData.get("id").toString());
 
   }
 
@@ -66,11 +71,15 @@ public class TenantInfoItem {
    *  상담사 테넌트 조직 리스트 반환 DTO로 변환하기
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
-   *  @param String tenantId                                로그인 상담사 소속 테넌트ID
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
+   *  @param String tenantId                                테넌트 ID
    *  @param String centerId                                센터ID
   */
   public static List<TenantInfoItem> getTenantList(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String tenantId,
     String centerId
   ) {
@@ -100,7 +109,7 @@ public class TenantInfoItem {
       if (!tenantId.equals("0") && !jsonObjTenant.get("TENANT").equals(tenantId)) {
         continue;
       }
-      TenantInfoItem tanantInfo = new TenantInfoItem(redisTemplate1, centerId, jsonObjTenant);
+      TenantInfoItem tanantInfo = new TenantInfoItem(redisTemplate1, baseUrl, sessionKey, centerId, jsonObjTenant);
       tanantList.add(tanantInfo);
     }
 

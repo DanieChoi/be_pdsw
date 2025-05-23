@@ -41,28 +41,36 @@ public class CounselorItem {
   private String counselorLoginId;                              //상담사 로그인 ID
   private String counselorname;                                 //상담사 이름
   private String blendKind;                                     //블랜딩 종류(1: 인바운드, 2: 아웃바운드, 3: 블랜드)
+  private List<AssignedSkillItem> assignedSkills;               //상담사 보유 스킬 리스트
 
   /*
    *  상담사 리스트 반환 DTO 생성자
    * 
-   *  @param JSONObject objCounselorData 상담사 정보
+   *  @param String baseUrl               기본 URL
+   *  @param String sessionKey            세션 키
+   *  @param JSONObject objCounselorData  상담사 정보
   */
   private CounselorItem(
+    String baseUrl,
+    String sessionKey,
     JSONObject objCounselorData
   ) {
-    
+
     // JSONObject objCounselorData = (JSONObject) mapCounselor.get("Data");
 
     this.counselorId = (String) objCounselorData.get("id");
     this.counselorLoginId = (String) objCounselorData.get("media_login_id");
     this.counselorname = (String) objCounselorData.get("name");
     this.blendKind = (String) objCounselorData.get("blend_kind");
+    this.assignedSkills = AssignedSkillItem.getAssignedSkillList(baseUrl, sessionKey, (String) objCounselorData.get("id"));
   }
 
   /*
    *  상담사 리스트 반환 DTO로 변환하기
 	 * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
    *  @param String centerId                                센터ID
    *  @param String tenantId                                테넌트ID
    *  @param String groupId                                 그룹ID
@@ -71,6 +79,8 @@ public class CounselorItem {
 	*/
   public static List<CounselorItem> getCounselorList(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String centerId,
     String tenantId,
     String groupId,
@@ -104,8 +114,8 @@ public class CounselorItem {
       
       //only_work가 call인 상담원만 가져오는 부분은 차후 환경설정 변수로 처리할 예정(2025-02-25 최상원)
       if (!objCounselorData.get("media_login_id").equals("NULL") && (objCounselorData.get("only_work").equals("call") || objCounselorData.get("only_work").equals("callbot"))) {
-        CounselorItem counselorInfo = new CounselorItem(objCounselorData); 
-        counselorList.add(counselorInfo);          
+        CounselorItem counselorInfo = new CounselorItem(baseUrl, sessionKey, objCounselorData);
+        counselorList.add(counselorInfo);
       }
 
     }

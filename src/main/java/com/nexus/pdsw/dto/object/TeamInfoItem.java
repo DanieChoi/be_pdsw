@@ -46,6 +46,8 @@ public class TeamInfoItem {
    *  상담사 팀 조직 리스트 반환 DTO 생성자
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
    *  @param String centerId                                센터ID
    *  @param String tenantId                                테넌트ID
    *  @param String groupId                                 그룹ID
@@ -53,6 +55,8 @@ public class TeamInfoItem {
   */
   private TeamInfoItem(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String centerId,
     String tenantId,
     String groupId,
@@ -64,13 +68,15 @@ public class TeamInfoItem {
     this.teamId = objTeamData.get("id").toString();
     this.teamName = objTeamData.get("name").toString();
 
-    this.counselorInfo = CounselorItem.getCounselorList(redisTemplate1, centerId, tenantId, groupId, objTeamData.get("id").toString());
+    this.counselorInfo = CounselorItem.getCounselorList(redisTemplate1, baseUrl, sessionKey,centerId, tenantId, groupId, objTeamData.get("id").toString());
   }
 
   /*
    *  상담사 팀 조직 리스트 반환 DTO로 변환하기
 	 * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
    *  @param String centerId                                센터ID
    *  @param String tenantId                                테넌트ID
    *  @param String groupId                                 그룹ID
@@ -79,6 +85,8 @@ public class TeamInfoItem {
   @SuppressWarnings("unchecked")
   public static List<TeamInfoItem> getTeamList(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String centerId,
     String tenantId,
     String groupId
@@ -107,7 +115,7 @@ public class TeamInfoItem {
         e.printStackTrace();
       }
 
-      TeamInfoItem teamInfo = new TeamInfoItem(redisTemplate1, centerId, tenantId, groupId, mapTeam); 
+      TeamInfoItem teamInfo = new TeamInfoItem(redisTemplate1, baseUrl, sessionKey, centerId, tenantId, groupId, mapTeam); 
       teamList.add(teamInfo);
     }
 

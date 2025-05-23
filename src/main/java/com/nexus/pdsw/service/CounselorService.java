@@ -29,10 +29,10 @@ public interface CounselorService {
   /*  
    *  상담사 리스트 가져오기
    *  
-   *  @param String tenantId  상담사 소속 테넌트ID
+   *  @param PostCounselorListRequestDto requestBody  상담사 리스트 전달 DTO
    *  @return ResponseEntity<? super GetCounselorListResponseDto>
    */
-  ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(String tenantId);
+  ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(PostCounselorListRequestDto requestBody);
 
   /*
    *  상담사 상태정보 가져오기

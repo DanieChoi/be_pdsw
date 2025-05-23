@@ -41,12 +41,16 @@ public class GroupInfoItem {
    *  상담사 그룹 조직 리스트 반환 DTO 생성자
    * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
    *  @param String centerId                                센터ID
    *  @param String tenantId                                테넌트ID
    *  @param JSONObject jsonObjGroup                        그룹정보
   */
   private GroupInfoItem(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String centerId,
     String tenantId,
     JSONObject jsonObjGroup
@@ -57,19 +61,23 @@ public class GroupInfoItem {
     this.groupId = jsonObjGroupData.get("id").toString();
     this.groupName = jsonObjGroupData.get("name").toString();
 
-    this.teamInfo = TeamInfoItem.getTeamList(redisTemplate1, centerId, tenantId, jsonObjGroupData.get("id").toString());
+    this.teamInfo = TeamInfoItem.getTeamList(redisTemplate1, baseUrl, sessionKey, centerId, tenantId, jsonObjGroupData.get("id").toString());
   }
 
   /*
    *  상담사 그룹 조직 리스트 반환 DTO로 변환하기
 	 * 
    *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
+   *  @param String baseUrl                                 기본 URL
+   *  @param String sessionKey                              세션 키
    *  @param String centerId                                센터ID
    *  @param String tenantId                                테넌트ID
 	 *  @return List<GroupInfoItem>
 	*/
   public static List<GroupInfoItem> getGroupList(
     RedisTemplate<String, Object> redisTemplate1,
+    String baseUrl,
+    String sessionKey,
     String centerId,
     String tenantId
   ) {
@@ -95,7 +103,7 @@ public class GroupInfoItem {
 
     for (Object jsonGroup : arrJsonGroup) {
       JSONObject jsonObjGroup = (JSONObject) jsonGroup;
-      GroupInfoItem groupInfo = new GroupInfoItem(redisTemplate1, centerId, tenantId, jsonObjGroup); 
+      GroupInfoItem groupInfo = new GroupInfoItem(redisTemplate1, baseUrl, sessionKey, centerId, tenantId, jsonObjGroup);
       groupList.add(groupInfo);
     }
 
