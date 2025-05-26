@@ -57,16 +57,6 @@ public class AssignedCounselorListItem {
     Map<String, Object> mapCounselorInfo
   ) {
 
-    // ObjectMapper objectMapper = new ObjectMapper();
-    // Map<String, Object> mapCounselorAffiliation = objectMapper.convertValue(mapCounselorInfo.get("employee_group_id"), Map.class);
-    // mapCounselorAffiliation.forEach((key, value) -> {
-    //   if (key.equals("1")) {
-    //     this.affiliationGroupId = (String) value;
-    //   } else {
-    //     this.affiliationTeamId = (String) value;
-    //   }
-    // });
-
     ObjectMapper objectMapper = new ObjectMapper();
 
     Map<String, Object> mapCounselorAffiliation = objectMapper.convertValue(mapCounselorInfo.get("employee_group_id"), Map.class);
@@ -76,7 +66,6 @@ public class AssignedCounselorListItem {
     JSONParser jsonParser = new JSONParser();
 
     String redisKey = "master.group-emp-" + mapCounselorInfo.get("center_id") + "-" + mapCounselorInfo.get("tenant_id");
-    log.info(">>>redisKeyL {}", redisKey);
     //그룹정보
     Map<Object, Object> redisGroup = hashOperations.entries(redisKey);
 
