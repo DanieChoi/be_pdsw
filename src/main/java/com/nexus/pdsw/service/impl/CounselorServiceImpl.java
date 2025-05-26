@@ -633,6 +633,7 @@ public class CounselorServiceImpl implements CounselorService {
             }
           }
         }
+        log.info(">>>캠페인 할당 상담사 정보: {}", mapCounselorInfoList.toString());
       }
       
     } catch (Exception e) {
@@ -640,7 +641,7 @@ public class CounselorServiceImpl implements CounselorService {
       ResponseDto.databaseError();
     }
 
-    return GetCounselorInfoListResponseDto.success(mapCounselorInfoList);
+    return GetCounselorInfoListResponseDto.success(redisTemplate1, mapCounselorInfoList);
   }
 
   /*

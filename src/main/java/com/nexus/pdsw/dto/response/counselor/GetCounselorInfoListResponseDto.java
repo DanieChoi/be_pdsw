@@ -16,6 +16,7 @@ package com.nexus.pdsw.dto.response.counselor;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -34,27 +35,31 @@ public class GetCounselorInfoListResponseDto extends ResponseDto {
   /*  
    *  캠페인 할당상담사 정보 리스트 가져오기(생성자)
    *  
+   *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
    *  @param List<Map<String, Object>> mapCounselorInfoList 반환할 상담사 리스트
    */
   private GetCounselorInfoListResponseDto(
+    RedisTemplate<String, Object> redisTemplate1,
     List<Map<String, Object>> mapCounselorInfoList
   ) {
 
     super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-    this.assignedCounselorList = AssignedCounselorListItem.getAssignedCounselorList(mapCounselorInfoList);
+    this.assignedCounselorList = AssignedCounselorListItem.getAssignedCounselorList(redisTemplate1, mapCounselorInfoList);
   }
 
   /*  
    *  캠페인 할당상담사 정보 리스트 가져오기(성공)
    *  
+   *  @param RedisTemplate<String, Object> redisTemplate1   레디스 개체
    *  @param List<Map<String, Object>> mapCounselorInfoList 반환할 상담사 리스트
    *  @return ResponseEntity<GetCounselorListResponseDto>
    */
   public static ResponseEntity<GetCounselorInfoListResponseDto> success(
+    RedisTemplate<String, Object> redisTemplate1,
     List<Map<String, Object>> mapCounselorInfoList
   ) {
 
-    GetCounselorInfoListResponseDto result = new GetCounselorInfoListResponseDto(mapCounselorInfoList);
+    GetCounselorInfoListResponseDto result = new GetCounselorInfoListResponseDto(redisTemplate1, mapCounselorInfoList);
     return ResponseEntity.status(HttpStatus.OK).body(result);
   }
 
