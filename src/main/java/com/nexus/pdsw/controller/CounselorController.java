@@ -15,6 +15,7 @@
  *------------------------------------------------------------------------------*/
 package com.nexus.pdsw.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,10 +53,19 @@ public class CounselorController {
      */
     @PostMapping("/list")
     public ResponseEntity<? super GetCounselorListResponseDto> getCounselorList(
-      @RequestBody PostCounselorListRequestDto requestBody
+            @RequestBody PostCounselorListRequestDto requestBody
     ) {
-      ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(requestBody);
-      return response;
+        ResponseEntity<? super GetCounselorListResponseDto> response = counselorService.getCounselorList(requestBody);
+
+        // JSON으로 응답 전체 출력 (ObjectMapper 필요)
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            System.out.println("응답 JSON: " + mapper.writeValueAsString(response.getBody()));
+        } catch (Exception e) {
+            System.out.println("응답 객체: " + response.getBody());
+        }
+
+        return response;
     }
 
     /*
